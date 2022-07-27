@@ -1,25 +1,76 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
+  "name": "eigen-plugin",
+  "version": "1.0",
+  "description": "eigen-plugin",
+  "icons": {
+    "16": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
+  },
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "static/js/background.js",
+  },
+  "content_scripts": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "matches": [
+        "<all_urls>"
+      ],
+      "css": [
+        "static/css/content.css"
+      ],
+      "js": [
+        "static/js/content.js"
+      ],
+      "run_at": "document_end"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "permissions": [
+    "declarativeContent",
+    "storage",
+  ],
+  "web_accessible_resources": [
+    {"resource": ["/images/app.png"], "matches": ["<all_urls>"]},
+    {"resource": ["insert.js"], "matches": ["<all_urls>"]},
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "/images/app.png",
+      "32": "/images/app.png",
+      "48": "/images/app.png",
+      "128": "/images/app.png",
+    },
+    "icons": {
+      "16": "/images/app.png",
+      "32": "/images/app.png",
+      "48": "/images/app.png",
+      "128": "/images/app.png",
+    }
+  },
 }
+// {
+  // "short_name": "React App",
+  // "name": "Create React App Sample",
+  // "icons": [
+  //   {
+  //     "src": "favicon.ico",
+  //     "sizes": "64x64 32x32 24x24 16x16",
+  //     "type": "image/x-icon"
+  //   },
+  //   {
+  //     "src": "logo192.png",
+  //     "type": "image/png",
+  //     "sizes": "192x192"
+  //   },
+  //   {
+  //     "src": "logo512.png",
+  //     "type": "image/png",
+  //     "sizes": "512x512"
+  //   }
+  // ],
+  // "start_url": ".",
+  // "display": "standalone",
+  // "theme_color": "#000000",
+  // "background_color": "#ffffff"
+// }
