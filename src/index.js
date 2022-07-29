@@ -2,11 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import zhCN from 'antd/es/locale/zh_CN'
+import Popup from '@/popup'
+import { ConfigProvider } from 'antd'
+
+const antdConfig = {
+  locale: zhCN,
+}
+
+// ReactDOM.render(
+//   <ConfigProvider {...antdConfig}>
+//     <Popup />
+//   </ConfigProvider>,
+//   document.getElementById('root')
+// )
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Popup />
   </React.StrictMode>
 );
 
