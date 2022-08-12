@@ -188,7 +188,7 @@ module.exports = function (webpackEnv) {
   };
 
   return {
-    target: ['browserslist'],
+    target: 'web',
     // Webpack noise constrained to errors and warnings
     stats: 'errors-warnings',
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
@@ -206,7 +206,8 @@ module.exports = function (webpackEnv) {
     entry: {
       main: isEnvDevelopment && !shouldUseReactRefresh ? [webpackDevClientEntry, paths.appIndexJs] : paths.appIndexJs,
       content: './src/content/index.js',
-      background: './src/background/index.js'
+      background: './src/background/index.js',
+      insert: './src/content/insert.js',
     },
     /*zcy add end*/
     output: {
@@ -221,13 +222,13 @@ module.exports = function (webpackEnv) {
       //   ? 'static/js/[name].[contenthash:8].js'
       //   : isEnvDevelopment && 'static/js/bundle.js',
       filename: isEnvProduction
-        ? 'static/js/[name].js'
-        : isEnvDevelopment && 'static/js/[name].bundle.js',
+        ? '[name].js'
+        : isEnvDevelopment && '[name].bundle.js',
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
         // ? 'static/js/[name].[contenthash:8].chunk.js'
-        ? 'static/js/[name].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
+        ? '[name].chunk.js'
+        : isEnvDevelopment && '[name].chunk.js',
       /*zcy add end*/
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       // webpack uses `publicPath` to determine where the app is being served from.
@@ -335,6 +336,8 @@ module.exports = function (webpackEnv) {
         }),
         ...(modules.webpackAliases || {}),
         '@': path.join(__dirname, '..', 'src'),//zcy add
+        'stream': require.resolve("stream-browserify"),
+        'buffer': require.resolve("buffer/"),
       },
       plugins: [
         // Prevents users from importing files from outside of src/ (or node_modules/).

@@ -4,5 +4,114 @@
 		color: #000;
 		font-size: 14px;
 		text-align: center;
+		height: 40px;
+		line-height: 40px;
+		font-weight: bold;
 	}
+	.confirm-modal {
+	  i.cicrl {
+	    width: 15px;
+	    height: 15px;
+	    display: block;
+	    border-radius: 50%;
+	    margin-right: 5px;
+	    background: rgb(238, 116, 116);
+	  }
+	  i.user {
+	    width: 26px;
+	    height: 26px;
+	    display: block;
+	    background: url('~@/content/images/icon_user.png') center center no-repeat;
+	    background-size: cover;
+	  }
+	  i.token {
+	    width: 24px;
+	    height: 24px;
+	    display: block;
+	    background: url('~@/content/images/icon_token.png') center center no-repeat;
+	    background-size: cover;
+	  }
+	  .confirm-modal-wraper {
+	    .top-header {
+	      padding: 5px;
+	      width: 100%;
+	      display: flex;
+	      justify-content: space-between;
+	      align-items: center;
+	      border-bottom: 2px solid #ccc;
+	      .user-address { display: flex; align-items: center; }
+	      .net {
+	        display: flex;
+	        justify-content: center;
+	        align-items: center;
+	        border: 1px solid #ececec;
+	        border-radius: 5px;
+	        padding: 5px;
+	      }
+	    }
+	    
+	    .approve-info {
+	      padding: 20px;
+	      background: #F9FAFA;
+	      .host {
+	        color: #333;
+	        border: 1px solid #ebedf0;
+	        border-radius: 10px;
+	        padding: 5px 15px;
+	        display: flex;
+	        justify-content: center;
+	        align-items: center;
+	        font-size: 0.75rem;
+	        span{ padding-left: 5px;}
+	        i{
+	          width: 32px;
+	          height: 32px;
+	          display: block;
+	          background: url('~@/content/images/icon_logo.png') center center no-repeat;
+	          background-size: cover;
+	        }
+	      }
+	      .info {
+	        text-align: center;
+	        h4 { font-size: 1.2rem; margin: 10px; word-break: break-word; }
+	        .tip { font-size: 0.75rem; color: #6B737C; line-height: 20px; span{word-break: break-word;}} 
+	        .token-address-wrapper {
+	          margin: 20px auto 0;
+	          background: #F2F3F4;
+	          padding: 5px 10px;
+	          color: #6B737C;
+	          border-radius: 10px;
+	          display: flex;
+	          justify-content: center;
+	          align-items: center;
+	          width: max-content;
+	          span{ margin-left: 10px;}
+	        }
+	      }
+	    }
+	    .gas-info-wrapper {
+	      font-size: 0.75rem;
+	      padding: 0 10px;
+	      min-height: 100px;
+	      border-top: 1px solid #D3D8DC;
+	      .gas-info-wrapper-inner {
+	        .sign-title {
+	          margin-top: 10px;
+	          font-size: 0.84rem;
+	        }
+	        .sign-msg {
+	          line-height:25px;
+	          margin-top: 10px;
+	        }
+	      }
+	    }
+	    .button-content {
+	    	display: flex;
+	    	justify-content: space-between;
+	    	padding: 0 10px;
+	    	margin-top: 120px;
+	    }
+	  }
+	}
+
 }

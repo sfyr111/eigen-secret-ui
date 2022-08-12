@@ -9,7 +9,7 @@
   },
   "manifest_version": 3,
   "background": {
-    "service_worker": "static/js/background.js"
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -17,7 +17,7 @@
         "<all_urls>"
       ],
       "js": [
-        "static/js/content.js"
+        "content.js"
       ],
       "run_at": "document_end"
     }

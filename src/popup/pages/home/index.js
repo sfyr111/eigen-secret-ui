@@ -3,6 +3,7 @@ import { Button, Input } from 'antd'
 import imgLogo from '@/content/images/icon.png'
 import './home.css'
 
+
 function Home() {
 	const navigate = useNavigate()
 
