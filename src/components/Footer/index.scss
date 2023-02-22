@@ -1,0 +1,73 @@
+
+.component-footer {
+  width: 100%;
+  height: 194px;
+  background: #414152;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  .footer-logo {
+    width: 14rem;
+    height: 3.12rem;
+  }
+  .footer-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    word-wrap: normal;
+    .footer-item {
+      width: 33.3%;
+    }
+    .footer-item:nth-child(1) {
+      min-width: 230px;
+    }
+  }
+  .nav-list {
+    font-size: 0.87rem;
+    font-weight: bold;
+    line-height: 2rem;
+    li {
+      cursor: pointer;
+    }
+    li:hover {
+      color: #fff;
+    }
+  }
+  .community-title {
+    font-size: 0.87rem;
+    font-weight: bold;
+    margin-bottom: 0.62rem;
+  }
+  .commity-list {
+    .link-item {
+      display: inline-block;
+      i{
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        vertical-align: middle;
+        margin-right: 20px;
+        background: #000;
+      }
+      i.twitter{
+        background: url('~@/assets/footer/twitter.png') center center no-repeat;
+        background-size: 100% 100%;
+      }
+      i.telegram{
+        background: url('~@/assets/footer/telegram.png') center center no-repeat;
+        background-size: 100% 100%;
+      }
+      i.github{
+        background: url('~@/assets/footer/github.png') center center no-repeat;
+        background-size: 100% 100%;
+      }
+      i:hover{
+        transition: 1s;
+        transform: rotateY(360deg);
+        cursor: pointer;
+      }
+    }
+  }
+}
+

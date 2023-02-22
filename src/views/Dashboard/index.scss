@@ -1,0 +1,78 @@
+@import '@/app.scss';
+.page-dashboard {
+    .common-block-title {
+	  	font-size: 1.08rem;
+	  	color: #16161A;
+	  	font-weight: 600;
+	  	margin-top: 32px;
+	  	font-family: PingFangSC-Semibold;
+	  	margin-bottom: 18px;
+    }
+    .nav-title {
+	  	font-size: 1.8rem;
+	  	color: $defaultColor;
+	  	font-weight: 600;
+	}
+    .assets-nav-box {
+	  	display: flex;
+	  	justify-content: space-between;
+	  	align-items: center;
+	  	margin-top: 28px;
+	  	.asset-total {
+	  		color: #16161A;
+	  		font-size: 1.74rem;
+	  		font-weight: 600;
+	  	}
+	  	.asset-change {
+	  		color: $redColor;
+	  		font-size: 0.72rem;
+	  		letter-spacing: 0.02rem;
+	  		margin-top: 5px;
+	  	}
+	  	button + button {
+	  		margin-left: 0.72rem;
+	  	}
+    }
+   .table-list {
+	  	table {
+	  		width: 100%;
+	  		font-size: 0.6rem;
+	  		th {
+	  			text-align: left;
+	  			color: #44444D;
+	  			font-weight: 600;
+	  		}
+	  		td {
+	  			color: #16161A;
+	  		}
+	  		th {
+	  			height: 30px;
+	  		}
+	  	}
+    }
+   .assets-list-box {
+        .asset-list {
+	      	border-radius: 12px;
+	      	border: 1px solid $borderColor;
+	      	padding: 0 1.44rem;
+	      	table {
+	      		td {
+	      			height: 48px;
+	      		}
+	      		tr+tr {
+		  			border-top: 1px solid $borderColor;
+		  		}
+	      	}
+        }
+    }
+    .transaction-list-box {
+    	table {
+      		td {
+               height: 45px;
+      		}
+      		tr {
+      			border-bottom: 1px solid $borderColor;
+      		}
+      	}
+    }
+}

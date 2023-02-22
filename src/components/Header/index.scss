@@ -1,0 +1,23 @@
+.component-header {
+    .header-logo {
+		width: 13.14rem;
+		height: 2.88rem;
+	}
+	.user-icon {
+		width: 2.16rem;
+		height: 2.16rem;
+		border-radius: 0.72rem;
+		margin-right: 0.72rem;
+	}
+	.head-wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 98px;
+	}
+	.head-right {
+		display: flex;
+		align-items: center;
+	}
+}
+

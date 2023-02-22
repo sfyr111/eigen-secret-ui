@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Login from '../views/Login/index';
+import Dashboard from '../views/Dashboard/index';
 
 
 
@@ -52,6 +53,14 @@ const routes = [
     name: 'login',
     meta: {
       title: "login",
+    },
+    component: Login,
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    meta: {
+      title: "dashboard",
     },
     component: Login,
   },

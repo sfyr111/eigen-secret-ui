@@ -1,0 +1,107 @@
+@import './assets/style/reset.scss';
+
+*{
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+$defaultColor: #17161B;
+$desTextColor: #9E9E9E;
+$borderColor: #E6E7E9;
+$redColor: #EE615B;
+$activeColor: #3466E6;
+
+#app {
+  // font-family: 'MicrosoftYaHei', 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: Euclid, Roboto, Helvetica, Arial, sans-serif;;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  margin: 0 auto;
+  font-size: .8125rem;
+  height: 100%;
+}
+.page-container {
+  width: 930px;
+  margin: 0 auto;
+}
+
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+
+@mixin text-ellipsis () {
+    line-height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap:break-word;
+    word-break:break-all;
+}
+
+
+@mixin text-more-ellipsis ($line) {
+    position: relative;
+    line-height: 24px;
+    max-height: calc(#{$line}px * 24);
+    text-align: justify;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+    word-wrap:break-word;
+    word-break:break-all;
+}
+
+.main-block-with-text:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    width: 14px;
+}
+.main-block-with-text:after {
+    content: '';
+    position: absolute;
+    /*设置遮盖省略号的位置 */
+    right: 0;
+    /*设置遮盖省的大小 */
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: white;
+}
+.submit-btn {
+    width: 5.16rem;
+    height: 1.56rem;
+    background: $activeColor;
+    color: #fff;
+    border: 0px;
+    border-radius: 14px;
+}
+
