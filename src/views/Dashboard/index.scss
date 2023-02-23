@@ -65,14 +65,32 @@
 	      	}
         }
     }
-    .transaction-list-box {
-    	table {
-      		td {
-               height: 45px;
-      		}
-      		tr {
-      			border-bottom: 1px solid $borderColor;
-      		}
-      	}
+    .pagination-box {
+    	width: 100%;
+    	text-align: center;
+    	margin-top: 36px;
+    	margin-bottom: 63px;
     }
+    .transaction-search-box {
+    	width: 14.4rem;
+    	height: 1.38rem;
+    	background: #E6E7E9;
+    	border-radius: 6px;
+    	display: flex;
+    	align-items: center;
+    	margin-bottom: 10px;
+    	.search-icon-style {
+	    	font-size: 0.7rem;
+	    	margin-left: 10px;
+	    }
+    	.input-search {
+            font-size: 0.6rem;
+            padding-left: 8px;
+            border: 0px;
+            background: transparent;
+            outline: none;
+            color: #16161A;
+    	}
+    }
+    
 }

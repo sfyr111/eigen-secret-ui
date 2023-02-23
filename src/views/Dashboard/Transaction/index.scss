@@ -1,0 +1,89 @@
+@import '@/app.scss';
+.component-tranaction {
+    .table-list {
+	  	table {
+	  		width: 100%;
+	  		font-size: 0.6rem;
+	  		th {
+	  			text-align: left;
+	  			color: #44444D;
+	  			font-weight: 600;
+	  		}
+	  		td {
+	  			color: #16161A;
+	  		}
+	  		th {
+	  			height: 30px;
+	  		}
+	  		tr:hover {
+	  			cursor: pointer;
+	  			background: #f5f7fa;
+	  		}
+	  	}
+    }
+    .tranaction-list {
+    	table {
+      		td {
+               height: 45px;
+      		}
+      		tr {
+      			border-bottom: 1px solid #E6E7E9;
+      		}
+      	}
+    }
+    .transaction-list-tr {
+    	.address-icon {
+    		width: 0.78rem;
+    		height: 0.78rem;
+    		display: inline-block;
+    		margin-right: 4px;
+    		background: $activeColor;
+    		border-radius: 50%;
+    	}
+    	.address-td {
+    		display: flex;
+    		align-items: center;
+    	}
+    }
+    .status-trans {
+    	display: flex;
+    	align-items: center;
+    	i {
+    		width: 0.84rem;
+    		height: 0.84rem;
+    		display: inline-block;
+    		margin-right: 4px;
+    	}
+    }
+    .status-success {
+    	i {
+    		background: url('~@/assets/transaction/icon_success.png') center center;
+    		background-size: 100% 100%;
+    	}
+    }
+    .status-fail {
+        i {
+    		background: url('~@/assets/transaction/icon_fail.png') center center;
+    		background-size: 100% 100%;
+    	}
+    }
+    .status-pending {
+        i {
+    		background: url('~@/assets/transaction/icon_submitted.png') center center;
+    		background-size: 100% 100%;
+    	}
+    }
+    .status-confirming {
+        i {
+    		background: url('~@/assets/transaction/icon_submitted.png') center center;
+    		background-size: 100% 100%;
+    	}
+    }
+    .status-cancel {
+        i {
+    		background: url('~@/assets/transaction/icon_fail.png') center center;
+    		background-size: 100% 100%;
+    	}
+    }
+}
+

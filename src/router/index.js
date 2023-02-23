@@ -62,7 +62,7 @@ const routes = [
     meta: {
       title: "dashboard",
     },
-    component: Login,
+    component: Dashboard,
   },
   
 ];
