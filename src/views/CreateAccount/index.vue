@@ -19,7 +19,9 @@
             <img src="~@/assets/eth.png" class="eth-icon">
             <label class="eth-label">ETH</label>
           </div>
-          <div class="input-bot-right"></div>
+          <div class="input-bot-right">
+            <input type="text" class="input-bot">
+          </div>
         </div>
       </div>
     </div>
