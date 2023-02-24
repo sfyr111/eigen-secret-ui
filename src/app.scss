@@ -4,6 +4,9 @@
   word-break: break-all;
   word-wrap: break-word;
 }
+input {
+    outline: none;
+}
 
 $defaultColor: #17161B;
 $desTextColor: #9E9E9E;
@@ -104,4 +107,8 @@ $activeColor: #3466E6;
     border: 0px;
     border-radius: 14px;
 }
-
+.page-submit {
+    width: 11.58rem;
+    height: 2.1rem;
+    border-radius: 1.05rem;
+}

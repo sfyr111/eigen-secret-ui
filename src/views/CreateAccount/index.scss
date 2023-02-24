@@ -1,0 +1,73 @@
+@import '@/app.scss';
+.page-create-account {
+  .create-title {
+    font-size: 2.04rem;
+    font-weight: 600;
+    line-height: 48px;
+    margin-top: 66px;
+    color: $defaultColor;
+  }
+  
+  .create-des {
+    font-size: 0.96rem;
+    line-height: 30px;
+    color: #666;
+    margin-top: 20px;
+  }
+  .create-nick-box {
+    border: 1px solid $borderColor;
+    border-radius: 10px;
+    width: 16.8rem;
+    height: 2.4rem;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    input {
+      border: 0px;
+      height: 2.2rem;
+      margin-left: 10px;
+      width: 83%;
+      font-size: 0.96rem;
+      color: #9D9FA8;
+    }
+    .input-success {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .error-tip {
+    color: $redColor;
+    font-size: 0.54rem;
+    margin-top: 3px;
+  }
+  .create-submit {
+    margin-top: 58px;
+  }
+  .create-value-box {
+    .input-wraper {
+      width: 16.8rem;
+    }
+  }
+
+  .input-wraper {
+    width: 100%;
+    height: 2.7rem;
+    background: #F0F0F2;
+    border-radius: 6px;
+    padding: 5px 10px;
+    .input-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.54rem;
+      color: #71727C;
+    }
+    .eth-icon {
+      width: 0.78rem;
+      height: 0.78rem;
+    }
+    .eth-label {
+      color: #16161A;
+      font-size: 0.72rem;
+    }
+  }
+}

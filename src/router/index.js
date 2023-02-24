@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Login from '../views/Login/index';
 import Dashboard from '../views/Dashboard/index';
+import CreateAccount from '../views/CreateAccount/index';
 
 
 
@@ -59,12 +60,13 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    meta: {
-      title: "dashboard",
-    },
     component: Dashboard,
   },
-  
+  {
+    path: '/createAccount',
+    name: 'createAccount',
+    component: CreateAccount,
+  },
 ];
 
 const router = new VueRouter({
