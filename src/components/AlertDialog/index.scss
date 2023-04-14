@@ -1,0 +1,55 @@
+@import '@/app.scss';
+.component-confirmdialog {
+    .dialog-title {
+    	font-size: 1.8rem;
+    	font-weight: 600;
+    	text-align: center;
+    	color: $defaultColor;
+    }
+    .dialog-des {
+    	font-size: 0.96rem;
+    	color: #9D9FA8;
+    	word-break: break-word;
+    	margin-top: 20px;
+    	font-family: Source Han Sans CN;
+    }
+    .dialog-rec {
+    	color: #666;
+    	font-size: 0.96rem;
+    	margin-top: 36px;
+    	font-family: PingFangSC-Medium;
+    }
+    .dialog-status-box {
+    	text-align: center;
+    	.status-icon {
+	    	width: 6.24rem;
+	    	height: 6.24rem;
+	    	margin-top: 14px;
+	    }
+	    .status-txt {
+	    	color: #9D9FA8;
+	    	font-size: 0.96rem;
+	    	margin-top: 45px;
+	    }
+    }
+    .dialog-amount-box {
+    	border-top: 1px solid #D8D8D8;
+    	margin-top: 28px;
+    	color: #666;
+    	padding-top: 12px;
+    	display: flex;
+    	justify-content: space-between;
+    }
+    .dialog-footer {
+    	text-align: center;
+    }
+    .dialog-btn {
+    	width: 10.08rem;
+    	height: 2.1rem;
+    	background: $activeColor;
+    	color: #fff;
+    	font-size: 0.72rem;
+    }
+    
+}
+

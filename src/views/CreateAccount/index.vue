@@ -1,57 +1,86 @@
 <template>
   <div class="page-create-account page-container">
-    <div class="create-title">Create a new EigenMoney account</div>
-    <div class="create-des">Please set an account nicknameYour friends can easily transfer crypto to you by nickname.</div>
-    <div class="create-nick-box">
-      <input type="text" name="nickname" class="input-nick-name">
-      <img src="~@/assets/success.png" class="input-success">
-    </div>
-    <div class="error-tip">Already registered，please change your nickname</div>
-    <div class="create-des">Please deposit at least 0.01ETH</div>
-    <div class="create-value-box">
-      <div class="input-wraper">
-        <div class="input-top">
-          <p>Amount</p>
-          <p>-4 hours</p>
-        </div>
-        <div class="input-bottom">
-          <div class="input-bot-left">
-            <img src="~@/assets/eth.png" class="eth-icon">
-            <label class="eth-label">ETH</label>
+
+    <div class="nickname-box">
+      <div class="title">Set an account nickname</div>
+      <div class="content">
+
+        <div class="left input-box">
+          <div>
+            <FormInput placeholder="Enter nickname、ethereum address or ENS"/>
           </div>
-          <div class="input-bot-right">
-            <input type="text" class="input-bot">
+        </div>
+
+        <div class="create-des">
+          <div>
+            <span>Please set an account nicknameYour friends can easily transfer crypto to you by
+          nickname.</span>
           </div>
         </div>
       </div>
+
+      <div>
+        <div class="error-tip">Already registered，please change your nickname</div>
+      </div>
     </div>
-    <div class="create-submit"><button class="submit-btn page-submit">Register</button></div>
+
+
+    <div class="nickname-box">
+
+      <div class="title">Amount</div>
+
+      <div class="content">
+        <div class="left create-value-box">
+          <ExchangeItem
+              key="fromToken"
+              isMax=true
+              placeholder="Enter amount"
+              :sourceData="assetsTokenList"
+              :showLoading="tokenLoading"
+              @selectChagne="val=> val"
+              @inputChange="val=> val"
+              ref="tokenFromSelect"/>
+        </div>
+        <div class="create-des">Please deposit at least 0.01ETH</div>
+      </div>
+
+    </div>
+
+    <div class="create-submit">
+      <button class="submit-btn page-submit" @click="register">Register</button>
+    </div>
   </div>
 </template>
 
 <script>
 
+import ExchangeItem from '@/components/ExchangeItem/index';
+import FormInput from '@/components/Input/index';
+
 export default {
   name: 'create-accout-page',
-  
+  components: {
+    ExchangeItem,
+    FormInput
+  },
   data() {
     return {
-      
+      assetsTokenList: [],
+      tokenLoading: false,
     }
   },
-  
-  
   methods: {
-    
+    register() {
+      this.$emit('create-end', 4)
+    }
   },
-  
   created() {
     console.log('token')
   },
-  
+
 };
 </script>
 <style lang="scss" scoped>
-  @import 'index.scss';
+@import 'index.scss';
 </style>
 

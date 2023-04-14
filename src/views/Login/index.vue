@@ -1,13 +1,12 @@
 <template>
   <div class="page-login page-container">
-    <div class="login-title">Login in with your wallet</div>
     <div class="login-des">Welcome to Eigen zkPay! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
-      <div @click="metamaskLogin">
+      <div class="login-btn" @click="metamaskLogin">
         <img src="~@/assets/metamask.png" class="metamask-icon">
         <p class="metamask-text">MetaMask</p>
       </div>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -15,27 +14,26 @@
 
 export default {
   name: 'login-page',
-  
+
   data() {
-    return {
-      
-    }
+    return {}
   },
-  
-  
+
+
   methods: {
     metamaskLogin() {
-      this.$router.push('/dashboard')
+      this.$emit('login-end', 1)
+      // this.$router.push('/dashboard')
     },
   },
-  
+
   created() {
     console.log('token')
   },
-  
+
 };
 </script>
 <style lang="scss" scoped>
-  @import 'index.scss';
+@import 'index.scss';
 </style>
 

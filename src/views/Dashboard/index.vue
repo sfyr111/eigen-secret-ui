@@ -33,13 +33,16 @@
             </table>
          </div>
       </div>
+      <div class="multi-transaction-box">
+        <MultiTransactionTab/>
+      </div>
       <div class="transaction-list-box">
         <div class="common-block-title">Transaction History</div>
         <div class="transaction-search-box">
           <i class="el-icon-search search-icon-style"></i>
           <input placeholder="Filter by TX HASH" v-model="transactionHash" class="input-search">
         </div>
-        <Transaction 
+        <Transaction
           :transactionList="transactionList"/>
         <div class="pagination-box">
           <el-pagination
@@ -50,7 +53,7 @@
         </div>
       </div>
     </div>
-    <ConfirmDialog 
+    <ConfirmDialog
       :dialogDes="dialogDes"
       :dialogType="dialogType"
       :dialogVisible.sync="dialogVisible"
@@ -63,6 +66,8 @@
 import Header from '@/components/Header/index';
 import Footer from '@/components/Footer/index';
 import Transaction from './Transaction/index';
+import MultiTransaction from './MultiTransaction/index';
+import MultiTransactionTab from './MultiTransactionTab/index';
 import ConfirmDialog from '@/components/ConfirmDialog/index';
 export default {
   name: 'dashboard-page',
@@ -81,7 +86,7 @@ export default {
         }
       ],
       transactionHash: '',
-      
+
       dialogDes: '',
       dialogType: '',
       dialogVisible: false,
@@ -92,8 +97,10 @@ export default {
     Footer,
     Transaction,
     ConfirmDialog,
+    MultiTransaction,
+    MultiTransactionTab,
   },
-  
+
   methods: {
     transClick(type) {
       this.dialogType = type
@@ -107,18 +114,18 @@ export default {
         case 'Withdraw':
           this.dialogDes = 'Withdraw assets from EigenMoney L2 to L1 at any time. The default address is your signing wallet address. You can also withdraw to other L1 addresses. Please make sure the address is correct.'
           break;
-        default: 
+        default:
           break;
       }
       this.dialogVisible = true
     },
-    
+
   },
-  
+
   created() {
     console.log('token')
   },
-  
+
 };
 </script>
 <style lang="scss" scoped>
