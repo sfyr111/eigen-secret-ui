@@ -1,6 +1,7 @@
-export const getStatusTxt = (record) => {
+export const getStatusTxt = (status) => {
+  status = parseInt(status)
   let statusTxt = 'pending';
-  switch(record.status) {
+  switch(status) {
     case 0:
       statusTxt = 'pending'
       break;

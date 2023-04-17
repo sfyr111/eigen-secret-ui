@@ -4,6 +4,8 @@ import LoginStep from '../views/LoginStep/index';
 import Login from '../views/Login/index';
 import Dashboard from '../views/Dashboard/index';
 import CreateAccount from '../views/CreateAccount/index';
+import Secret from '../views/secret/index';
+import { getSigner, getAlias } from "@/store";
 
 
 // cache origin push method
@@ -49,7 +51,23 @@ const routes = [
       component: ThirdLogin,
     }, */
     {
+        path: '/secret',
+        name: 'secret',
+        meta: {
+            title: "secret",
+        },
+        component: Secret,
+    },
+    {
         path: '/',
+        name: 'Login',
+        meta: {
+            title: "Login",
+        },
+        component: Login,
+    },
+    {
+        path: '/LoginStep',
         name: 'LoginStep',
         meta: {
             title: "LoginStep",
@@ -80,6 +98,22 @@ const router = new VueRouter({
     mode: 'history', // 'hash'
     base: process.env.BASE_URL,
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.path === '/secret') {
+        return next()
+    }
+    if (to.path != '/' && to.path != '/LoginStep' && to.path != '/login') {
+        if(!getAlias() || !getSigner()) {
+            next('/')
+        } else {
+            next();
+        }
+    } else {
+        next()
+    }
+
 });
 
 export default router;

@@ -1,5 +1,10 @@
 @import '@/app.scss';
 
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
 .page-create-account {
 
   .nickname-box {

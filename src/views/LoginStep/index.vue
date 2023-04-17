@@ -5,14 +5,14 @@
     </div>
     <div class="steps">
       <el-steps :active="active" align-center>
-        <el-step title="Login in with your wallet">
+        <el-step title="Login in with MetaMask">
         </el-step>
         <el-step title="Set an account nickname"></el-step>
         <el-step title="Login succeeded"></el-step>
       </el-steps>
     </div>
     <div class="content">
-      <Login v-if="active == 0" @login-end="loginEnd"/>
+      <Register v-if="active == 0" @login-end="loginEnd"/>
       <CreateAccount @create-end="createEnd" v-if="active == 1 || active == 2 || active == 3"/>
       <AlertDialog @update:dialogVisible="registerDialogClose" :dialog-visible="registerDialog"
                    dialog-tip="Congratulations, your registration is successful!"
@@ -23,15 +23,17 @@
 
 <script>
 
-import Login from '@/views/Login/index';
+import Register from '@/views/Register/index';
 import CreateAccount from '@/views/CreateAccount/index';
 import AlertDialog from '@/components/AlertDialog/index';
-
+import secretManager from '@/SecretManager/SecretManager';
+import { getSigner, setSdk, setSigner, setAlias } from "@/store";
+import { ehters } from 'ethers';
 
 export default {
   name: 'LoginStep',
   components: {
-    Login,
+    Register,
     CreateAccount,
     AlertDialog
   },
@@ -39,16 +41,20 @@ export default {
     return {
       active: 0,
       registerDialog: false,
+      user: null, // todo to store
     }
   },
 
 
   methods: {
-    loginEnd() {
+    loginEnd(singer) {
+      setSigner(singer)
       this.active = 1
     },
-    createEnd() {
+    createEnd(sdk) {
       this.active = 3
+      setSdk(sdk.data)
+      setAlias(sdk.data.alias)
       this.registerDialog = true
     },
     metamaskLogin() {

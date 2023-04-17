@@ -4,92 +4,180 @@
       <div class="recipient">
         <p class="common-block-title">Recipient</p>
         <div>
-          <FormInput placeholder="Enter nickname、ethereum address or ENS"/>
+          <FormInput :value.sync="receiver" @inputChange="(e) => {this.receiver = e.value} "
+                     placeholder="Enter address"/>
         </div>
       </div>
       <div class="amount">
         <p class="amount-title">
           <span class="common-block-title">Amount</span>
-          <span class="remainder">Balance: 0.005780 ETH</span>
+          <span class="remainder">Balance: {{ ethBalance }} ETH</span>
         </p>
         <div>
           <ExchangeItem
               key="fromToken"
               isMax=true
               placeholder="Enter amount"
-              :sourceData="assetsTokenList"
+              :sourceData="assetsInfos"
               :showLoading="tokenLoading"
-              @selectChagne="val=> val"
-              @inputChange="val=> val"
+              @selectChagne="val => {this.assetId = val.rightVal}"
+              @inputChange="val => {this.transactionValue = val}"
               ref="tokenFromSelect"/>
         </div>
       </div>
-      <div class="transaction-fee">
-        <p class="amount-title">
-          <span class="common-block-title">Transaction Fee</span>
-          <span class="remainder">Balance: 0.005780 ETH</span>
-        </p>
-        <div class="row" :class="transactionFee == '1' ? 'selected' : ''" @click="switchTransactionFee('1')">
-          <div class="item icon">
-            <el-radio v-model="transactionFee" label="1"><span></span></el-radio>
-          </div>
-          <div class="item title">Slow</div>
-          <div class="item time"></div>
-          <div class="item price">0.00034 ETH</div>
-          <div class="item process">$0.58</div>
-        </div>
-        <div class="row" :class="transactionFee == '2' ? 'selected' : ''" @click="switchTransactionFee('2')">
-          <div class="item icon">
-            <el-radio v-model="transactionFee" label="2"><span></span></el-radio>
-          </div>
-          <div class="item title">Instant</div>
-          <div class="item time">7 mins</div>
-          <div class="item price">0.0085 ETH</div>
-          <div class="item process">$14.56</div>
-        </div>
-      </div>
+      <!--      <div class="transaction-fee">-->
+      <!--        <p class="amount-title">-->
+      <!--          <span class="common-block-title">Transaction Fee</span>-->
+      <!--          <span class="remainder">Balance: 0.005780 ETH</span>-->
+      <!--        </p>-->
+      <!--        <div class="row" :class="transactionFee == '1' ? 'selected' : ''" @click="switchTransactionFee('1')">-->
+      <!--          <div class="item icon">-->
+      <!--            <el-radio v-model="transactionFee" label="1"><span></span></el-radio>-->
+      <!--          </div>-->
+      <!--          <div class="item title">Slow</div>-->
+      <!--          <div class="item time"></div>-->
+      <!--          <div class="item price">0.00034 ETH</div>-->
+      <!--          <div class="item process">$0.58</div>-->
+      <!--        </div>-->
+      <!--        <div class="row" :class="transactionFee == '2' ? 'selected' : ''" @click="switchTransactionFee('2')">-->
+      <!--          <div class="item icon">-->
+      <!--            <el-radio v-model="transactionFee" label="2"><span></span></el-radio>-->
+      <!--          </div>-->
+      <!--          <div class="item title">Instant</div>-->
+      <!--          <div class="item time">7 mins</div>-->
+      <!--          <div class="item price">0.0085 ETH</div>-->
+      <!--          <div class="item process">$14.56</div>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
     <div class="center">
 
     </div>
     <div class="right">
-      <div class="common-block-title">Summary</div>
+      <div class="common-block-title">Tips</div>
       <div class="content">
-        Transfer assets from the layer1 wallet (e.g. connected MetaMask wallet) to the EigenSecret (2 wallet to
-        experience gas-low token transfer and swap. You can withdraw assets to the layer1 wallet at any time.
+        {{ summaryTxt }}
       </div>
       <div class="button">
-        <button class="submit-btn">Deposit to L2</button>
+        <button class="submit-btn" @click="caller">{{ buttonTxt }}</button>
       </div>
     </div>
+
+
+    <AlertDialog
+        :dialogDes="dialogObject.dialogDes"
+        :dialogType="dialogObject.dialogType"
+        :dialogVisible.sync="dialogObject.dialogVisible"
+        :dialogBtnTxt="dialogObject.dialogBtnTxt"
+    />
+
   </div>
 </template>
 
 <script>
 
-import FormSelect from '@/components/Select/index';
 import FormInput from '@/components/Input/index';
 import ExchangeItem from '@/components/ExchangeItem/index';
-
+import secretManager from '@/SecretManager/SecretManager';
+import msg from "@/utils/msg";
+import {getAlias, getSigner} from "@/store";
+import AlertDialog from '@/components/AlertDialog/index';
 
 export default {
   name: "MultiTransaction",
   components: {
-    FormSelect,
     ExchangeItem,
-    FormInput
+    FormInput,
+    AlertDialog
+  },
+  props: {
+    transactionType: {
+      type: String,
+    },
+    assetsInfos: {
+      type: Array,
+    },
+    ethBalance: {
+      type: String
+    }
+  },
+  created() {
+    this.summaryTxt = msg.transaction[this.transactionType].summaryTxt
+    this.buttonTxt = msg.transaction[this.transactionType].buttonTxt
+    if (this.transactionType == 'deposit' || this.transactionType == 'withdraw') {
+      this.receiver = secretManager.getPubKey()// getSigner().userAddress
+    }
   },
   data() {
     return {
-      assetsTokenList: [],
       tokenLoading: false,
-      transactionFee: '1'
+      transactionFee: '1',
+      summaryTxt: '',
+      buttonTxt: '',
+      transactionValue: null,
+      receiver: null,
+      assetId: null,
+      dialogObject: {
+        dialogDes: null,
+        dialogType: 1,
+        dialogVisible: false,
+        dialogBtnTxt: 'confirm',
+      },
     }
   },
   methods: {
+    showAlert(dialogDes, dialogType) {
+      this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
+      this.dialogObject.dialogType = dialogType
+      this.dialogObject.dialogVisible = true
+    },
     switchTransactionFee(e) {
       this.transactionFee = e
-    }
+    },
+    caller() {
+      const type = this.transactionType
+
+      if (!this.receiver) {
+        this.showAlert('Please enter the recipient address', 2)
+        return
+      }
+      if (!this.transactionValue) {
+        this.showAlert('Please enter the operation amount', 2)
+        return
+      }
+      if (!this.assetId) {
+        this.showAlert('Please select an asset type', 2)
+        return
+      }
+      const params = {
+        alias: getAlias(),
+        assetId: this.assetId, // todo this value from selector, default 2.
+        value: this.transactionValue,
+        user: getSigner(),
+        receiver: this.receiver, // todo when only call send method is required
+      }
+      if (secretManager[type]) {
+        const eloading = this.$eloading('Operation in progress, please wait')
+        this.assetsInfos.forEach(item => {
+          if (item.rightVal == this.assetId) {
+            params.decimals = item.tokenInfo?.decimals
+          }
+        })
+        secretManager[type].call(secretManager, params).then((res) => {
+          if (res.errno == 0) {
+            this.showAlert('Transaction Confirmed!', 1)
+            this.$eventBus.$emit('transaction-success', {value: true})
+          } else {
+            this.showAlert(res.message, 2)
+          }
+        }).catch((e) => {
+          console.error(e)
+          this.showAlert(null, 2, e)
+        }).finally(() => {
+          eloading.close()
+        })
+      }
+    },
   }
 }
 </script>

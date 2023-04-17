@@ -1,58 +1,132 @@
 <template>
-  <div class="component-tranaction">
-    <div class="tranaction-list table-list">
-      <table>
-        <tr>
-          <th>STATUS</th>
-          <th>OPERATION</th>
-          <th>TX HASH</th>
-          <th>BALANCE</th>
-          <th>FROM</th>
-          <th>TO</th>
-          <th>TIMESTAMP</th>
-        </tr>
-        <tr v-for="(item,index) in newtransactionList" :key="index" class="transaction-list-tr">
-          <td :class="['status-trans', `status-${getStatusTxt(item.status)}`]"><i></i>{{getStatusTxt(item.status)}}</td>
-          <td>{{ item.opration }}</td>
-          <td>{{ item.hash }}</td>
-          <td>{{ item.balance }}</td>
-          <td>
-            <div class="address-td">
-              <i class="address-icon"></i>{{ item.from }}
-            </div>
-          </td>
-          <td>
-            <div class="address-td">
-              <i class="address-icon"></i>{{ item.to }}
-            </div>
-          </td>
-          <td>{{ item.time }}</td>
-        </tr>
-      </table>
+
+  <div>
+    <div class="component-tranaction">
+      <div class="tranaction-list table-list">
+        <table>
+          <tr>
+            <th>STATUS</th>
+            <th>OPERATION</th>
+            <th>TX HASH</th>
+            <th>BALANCE</th>
+<!--            <th>FROM</th>-->
+            <th>TO</th>
+            <th>TIMESTAMP</th>
+          </tr>
+          <tr v-for="(item,index) in pageData" :key="index" class="transaction-list-tr">
+<!--            <td :class="['status-trans', `status-${getStatusTxt(item.status)}`]"><i></i>{{ getStatusTxt(item.status) }}-->
+<!--            </td>-->
+            <td>{{ item.status }}</td>
+            <td>{{ item.operation }}</td>
+            <td @click="copyAddress(item.txhashReal)" title="Click to copy">{{ item.txhash }}</td>
+            <td>{{ item.balance }}</td>
+<!--            <td>{{ item.assetId }}</td>-->
+            <td @click="copyAddress(item.toReal)" title="Click to copy">{{ item.to }}</td>
+            <td>{{ item.timestamp }}</td>
+          </tr>
+        </table>
+        <div class="no-data" v-if="!pageData || pageData.length < 1">
+          <span>No more data available</span>
+        </div>
+      </div>
     </div>
+
+    <div class="pagination-box">
+      <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="totalCount"
+          @size-change="changePageSize"
+          @current-change="changePage"
+          :current-page.sync="page"
+          @prev-click="prevPage"
+          @next-click="nextPage"
+      >
+      </el-pagination>
+    </div>
+
   </div>
+
 </template>
 <script>
-import { getStatusTxt, timeFormat } from '@/utils/index';
+import {getStatusTxt} from '@/utils/index';
+import secretManager from '@/SecretManager/SecretManager';
+import {getAlias, getSigner} from "@/store";
+
 export default {
   name: 'Transaction',
-  props: {
-    transactionList: {
-      type: Array,
-      default: () => []
-    }
-  },
+  // props: {
+  //   transactionList: {
+  //     type: Array,
+  //     default: () => []
+  //   }
+  // },
   data() {
     return {
-      newtransactionList: this.transactionList,
+      // newtransactionList: this.transactionList,
       getStatusTxt,
+      page: 1,
+      pageSize: 10,
+      pageData: [],
+      totalCount: 0,
     }
   },
   methods: {
-    
+    copyAddress(data) {
+      navigator.clipboard.writeText(data)
+    },
+    changePage(p) {
+      this.page = p
+    },
+    changePageSize( p) {
+      this.pageSize = p
+    },
+    prevPage() {
+      if (this.page > 1) {
+        this.page -= 1;
+      }
+    },
+    nextPage() {
+      this.page++;
+    },
+    fetchPageData() {
+      const options = {alias: getAlias(), password: secretManager.getPassword(), user: getSigner(), page: this.page, pageSize: this.pageSize}
+      secretManager.getTransactions(options).then((res) => {
+        if (res && Array.isArray(res.data?.transactions)) {
+          this.pageData = res?.data?.transactions
+          this.totalCount = res?.data?.totalPage * this.pageSize
+          this.pageData?.forEach(item => {
+            item.txhashReal = '0x' + item.txhash
+            item.toReal =  item.to
+            item.txhash = '0x' + this.$hideAddress(item.txhash)
+            item.to = 'eig:' + this.$hideAddress(item.to)
+          })
+        } else {
+          this.pageData = []
+        }
+        console.log('getTransactions res: ', res)
+        // to convert
+      }).catch((e) => {
+        console.error('getTransactions error: ', e)
+      })
+    },
+    initData() {
+      this.fetchPageData()
+      this.$eventBus.$on('transaction-success', (data) => {
+        this.fetchPageData()
+      })
+    }
   },
+  created() {
+    this.initData()
+  },
+  watch: {
+    'page': function() {
+      this.initData()
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
-  @import 'index';
+@import 'index';
 </style>

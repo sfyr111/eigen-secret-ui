@@ -3,6 +3,7 @@
     <div class="input-label">{{ label }}</div>
     <div class="input-con">
       <input
+          :disabled="disabled"
           @input="inputChange"
           type="text"
           :value="value"
@@ -27,7 +28,7 @@ import {Field} from 'vant';
 Vue.use(Field);
 export default {
   name: 'FormInput',
-  props: ['label', 'leftIcon', 'rightIcon', 'placeholder', 'value', 'limitInput'],
+  props: ['label', 'leftIcon', 'rightIcon', 'placeholder', 'value', 'limitInput', 'disabled'],
   methods: {
     inputChange(e) {
       const value = e.target.value

@@ -2,19 +2,21 @@
     <li class="select-item" @click="selectChange">
       <div class="select-left">
         <div class="select-left-icon">
-          <img :src="icon">
+          <img :src="icon" v-if="icon">
+          <img src="@/assets/exchangeitem/icon_token_eth.png" class="select-img" v-else>
         </div>
         <div class="select-left-text">
           <h3 class="select-left-title">{{leftTitle}}</h3>
-          <p class="select-left-value">{{leftDes}}</p>
+<!--          <p class="select-left-value">{{leftDes}}</p>-->
+          <p class="select-left-value">Asset ID: {{rightVal}}</p>
         </div>
       </div>
       <h3 class="select-price-right">
-        <span v-if="!showInput">{{rightVal}}<label v-if="labelShow">Gwei</label></span>
-        <span v-else>
-          <input v-model="value" @input="inputChange" type="text" class="input-text" placeholder="" @keyup="hanldeValue" >
-          <label >Gwei</label>
-        </span>
+<!--        <span v-if="!showInput">{{rightVal}}<label v-if="labelShow">Gwei</label></span>-->
+<!--        <span v-else>-->
+<!--          <input v-model="value" @input="inputChange" type="text" class="input-text" placeholder="" @keyup="hanldeValue" >-->
+<!--          <label >Gwei</label>-->
+<!--        </span>-->
       </h3>
     </li>
 </template>
