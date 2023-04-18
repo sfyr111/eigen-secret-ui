@@ -12,6 +12,8 @@
 
 <script>
 
+import { SecretSDK } from "@eigen-secret/sdk/dist/index";
+
 export default {
   name: 'login-page',
 
@@ -22,6 +24,8 @@ export default {
 
   methods: {
     metamaskLogin() {
+      let secretSDK = new SecretSDK('')
+      secretSDK.createAccount();
       this.$emit('login-end', 1)
       // this.$router.push('/dashboard')
     },
