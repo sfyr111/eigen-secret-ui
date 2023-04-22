@@ -13,6 +13,7 @@
 <script>
 
 import { SecretSDK } from "@eigen-secret/sdk/dist/index";
+import { Prover } from "@eigen-secret/core/dist/prover";
 
 export default {
   name: 'login-page',
@@ -24,7 +25,9 @@ export default {
 
   methods: {
     metamaskLogin() {
+      console.log(Prover)
       let secretSDK = new SecretSDK('')
+      console.log(secretSDK)
       secretSDK.createAccount();
       this.$emit('login-end', 1)
       // this.$router.push('/dashboard')
