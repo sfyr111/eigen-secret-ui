@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
-import { signEOASignature, rawMessage } from "@eigen-secret/core/dist/utils";
-import { SigningKey, SecretAccount } from "@eigen-secret/core/dist/account";
-import { SecretSDK } from "@eigen-secret/sdk/dist/index";
+import { signEOASignature, rawMessage } from "@eigen-secret/core/dist-browser/utils";
+import { SigningKey, SecretAccount } from "@eigen-secret/core/dist-browser/account";
+import { SecretSDK } from "@eigen-secret/core/dist-browser/sdk";
 import { buildEddsa } from "circomlibjs";
 import createBlakeHash from "blake-hash";
 import { defaultContractABI, defaultContractFile as contractJson, defaultServerEndpoint, defaultCircuitPath } from "./common";
@@ -54,6 +54,7 @@ export async function createSecretAccount(alias) {
   let proofAndPublicSignals = await secretSDK.createAccount(ctx, sa.newSigningKey1, sa.newSigningKey2);
 
   console.log('createSecretAccount: ', proofAndPublicSignals)
+  return proofAndPublicSignals
   // ...
 }
 
