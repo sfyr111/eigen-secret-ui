@@ -13,6 +13,7 @@
 <script>
 
 import { createSecretAccount } from "@/contractUtils/account";
+import { sendL1 } from "@/contractUtils/token";
 
 async function loadScriptFromBlob(blob) {
   return new Promise((resolve, reject) => {
@@ -44,6 +45,15 @@ export default {
     async createAccount() {
       const batchproof = await createSecretAccount('abu')
       console.log(batchproof)
+
+
+
+
+
+
+
+
+
     },
     async createImport() {
       let wcUrl = `http://localhost:3000/public/main_update_state_js/witness_calculator.js`;
