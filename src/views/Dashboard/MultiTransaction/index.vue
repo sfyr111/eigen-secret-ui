@@ -55,11 +55,10 @@
     <div class="right">
       <div class="common-block-title">Summary</div>
       <div class="content">
-        Transfer assets from the layer1 wallet (e.g. connected MetaMask wallet) to the EigenSecret (2 wallet to
-        experience gas-low token transfer and swap. You can withdraw assets to the layer1 wallet at any time.
+        {{summaryTxt}}
       </div>
       <div class="button">
-        <button class="submit-btn">Deposit to L2</button>
+        <button class="submit-btn">{{buttonTxt}}</button>
       </div>
     </div>
   </div>
@@ -70,6 +69,8 @@
 import FormSelect from '@/components/Select/index';
 import FormInput from '@/components/Input/index';
 import ExchangeItem from '@/components/ExchangeItem/index';
+import {deposit, send, withdraw} from "@/contractUtils/transaction";
+import prompt from "@/utils/prompt";
 
 
 export default {
@@ -79,16 +80,39 @@ export default {
     ExchangeItem,
     FormInput
   },
+  props: {
+    transactionType: {
+      type: String,
+    },
+  },
   data() {
     return {
       assetsTokenList: [],
       tokenLoading: false,
-      transactionFee: '1'
+      transactionFee: '1',
+      summaryTxt: '',
+      buttonTxt: '',
     }
   },
   methods: {
     switchTransactionFee(e) {
       this.transactionFee = e
+    },
+    doDeposit() {
+
+    },
+    doSend() {
+
+    },
+    doWithdraw() {
+
+    }
+  },
+  watch: {
+    // 监视message属性的变化
+    transactionType: function(n) {
+      this.summaryTxt = prompt[n].summaryTxt
+      this.buttonTxt = prompt[n].buttonTxt
     }
   }
 }

@@ -7,7 +7,7 @@
 
         <div class="left input-box">
           <div>
-            <FormInput placeholder="Enter nickname、ethereum address or ENS"/>
+            <FormInput :value="alias" @inputChange="(v) => {this.alias = v.value}" placeholder="@nickname"/>
           </div>
         </div>
 
@@ -56,6 +56,7 @@
 
 import ExchangeItem from '@/components/ExchangeItem/index';
 import FormInput from '@/components/Input/index';
+import {createSecretAccount} from "@/contractUtils/account";
 
 export default {
   name: 'create-accout-page',
@@ -67,11 +68,40 @@ export default {
     return {
       assetsTokenList: [],
       tokenLoading: false,
+      alias: null,
     }
   },
   methods: {
-    register() {
-      this.$emit('create-end', 4)
+    openFullScreen2() {
+
+    },
+    async register() {
+      const eloading = this.$eloading('Registration in progress, please wait')
+      try {
+        if (!this.alias) {
+          alert('请登录')
+          return
+        }
+        let info;
+        try {
+          info = await createSecretAccount();
+        } catch (e) {
+          if (e.code == 'ACTION_REJECTED') {
+            alert('Unable to link your account. Please try again.')
+          } else {
+            alert('create account error')
+          }
+          console.dir(e)
+        }
+        if (info) {
+
+          this.$emit('create-end', 4)
+        } else {
+
+        }
+      }  finally {
+        eloading.close()
+      }
     }
   },
   created() {

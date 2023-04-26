@@ -2,7 +2,7 @@
   <div class="page-login page-container">
     <div class="login-des">Welcome to Eigen zkPay! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
-      <div class="login-btn" @click="createAccount">
+      <div class="login-btn" @click="connect">
         <img src="~@/assets/metamask.png" class="metamask-icon">
         <p class="metamask-text">MetaMask</p>
       </div>
@@ -12,8 +12,9 @@
 
 <script>
 
-import { createSecretAccount } from "@/contractUtils/account";
-import { sendL1 } from "@/contractUtils/token";
+import {createSecretAccount} from "@/contractUtils/account";
+import {connectMetaMask} from "@/contractUtils/metaMask";
+import {getSecretAccount, getSigner} from "@/utils/store";
 
 async function loadScriptFromBlob(blob) {
   return new Promise((resolve, reject) => {
@@ -42,18 +43,18 @@ export default {
 
 
   methods: {
+    async connect() {
+      await connectMetaMask();
+      if (getSigner()) {
+        this.$emit('login-end', 1)
+      } else {
+        // 签名失败
+
+      }
+    },
     async createAccount() {
       const batchproof = await createSecretAccount('abu')
       console.log(batchproof)
-
-
-
-
-
-
-
-
-
     },
     async createImport() {
       let wcUrl = `http://localhost:3000/public/main_update_state_js/witness_calculator.js`;
@@ -64,7 +65,7 @@ export default {
 
       const wcContentModified = wcContent.replace(/module\.exports\s*=/, 'window.wc =');
 
-      const wcBlob = new Blob([wcContentModified], { type: 'text/javascript' });
+      const wcBlob = new Blob([wcContentModified], {type: 'text/javascript'});
       console.log("Created Blob with witness_calculator.js content:", wcBlob);
 
       try {
