@@ -5,12 +5,14 @@ import ElementUI from "element-ui"
 import "element-ui/lib/theme-chalk/index.css"
 import 'vant/lib/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
+import Vuex from 'vuex'
 
 
 Vue.use(ElementUI, { locale });
 
 Vue.config.productionTip = false
 Vue.prototype.$eventBus = new Vue()
+
 
 new Vue({
   router,
