@@ -25,27 +25,6 @@
     </div>
 
 
-    <div class="nickname-box">
-
-      <div class="title">Amount</div>
-
-      <div class="content">
-        <div class="left create-value-box">
-          <ExchangeItem
-              key="fromToken"
-              isMax=true
-              placeholder="Enter amount"
-              :sourceData="assetsTokenList"
-              :showLoading="tokenLoading"
-              @selectChagne="val=> val"
-              @inputChange="val=> val"
-              ref="tokenFromSelect"/>
-        </div>
-        <div class="create-des">Please deposit at least 0.01ETH</div>
-      </div>
-
-    </div>
-
     <div class="create-submit">
       <button class="submit-btn page-submit" @click="register">Register</button>
     </div>
