@@ -1,6 +1,6 @@
 import {buildSdk} from "./sdk";
 import {buildCtx} from "@/contractUtils/metaMask";
-import {getSecretAccount, getSigner} from "@/utils/store";
+import {getSecretAccount, getSigner} from "@/store";
 
 
 export async function createSecretAccount(alias) {

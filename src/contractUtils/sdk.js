@@ -7,7 +7,7 @@ import {
     defaultContractFile as contractJson,
     defaultServerEndpoint
 } from "./common";
-import {getSdk, setSdk, setSecretAccount} from "@/utils/store";
+import {getSdk, setSdk, setSecretAccount} from "@/store";
 import {Buffer} from "buffer";
 import createBlakeHash from "blake-hash";
 

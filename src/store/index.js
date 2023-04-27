@@ -10,7 +10,7 @@ const SECRET_INFO_INIT = {
     secretAccount: null,
 }
 
-const store = new Vuex.Store({
+const index = new Vuex.Store({
     state() {
         return {
             secretInfo: SECRET_INFO_INIT,
@@ -37,37 +37,37 @@ const store = new Vuex.Store({
 
 
 export function getSigner() {
-    return store.state?.secretInfo?.signer
+    return index.state?.secretInfo?.signer
 }
 
 export function getAddress() {
-    return store.state?.secretInfo?.address
+    return index.state?.secretInfo?.address
 }
 
 export function getSdk() {
-    return store.state?.secretInfo?.sdk
+    return index.state?.secretInfo?.sdk
 }
 
 export function getSecretAccount() {
-    return store.state?.secretInfo?.secretAccount
+    return index.state?.secretInfo?.secretAccount
 }
 
 export function setSigner(signer) {
-    store.commit('setSigner', signer)
+    index.commit('setSigner', signer)
 }
 
 export function setAddress(address) {
-    store.commit('setAddress', address)
+    index.commit('setAddress', address)
 }
 
 export function setSdk(sdk) {
-    store.commit('setSdk', sdk)
+    index.commit('setSdk', sdk)
 }
 
 export function setSecretAccount(secretAccount) {
-    store.commit('setSecretAccount', secretAccount)
+    index.commit('setSecretAccount', secretAccount)
 }
 
-export default store
+export default index
 
 

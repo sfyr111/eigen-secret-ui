@@ -3,7 +3,7 @@ import {defaultContractABI} from "./common";
 
 import {buildSdk} from "./sdk";
 import {buildCtx} from "@/contractUtils/metaMask";
-import {getAddress, getSecretAccount, getSigner} from "@/utils/store";
+import {getAddress, getSecretAccount, getSigner} from "@/store";
 
 export async function deposit(alias, assetId, value, AliceAccount) {
     let ctx = await buildCtx(alias)

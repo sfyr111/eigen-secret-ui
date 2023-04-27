@@ -14,7 +14,7 @@
 
 import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
-import {getSecretAccount, getSigner} from "@/utils/store";
+import {getSecretAccount, getSigner} from "@/store";
 
 async function loadScriptFromBlob(blob) {
   return new Promise((resolve, reject) => {

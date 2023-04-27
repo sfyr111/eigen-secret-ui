@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { rawMessage, signEOASignature } from "@eigen-secret/core/dist-browser/utils";
-import {setSigner, setAddress, getSigner, getAddress} from "@/utils/store";
+import {setSigner, setAddress, getSigner, getAddress} from "@/store";
 
 export async function connectMetaMask() {
   if (typeof window.ethereum === "undefined") {
