@@ -11,31 +11,14 @@ import { defaultServerEndpoint, defaultCircuitPath, defaultContractABI, defaultC
 class SecretManager {
   constructor() {
     this.sdkInstance = null;
+    this.alias = null;
     this.signer = null;
     this.address = null;
-    this.alias = null;
   }
 
   createTimestamp() {
     const timestamp = Math.floor(Date.now() / 1000).toString();
     return timestamp;
-  }
-
-  async connectMetaMask() {
-    if (typeof window.ethereum === 'undefined') {
-      throw new Error('MetaMask is not installed');
-    }
-
-    try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-
-      const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner();
-      this.address = await signer.getAddress();
-      this.signer = signer;
-      return signer;
-    } catch (err) {
-      console.error(err);
-    }
   }
 
   async getSecretAccount(alias) {
@@ -64,13 +47,12 @@ class SecretManager {
     return { secretAccount, eddsa };
   }
 
-  async initializeAccount(alias) {
-    if (!this.signer) {
-      await this.connectMetaMask();
-    }
+  async initializeAccount(alias, signer) {
     const eddsa = await buildEddsa();
 
     this.alias = alias;
+    this.signer = signer;
+    this.address = await signer.getAddress();
     let secretAccount = await this.getSecretAccount(alias);
 
     if (!secretAccount) {
