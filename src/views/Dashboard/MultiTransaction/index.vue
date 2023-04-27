@@ -58,7 +58,7 @@
         {{summaryTxt}}
       </div>
       <div class="button">
-        <button class="submit-btn">{{buttonTxt}}</button>
+        <button class="submit-btn" @click="doOperate">{{buttonTxt}}</button>
       </div>
     </div>
   </div>
@@ -70,7 +70,12 @@ import FormSelect from '@/components/Select/index';
 import FormInput from '@/components/Input/index';
 import ExchangeItem from '@/components/ExchangeItem/index';
 import {deposit, send, withdraw} from "@/contractUtils/transaction";
-import prompt from "@/utils/prompt";
+import msg from "@/utils/msg";
+
+
+const assetId = 2
+const Alice = "Alice"
+const AliceAccount = "CKCRW1G+fKMxEVg9fKukRPitQFq4X7qNYZRk/BGfQBRkUYzsjUrNavs6jnttApm8qNZ0g45df4pr05syJZsVGj8bf5M6ERJYcgvE3U2w6iwfe53jkx9m724MCsB0MincSvdTDSAErxn80XRjvX6qaIBhU7sdcJ9ZUiJus6ZOpMM7jQCDaefVyx5h8cJagc8UX6IlsDjM6zZQuH3/OgDLKCMO2nPyJntinS9lWsBmHIRLmgQxSfpvRkbcSmdDSaRXBbkqYkOpH8O1RrK/uYw2+FyefHUkb1Zob/1GD0aooQqAg/pB4uFuQkdIPAuXKVmFhnZM8Zv8Ja9wDKaOV+dZHVhx8ciMIFgVydnpzhkRmB5mtZ+WNziujL0Klqg9GGEKnzWVdKwkCmOIth+pt6qVhHLqEJf+jc9wdTQSEq80Yvk=,1c8eed5455318bcf7c461f3e,f03ae7106aa3dbae77bb2d2b16814416";
 
 
 export default {
@@ -85,6 +90,10 @@ export default {
       type: String,
     },
   },
+  created() {
+    this.summaryTxt = msg.transaction[this.transactionType].summaryTxt
+    this.buttonTxt = msg.transaction[this.transactionType].buttonTxt
+  },
   data() {
     return {
       assetsTokenList: [],
@@ -98,21 +107,38 @@ export default {
     switchTransactionFee(e) {
       this.transactionFee = e
     },
-    doDeposit() {
+    doOperate() {
+      const eloading = this.$eloading('Operation in progress, please wait')
+      let pro = null
+      if (msg.transaction[this.transactionType] == msg.transaction.deposit) {
+        pro = this.doDeposit()
+      }
+      if (msg.transaction[this.transactionType] == msg.transaction.send) {
+        pro = this.doSend()
+      }
+      if (msg.transaction[this.transactionType] == msg.transaction.withdraw) {
+        pro = this.doWithdraw()
+      }
+      if (pro == null) {
+        alert('操作有误')
+        return
+      }
+      pro.then(() => {
 
+      }).catch((e) => {
+        alert('发生错误')
+      }).finally(() => {
+        eloading.close()
+      })
+    },
+    doDeposit() {
+      return deposit(Alice, assetId, 1, AliceAccount)
     },
     doSend() {
-
+      return send(Alice, AliceAccount, Alice, AliceAccount, assetId, 1)
     },
     doWithdraw() {
-
-    }
-  },
-  watch: {
-    // 监视message属性的变化
-    transactionType: function(n) {
-      this.summaryTxt = prompt[n].summaryTxt
-      this.buttonTxt = prompt[n].buttonTxt
+      return withdraw(AliceAccount, assetId)
     }
   }
 }

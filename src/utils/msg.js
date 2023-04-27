@@ -1,4 +1,4 @@
-const prompt = {
+const msg = {
     transaction: {
         deposit: {
             summaryTxt: 'Transfer assets from the layer1 wallet (e.g. connected MetaMask wallet) to the EigenSecret l2 wallet to experience gas-low token transfer and swap. You can withdraw assets to the laver1 wallet at any time.',
@@ -14,4 +14,4 @@ const prompt = {
         }
     }
 }
-export default prompt
+export default msg

@@ -83,3 +83,12 @@ export async function getBalance(alias, assetId, AliceAccount) {
     balance = await tokenIns.balanceOf(getAddress());
     console.log("L1 balance", balance.toString());
 }
+
+export async function getTransactions(page, pageSize, alias, aliceAccount) {
+    let ctx = await buildCtx(alias)
+    let secretSDK = await buildSdk(alias, getSigner(), aliceAccount)
+    return secretSDK.getTransactions(ctx, {page, pageSize})
+}
+
+
+

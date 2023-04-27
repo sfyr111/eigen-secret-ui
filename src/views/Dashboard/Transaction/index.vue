@@ -33,7 +33,9 @@
   </div>
 </template>
 <script>
+import {getTransactions} from "@/contractUtils/transaction";
 import { getStatusTxt, timeFormat } from '@/utils/index';
+import {getAllBalance} from "@/contractUtils/account";
 export default {
   name: 'Transaction',
   props: {
@@ -46,11 +48,24 @@ export default {
     return {
       newtransactionList: this.transactionList,
       getStatusTxt,
+
     }
   },
   methods: {
-    
+    initData() {
+      const eloading = this.$eloading('Obtaining transaction history, please wait')
+      const Alice = "Alice"
+      getTransactions(Alice).then((res) => {
+        console.log('getTransactions res: ', res)
+        // to convert
+      }).finally(() => {
+        eloading.close()
+      })
+    }
   },
+  created() {
+    this.initData()
+  }
 }
 </script>
 <style lang="scss" scoped>

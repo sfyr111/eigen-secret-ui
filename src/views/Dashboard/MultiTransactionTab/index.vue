@@ -1,14 +1,14 @@
 <template>
   <div class="multi-transaction-tab-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="Deposit" name="first">
-        <MultiTransaction/>
+      <el-tab-pane label="Deposit" name="Deposit">
+        <MultiTransaction transaction-type="deposit"/>
       </el-tab-pane>
-      <el-tab-pane label="Send" name="second">
-        <MultiTransaction/>
+      <el-tab-pane label="Send" name="Send">
+        <MultiTransaction transaction-type="send"/>
       </el-tab-pane>
-      <el-tab-pane label="Withdraw" name="third">
-        <MultiTransaction/>
+      <el-tab-pane label="Withdraw" name="Withdraw">
+        <MultiTransaction transaction-type="withdraw"/>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -25,12 +25,15 @@ export default {
   },
   data() {
     return {
-      activeName: 'first'
+      activeName: 'Deposit'
     };
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    switchTab(activeName) {
+      this.activeName = activeName
     }
   },
   created() {

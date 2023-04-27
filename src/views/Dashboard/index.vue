@@ -14,34 +14,12 @@
           <button class="submit-btn" @click="transClick('Withdraw')">Withdraw</button>
         </div>
       </div>
-      <div class="assets-list-box">
-         <div class="common-block-title">Assets</div>
-         <div class="asset-list table-list">
-            <table>
-              <tr>
-                <th>ASSET</th>
-                <th>BALANCE</th>
-                <th>VALUE</th>
-                <th>24-hour Return</th>
-              </tr>
-              <tr>
-                <td>eETH</td>
-                <td>0.033444eETH</td>
-                <td>$66.26</td>
-                <td>-$21.11 -12.55%</td>
-              </tr>
-            </table>
-         </div>
-      </div>
-      <div class="multi-transaction-box">
-        <MultiTransactionTab/>
+      <Asset/>
+      <div class="multi-transaction-box" ref="multiTransactionBox">
+        <MultiTransactionTab ref="multiTransactionTab"/>
       </div>
       <div class="transaction-list-box">
         <div class="common-block-title">Transaction History</div>
-        <div class="transaction-search-box">
-          <i class="el-icon-search search-icon-style"></i>
-          <input placeholder="Filter by TX HASH" v-model="transactionHash" class="input-search">
-        </div>
         <Transaction
           :transactionList="transactionList"/>
         <div class="pagination-box">
@@ -67,6 +45,7 @@ import Header from '@/components/Header/index';
 import Footer from '@/components/Footer/index';
 import Transaction from './Transaction/index';
 import MultiTransaction from './MultiTransaction/index';
+import Asset from './Asset/index';
 import MultiTransactionTab from './MultiTransactionTab/index';
 import ConfirmDialog from '@/components/ConfirmDialog/index';
 export default {
@@ -99,27 +78,35 @@ export default {
     ConfirmDialog,
     MultiTransaction,
     MultiTransactionTab,
+    Asset
   },
 
   methods: {
     transClick(type) {
-      this.dialogType = type
-      switch(type) {
-        case 'Deposit':
-          this.dialogDes = 'Transfer assets from the layer1 wallet（e.g.connected MetaMask wallet）to the EigeMoney l2 wallet to experience gas-low token transfer and asap. you can withdraw assets to the layer1 wallet at any time.'
-          break;
-        case 'Send':
-          this.dialogDes = 'Send assets to another user on EigenMoney via their nicknames and enjoy gas-low transfer. Please make sure that the nickname is correct.'
-          break;
-        case 'Withdraw':
-          this.dialogDes = 'Withdraw assets from EigenMoney L2 to L1 at any time. The default address is your signing wallet address. You can also withdraw to other L1 addresses. Please make sure the address is correct.'
-          break;
-        default:
-          break;
-      }
-      this.dialogVisible = true
+      this.$refs.multiTransactionTab.switchTab(type)
+      this.scrollToSection()
+      // this.dialogType = type
+      // switch(type) {
+      //   case 'Deposit':
+      //     this.dialogDes = 'Transfer assets from the layer1 wallet（e.g.connected MetaMask wallet）to the EigeMoney l2 wallet to experience gas-low token transfer and asap. you can withdraw assets to the layer1 wallet at any time.'
+      //     break;
+      //   case 'Send':
+      //     this.dialogDes = 'Send assets to another user on EigenMoney via their nicknames and enjoy gas-low transfer. Please make sure that the nickname is correct.'
+      //     break;
+      //   case 'Withdraw':
+      //     this.dialogDes = 'Withdraw assets from EigenMoney L2 to L1 at any time. The default address is your signing wallet address. You can also withdraw to other L1 addresses. Please make sure the address is correct.'
+      //     break;
+      //   default:
+      //     break;
+      // }
+      // this.dialogVisible = true
     },
-
+    scrollToSection() {
+      const section = this.$refs.multiTransactionBox;
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   },
 
   created() {
