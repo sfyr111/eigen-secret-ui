@@ -1,75 +1,35 @@
-import axios from 'axios';
-import { buildEddsa } from 'circomlibjs';
-import createBlakeHash from 'blake-hash';
-import { Buffer } from 'buffer';
+import SecretSDK from "@eigen-secret/core/dist-browser/sdk";
 import { ethers } from 'ethers';
-import SecretSDK from '@eigen-secret/core/dist-browser/sdk';
+import { buildEddsa } from "circomlibjs";
 import { rawMessage, signEOASignature } from '@eigen-secret/core/dist-browser/utils';
-import { SigningKey, SecretAccount } from "@eigen-secret/core/dist-browser/account";
-import { defaultServerEndpoint, defaultCircuitPath, defaultContractABI, defaultContractFile as contractJson } from './configure';
+import { Context, SigningKey, SecretAccount } from '@eigen-secret/core/dist-browser/context';
+import { defaultServerEndpoint, defaultCircuitPath, defaultContractABI, defaultContractFile } from './configure';
 
 class SecretManager {
   constructor() {
-    this.sdkInstance = null;
-    this.alias = null;
-    this.signer = null;
-    this.address = null;
+    this.sdk = null;
   }
 
-  createTimestamp() {
-    const timestamp = Math.floor(Date.now() / 1000).toString();
-    return timestamp;
-  }
-
-  async getSecretAccount(alias) {
-    const timestamp = this.createTimestamp();
-    const signature = await signEOASignature(this.signer, rawMessage, this.address, alias, timestamp);
-
-    const response = await axios.post('/account/get', {
-      alias,
-      signer: this.signer,
-      ethAddress: this.address,
-      message: rawMessage,
-      timestamp,
-      hexSignature: signature
-    });
-
-    return response.data.secretAccount;
-  }
-
-  async createSecretAccount(alias, eddsa) {
-    const signingKey = new SigningKey(eddsa);
-    const accountKey = new SigningKey(eddsa);
-    const newSigningKey1 = new SigningKey(eddsa);
-    const newSigningKey2 = new SigningKey(eddsa);
-
-    const secretAccount= new SecretAccount(alias, accountKey, signingKey, accountKey, newSigningKey1, newSigningKey2);
-    return { secretAccount, eddsa };
-  }
-
-  async initializeAccount(alias, signer) {
+  async createAccount({ alias, password, user }) {
     const eddsa = await buildEddsa();
+    let timestamp = Math.floor(Date.now() / 1000).toString();
+    console.log("ETH address", user.address);
 
-    this.alias = alias;
-    this.signer = signer;
-    this.address = await signer.getAddress();
-    let secretAccount = await this.getSecretAccount(alias);
-
-    if (!secretAccount) {
-      secretAccount = await this.createSecretAccount(alias, eddsa);
-    }
-
-    await this.initializeSecretSDK(secretAccount, eddsa);
-  }
-
-  async initializeSecretSDK(secretAccount, eddsa) {
-
-    const secretSDK = new SecretSDK(
-      secretAccount,
+    const signature = await signEOASignature(user, rawMessage, user.address, alias, timestamp);
+    let signingKey = new SigningKey(eddsa);
+    let accountKey = new SigningKey(eddsa);
+    let newSigningKey1 = new SigningKey(eddsa);
+    let newSigningKey2 = new SigningKey(eddsa);
+    const contractJson = await import(defaultContractFile);
+    let sa = new SecretAccount(
+      alias, accountKey, signingKey, accountKey, newSigningKey1, newSigningKey2
+    );
+    this.sdk = new SecretSDK(
+      sa,
       defaultServerEndpoint,
       defaultCircuitPath,
       eddsa,
-      this.signer,
+      user,
       contractJson.spongePoseidon,
       contractJson.tokenRegistry,
       contractJson.poseidon2,
@@ -78,139 +38,109 @@ class SecretManager {
       contractJson.rollup,
       contractJson.smtVerifier
     );
-
-    await secretSDK.initialize(defaultContractABI);
-    this.sdkInstance = secretSDK;
+    await this.sdk.initialize(defaultContractABI);
+    const ctx = new Context(alias, user.address, rawMessage, timestamp, signature);
+    let proofAndPublicSignals = await this.sdk.createAccount(ctx, password);
+    console.log("create account", proofAndPublicSignals);
+    return proofAndPublicSignals
   }
 
-  async createCtx() {
-    const timestamp = this.createTimestamp();
-    const signature = await signEOASignature(this.signer, rawMessage, this.address, this.alias, timestamp);
+  async userExists({ alias, password, user }) {
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const signature = await signEOASignature(user, rawMessage, user.address, alias, timestamp);
+    const ctx = new Context(alias, user.address, rawMessage, timestamp, signature);
 
-    const ctx = {
-      alias: this.alias,
-      ethAddress: this.address,
-      rawMessage,
-      timestamp,
-      signature,
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ context: ctx.serialize() })
     };
 
-    return ctx;
-  }
-
-  async createAccount(options) {
-    try {
-      const result = await this.sdkInstance.createAccount(options);
-      return result;
-    } catch (error) {
-      console.error('Error in createAccount:', error);
-      throw error;
+    const response = await fetch(`${defaultServerEndpoint}/accounts/create`, requestOptions);
+    const data = await response.json();
+    if (data.errno === 0) {
+      // await this.initSDK({ alias, password, user })
+      // user exist
+      return data;
+    } else {
+      // await this.createAccount({ alias, password, user })
+      // user no exist
+      return data;
     }
   }
 
-  async deposit(alias, assetId, password, value, index) {
-    const ctx = await this.createCtx();
-    const sa = await this.loadAccount();
+  async initSDK({ alias, password, user }) {
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const signature = await signEOASignature(user, rawMessage, user.address, alias, timestamp);
+    const ctx = new Context(
+      alias,
+      user.address,
+      rawMessage,
+      timestamp,
+      signature
+    );
+    const contractJson = await import(defaultContractFile);
+    this.sdk = await SecretSDK.initSDKFromAccount(
+      ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI
+    );
+  }
 
-    const nonce = 0; // TODO: get nonce from Metamask
-    const receiver = sa.accountKey.pubKey.pubKey;
+  async deposit({ alias, assetId, password, value, user }) {
+    if (!this.sdk) await this.initSDK(alias, password, user);
+    let nonce = 0; // TODO: get nonce from Metamask
+    let receiver = this.sdk.account.accountKey.pubKey.pubKey;
 
-    // get tokenAddress by asset id
-    const tokenAddress = await this.sdkInstance.getRegisteredToken(BigInt(assetId));
+    let tokenAddress = await this.sdk.getRegisteredToken(BigInt(assetId))
     console.log("token", tokenAddress.toString());
-    // approve
-    const approveTx = await this.sdkInstance.approve(tokenAddress.toString(), value);
+    let approveTx = await this.sdk.approve(tokenAddress.toString(), value);
     await approveTx.wait();
 
-    const proofAndPublicSignals = await this.sdkInstance.deposit(ctx, receiver, BigInt(value), Number(assetId), nonce);
+    let proofAndPublicSignals = await this.sdk.deposit(this.sdk.ctx, receiver, BigInt(value), Number(assetId), nonce);
     console.log(proofAndPublicSignals);
-    await this.sdkInstance.submitProofs(ctx, proofAndPublicSignals);
+    return await this.sdk.submitProofs(this.sdk.ctx, proofAndPublicSignals);
   }
 
-  async send(alias, assetId, password, value, index, receiver, receiverAlias) {
-    const ctx = await this.createCtx();
-    const sa = await this.loadAccount();
-
-    const proofAndPublicSignals = await this.sdkInstance.send(ctx, receiver, receiverAlias, BigInt(value), Number(assetId));
+  async send({ alias, assetId, password, value, user, receiver, receiverAlias }) {
+    if (!this.sdk) await this.initSDK(alias, password, user);
+    let proofAndPublicSignals = await this.sdk.send(this.sdk.ctx, receiver, receiverAlias, BigInt(value), Number(assetId));
     console.log(proofAndPublicSignals);
-    await this.sdkInstance.submitProofs(ctx, proofAndPublicSignals);
+    return await this.sdk.submitProofs(this.sdk.ctx, proofAndPublicSignals);
   }
 
-  async withdraw(alias, assetId, password, value, index) {
-    const ctx = await this.createCtx();
-    const sa = await this.loadAccount();
-
-    const receiver = sa.accountKey.pubKey.pubKey;
-    const proofAndPublicSignals = await this.sdkInstance.withdraw(ctx, receiver, BigInt(value), Number(assetId));
+  async withdraw({ alias, assetId, password, value, user }) {
+    if (!this.sdk) await this.initSDK(alias, password, user);
+    let receiver = this.sdk.account.accountKey.pubKey.pubKey;
+    let proofAndPublicSignals = await this.sdk.withdraw(this.sdk.ctx, receiver, BigInt(value), Number(assetId));
     console.log(proofAndPublicSignals);
-    await this.sdkInstance.submitProofs(ctx, proofAndPublicSignals);
+    return await this.sdk.submitProofs(this.sdk.ctx, proofAndPublicSignals);
   }
 
-  async getAllBalance(index, assetId, password) {
-    try {
-      const ctx = await this.createCtx();
-      const balance = await this.sdkInstance.getAllBalance(ctx);
-      console.log("L2 balance", balance.toString());
+  async getBalance({ alias, assetId, password, user }) {
+    if (!this.sdk) await this.initSDK(alias, password, user);
+    let balance = await this.sdk.getAllBalance(this.sdk.ctx);
+    let _balance = Object.fromEntries(
+      [...balance].map(([k, v]) => [k, v.toString()+"n"])
+    );
+    console.log("L2 balance", JSON.stringify(_balance));
 
-      const address = await this.sdkInstance.getRegisteredToken(BigInt(assetId));
-      const tokenIns = new ethers.Contract(
-        address,
-        defaultContractABI.testTokenContractABI,
-        this.signer
-      );
+    let address = await this.sdk.getRegisteredToken(BigInt(assetId));
+    let tokenIns = new ethers.Contract(
+      address,
+      defaultContractABI.testTokenContractABI,
+      user
+    );
 
-      const l1Balance = await tokenIns.balanceOf(this.address);
-      console.log("L1 balance", l1Balance.toString());
-
-      return { l2Balance: balance, l1Balance };
-    } catch (error) {
-      console.error('Error in getAllBalance:', error);
-      throw error;
-    }
+    balance = await tokenIns.balanceOf(user.address);
+    console.log("L1 balance", balance.toString());
+    return balance;
   }
 
-  async getTransactions(page, pageSize) {
-    try {
-      const ctx = await this.createCtx();
-      const transactions = await this.sdkInstance.getTransactions(ctx, { page, pageSize });
-      console.log("transactions", transactions);
-
-      return transactions;
-    } catch (error) {
-      console.error('Error in getTransactions:', error);
-      throw error;
-    }
-  }
-
-  async loadAccount() {
-    try {
-      const accountData = await this.loadAccountFromAPI(this.alias);
-      const key = createBlakeHash("blake256").update(Buffer.from('<your password>')).digest();
-      const sa = SecretAccount.deserialize(await this.buildEddsa(), key, accountData.toString());
-      return sa;
-    } catch (error) {
-      console.error('Error in loadAccount:', error);
-      throw error;
-    }
-  }
-
-  async loadAccountFromAPI(alias) {
-    const timestamp = this.createTimestamp();
-    const signature = await signEOASignature(this.signer, rawMessage, this.address, alias, timestamp);
-
-    const response = await axios.post('/account/get', {
-      alias,
-      signer: this.signer,
-      ethAddress: this.address,
-      message: rawMessage,
-      timestamp,
-      hexSignature: signature
-    });
-
-    return response.data.secretAccount;
+  async getTransactions({ alias, password, user, page, pageSize }) {
+    if (!this.sdk) await this.initSDK(alias, password, user);
+    const transactions = await this.sdk.getTransactions(this.sdk.ctx, { page, pageSize });
+    console.log("transactions", transactions);
+    return transactions;
   }
 }
 
-const secretManagerInstance = new SecretManager();
-
-export default secretManagerInstance;
+export default SecretManager;
