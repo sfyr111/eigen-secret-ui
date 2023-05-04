@@ -1,54 +1,80 @@
-import SecretManager from './secretManager';
 import { ethers } from "ethers";
-
-async function connectMetaMask() {
-  if (typeof window.ethereum === 'undefined') {
-    throw new Error('MetaMask is not installed');
-  }
-
-  try {
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-
-    const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner();
-    return signer;
-  } catch (err) {
-    console.error(err);
-  }
-}
+import SecretManager from "./SecretManager";
 
 async function main() {
-  const signer = await connectMetaMask();
+  const ethereum = window.ethereum;
+  const signer = new ethers.providers.Web3Provider(ethereum).getSigner();
 
-  // Step 1: Initialize the account
-  const alias = 'your-alias'; // Replace with your desired alias
-  await SecretManager.initializeAccount(alias, signer);
+  const secretManager = new SecretManager();
+  const alias = "exampleAlias";
+  const password = "examplePassword";
 
-  // Step 2: Create a new account
-  const options = { /*...*/ }; // Replace with your desired account options
-  const createAccountResult = await SecretManager.createAccount(options);
-  console.log('Account created:', createAccountResult);
+  const userExistsResponse = await secretManager.userExists({
+    alias,
+    password,
+    user: signer
+  });
 
-  // Step 3: Query L1 and L2 balances
-  const index = 0;
-  const assetId = 1;
-  const password = 'your-password'; // Replace with your actual password
-  const balance = await SecretManager.getAllBalance(index, assetId, password);
-  console.log('L1 balance:', balance.l1Balance.toString());
-  console.log('L2 balance:', balance.l2Balance.toString());
+  if (userExistsResponse.errno === 0) {
+    // 用户存在
+    await secretManager.initSDK({ alias, password, user: signer });
+  } else {
+    // 用户不存在
+    await secretManager.createAccount({ alias, password, user: signer });
+  }
 
-  // Step 4: Send assets to another account
-  const receiver = 'receiver-address'; // Replace with the receiver's address
-  const receiverAlias = 'receiver-alias'; // Replace with the receiver's alias
-  const value = 10;
-  await SecretManager.send(alias, assetId, password, value, index, receiver, receiverAlias);
-  console.log('Assets sent:', value);
+  // 存款
+  const depositResult = await secretManager.deposit({
+    alias,
+    assetId: 2,
+    password,
+    value: 100,
+    user: signer
+  });
+  console.log("Deposit result:", depositResult);
 
-  // Step 5: Withdraw assets to L1
-  const withdrawValue = 5;
-  await SecretManager.withdraw(alias, assetId, password, withdrawValue, index);
-  console.log('Assets withdrawn:', withdrawValue);
+  // 发送资产
+  const sendResult = await secretManager.send({
+    alias,
+    assetId: 2,
+    password,
+    value: 50,
+    user: signer,
+    receiver: "receiverPublicKey",
+    receiverAlias: "receiverAlias"
+  });
+  console.log("Send result:", sendResult);
+
+  // 提款
+  const withdrawResult = await secretManager.withdraw({
+    alias,
+    assetId: 2,
+    password,
+    value: 50,
+    user: signer
+  });
+  console.log("Withdraw result:", withdrawResult);
+
+  // 查询余额
+  const balance = await secretManager.getBalance({
+    alias,
+    assetId: 2,
+    password,
+    user: signer
+  });
+  console.log("Balance:", balance.toString());
+
+  // 获取交易记录
+  const transactions = await secretManager.getTransactions({
+    alias,
+    password,
+    user: signer,
+    page: 1,
+    pageSize: 10
+  });
+  console.log("Transactions:", transactions);
 }
 
-main().catch((error) => {
-  console.error('Error:', error);
-});
+main()
+  .then(() => console.log("Example finished successfully"))
+  .catch((error) => console.error("An error occurred:", error));
