@@ -4,6 +4,7 @@ import LoginStep from '../views/LoginStep/index';
 import Login from '../views/Login/index';
 import Dashboard from '../views/Dashboard/index';
 import CreateAccount from '../views/CreateAccount/index';
+import Secret from '../views/secret/index';
 
 
 // cache origin push method
@@ -48,6 +49,14 @@ const routes = [
       },
       component: ThirdLogin,
     }, */
+    {
+        path: '/secret',
+        name: 'secret',
+        meta: {
+            title: "secret",
+        },
+        component: Secret,
+    },
     {
         path: '/',
         name: 'LoginStep',
