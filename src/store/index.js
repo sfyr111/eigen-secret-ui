@@ -1,5 +1,7 @@
 import Vuex from 'vuex'
 import Vue from "vue";
+import { ethers } from "ethers";
+import SecretManager from "@/SecretManager/SecretManager";
 
 Vue.use(Vuex)
 
@@ -8,6 +10,7 @@ const SECRET_INFO_INIT = {
     address: null,
     sdk: null,
     secretAccount: null,
+    secretManager: null,
 }
 
 const index = new Vuex.Store({
@@ -31,6 +34,9 @@ const index = new Vuex.Store({
         },
         setSecretAccount(state, n) {
             state.secretInfo.secretAccount = n
+        },
+        setSecretManager(state, n) {
+            state.secretInfo.secretManager = n
         }
     }
 })
@@ -67,6 +73,21 @@ export function setSdk(sdk) {
 export function setSecretAccount(secretAccount) {
     index.commit('setSecretAccount', secretAccount)
 }
+
+
+export function setSecretManager(secretManager) {
+    index.commit('setSecretManager', secretManager)
+}
+
+export function getSecretManager() {
+    let secretManager = index.state?.secretInfo?.secretManager
+    if (!secretManager) {
+        secretManager = new SecretManager()
+        setSecretManager(secretManager)
+    }
+    return secretManager
+}
+
 
 export default index
 

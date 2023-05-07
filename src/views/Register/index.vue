@@ -1,18 +1,13 @@
 <template>
   <div class="page-login page-container">
-    <div class="logo-box">
-      <img class="logo" src="@/assets/header/logo.png">
-    </div>
-    <h1 class="login-des login-des-title">Trusted Encrypted Private Payments for You</h1>
     <div class="login-des">Welcome to Eigen zkPay! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
       <div class="login-btn" @click="connect">
         <img src="~@/assets/metamask.png" class="metamask-icon">
-        <p class="metamask-text">Login with MetaMask</p>
+        <p class="metamask-text">Register with MetaMask</p>
       </div>
     </div>
-    <p class="login-des">Don't have an account yet? <span class="sign-up" @click="toLogin">Sign up now</span></p>
-  </div >
+  </div>
 </template>
 
 <script>
@@ -40,14 +35,14 @@ async function loadScriptFromBlob(blob) {
 }
 
 export default {
-  name: 'login-page',
+  name: 'register-page',
+
   data() {
     return {}
   },
+
+
   methods: {
-    toLogin() {
-      this.$router.push('/LoginStep')
-    },
     async connect() {
       await connectMetaMask();
       let signer = getSigner()

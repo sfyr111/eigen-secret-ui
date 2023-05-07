@@ -12,7 +12,7 @@
       </el-steps>
     </div>
     <div class="content">
-      <Login v-if="active == 0" @login-end="loginEnd"/>
+      <Register v-if="active == 0" @login-end="loginEnd"/>
       <CreateAccount @create-end="createEnd" v-if="active == 1 || active == 2 || active == 3"/>
       <AlertDialog @update:dialogVisible="registerDialogClose" :dialog-visible="registerDialog"
                    dialog-tip="Congratulations, your registration is successful!"
@@ -23,7 +23,7 @@
 
 <script>
 
-import Login from '@/views/Login/index';
+import Register from '@/views/Register/index';
 import CreateAccount from '@/views/CreateAccount/index';
 import AlertDialog from '@/components/AlertDialog/index';
 
@@ -31,7 +31,7 @@ import AlertDialog from '@/components/AlertDialog/index';
 export default {
   name: 'LoginStep',
   components: {
-    Login,
+    Register,
     CreateAccount,
     AlertDialog
   },

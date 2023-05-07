@@ -59,6 +59,14 @@ const routes = [
     },
     {
         path: '/',
+        name: 'Login',
+        meta: {
+            title: "Login",
+        },
+        component: Login,
+    },
+    {
+        path: '/LoginStep',
         name: 'LoginStep',
         meta: {
             title: "LoginStep",

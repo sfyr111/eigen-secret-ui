@@ -36,6 +36,7 @@
 import ExchangeItem from '@/components/ExchangeItem/index';
 import FormInput from '@/components/Input/index';
 import {createSecretAccount} from "@/contractUtils/account";
+import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
 
 export default {
   name: 'create-accout-page',
@@ -61,23 +62,40 @@ export default {
           alert('请登录')
           return
         }
+
+
         let info;
-        try {
-          info = await createSecretAccount();
-        } catch (e) {
-          if (e.code == 'ACTION_REJECTED') {
-            alert('Unable to link your account. Please try again.')
-          } else {
-            alert('create account error')
-          }
-          console.dir(e)
-        }
-        if (info) {
-
-          this.$emit('create-end', 4)
-        } else {
-
-        }
+        const secretManager = getSecretManager();
+        const signer = getSigner()
+        await secretManager.initSDK({ alias: this.alias, password: '123456', user:  signer});
+        const createAccountResp = await secretManager.createAccount({
+          alias: this.alias,
+          password: '123456',
+          user: signer
+        })
+        console.log(createAccountResp)
+        // const userExistsResponse = await secretManager.userExists({
+        //   alias: this.alias,
+        //   password: '123456',
+        //   user: getSigner()
+        // });
+        // console.log('userExistsResponse ', userExistsResponse)
+        // try {
+        //   info = await createSecretAccount();
+        // } catch (e) {
+        //   if (e.code == 'ACTION_REJECTED') {
+        //     alert('Unable to link your account. Please try again.')
+        //   } else {
+        //     alert('create account error')
+        //   }
+        //   console.dir(e)
+        // }
+        // if (info) {
+        //
+        //   this.$emit('create-end', 4)
+        // } else {
+        //
+        // }
       }  finally {
         eloading.close()
       }

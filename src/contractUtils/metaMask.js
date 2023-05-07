@@ -7,10 +7,12 @@ export async function connectMetaMask() {
     throw new Error("MetaMask is not installed");
   }
   try {
-    await window.ethereum.request({ method: "eth_requestAccounts" });
-    const signer = new ethers.providers.Web3Provider(window.ethereum).getSigner();
+    // await window.ethereum.request({ method: "eth_requestAccounts" });
+    const signer = await new ethers.providers.Web3Provider(window.ethereum).getSigner();
     setSigner(signer)
-    setAddress(signer.getAddress())
+    const address = await signer.getAddress();
+    signer.address = address
+    setAddress(address)
     return signer;
   } catch (err) {
     console.error(err);
