@@ -2,46 +2,55 @@
     <div class="container">
         <button @click="connectMetamask" class="btn">connectMetamask</button>
         <label for="alias">Alias:</label>
-        <input v-model="alias" id="alias" class="input-field" />
+        <input v-model="alias" id="alias" class="input-field"/>
 
         <label for="value">Value:</label>
-        <input v-model="value" id="value" class="input-field" />
+        <input v-model="value" id="value" class="input-field"/>
 
         <button @click="createAccount" class="btn">Create Account</button>
+        <button @click="initSDK" class="btn">InitSDK</button>
         <button @click="deposit" class="btn">Deposit</button>
         <button @click="send" class="btn">Send</button>
         <button @click="withdraw" class="btn">Withdraw</button>
         <button @click="getBalance" class="btn">Get Balance</button>
         <button @click="getTransactions" class="btn">Get Transactions</button>
+        <button @click="proverInit" class="btn">Prover Init</button>
     </div>
 </template>
 
 <script>
-import SecretManager from '@/SecretManager/SecretManager';
+import secretManager from '@/SecretManager/SecretManager';
+import { Prover } from '@eigen-secret/core/dist-browser/prover';
 import { ethers } from 'ethers';
 
 export default {
   data() {
     return {
-      secretManager: new SecretManager(),
+      secretManager: secretManager,
       alias: '',
-      password: 'testPassword',
+      password: '<your password>',
       user: null,
       assetId: 2,
       value: '',
       receiver: 'receiverPublicKey',
       receiverAlias: 'receiverAlias',
       page: 1,
-      pageSize: 10
+      pageSize: 10,
     }
   },
   methods: {
+    async proverInit() {
+        debugger
+        Prover.serverAddr = 'http://localhost:3000'
+        Prover.init()
+    },
     async connectMetamask() {
       if (typeof window.ethereum !== 'undefined') {
         await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request account access
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        console.log(signer, signer.signMessage)
+        const address = await signer.getAddress();
+        console.log(address)
         this.user = signer;
       } else {
         console.error('MetaMask not found');
@@ -54,11 +63,25 @@ export default {
       debugger
       await this.secretManager.createAccount({ alias: this.alias, password: this.password, user: this.user });
     },
+    async initSDK() {
+      if (!this.user) {
+        await this.connectMetamask();
+      }
+      await this.secretManager.initSDK({ alias: this.alias, password: this.password, user: this.user });
+    },
     async deposit() {
       await this.secretManager.deposit({ alias: this.alias, assetId: this.assetId, password: this.password, value: this.value, user: this.user });
     },
     async send() {
-      await this.secretManager.send({ alias: this.alias, assetId: this.assetId, password: this.password, value: this.value, user: this.user, receiver: this.receiver, receiverAlias: this.receiverAlias });
+      await this.secretManager.send({
+        alias: this.alias,
+        assetId: this.assetId,
+        password: this.password,
+        value: this.value,
+        user: this.user,
+        receiver: this.receiver,
+        receiverAlias: this.receiverAlias,
+      });
     },
     async withdraw() {
       await this.secretManager.withdraw({ alias: this.alias, assetId: this.assetId, password: this.password, value: this.value, user: this.user });
@@ -68,8 +91,8 @@ export default {
     },
     async getTransactions() {
       await this.secretManager.getTransactions({ alias: this.alias, password: this.password, user: this.user, page: this.page, pageSize: this.pageSize });
-    }
-  }
+    },
+  },
 }
 </script>
 

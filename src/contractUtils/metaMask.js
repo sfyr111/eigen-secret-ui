@@ -3,19 +3,15 @@ import { rawMessage, signEOASignature } from "@eigen-secret/core/dist-browser/ut
 import {setSigner, setAddress, getSigner, getAddress} from "@/store";
 
 export async function connectMetaMask() {
-  if (typeof window.ethereum === "undefined") {
-    throw new Error("MetaMask is not installed");
-  }
-  try {
-    // await window.ethereum.request({ method: "eth_requestAccounts" });
-    const signer = await new ethers.providers.Web3Provider(window.ethereum).getSigner();
-    setSigner(signer)
+  if (typeof window.ethereum !== 'undefined') {
+    await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request account access
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
     const address = await signer.getAddress();
-    signer.address = address
-    setAddress(address)
+    console.log(address)
     return signer;
-  } catch (err) {
-    console.error(err);
+  } else {
+    console.error('MetaMask not found');
   }
 }
 

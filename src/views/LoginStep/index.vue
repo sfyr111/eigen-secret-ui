@@ -13,7 +13,7 @@
     </div>
     <div class="content">
       <Register v-if="active == 0" @login-end="loginEnd"/>
-      <CreateAccount @create-end="createEnd" v-if="active == 1 || active == 2 || active == 3"/>
+      <CreateAccount @create-end="createEnd" v-if="active == 1 || active == 2 || active == 3" :user="user"/>
       <AlertDialog @update:dialogVisible="registerDialogClose" :dialog-visible="registerDialog"
                    dialog-tip="Congratulations, your registration is successful!"
                    dialog-btn-txt="Confirm"/>
@@ -26,7 +26,8 @@
 import Register from '@/views/Register/index';
 import CreateAccount from '@/views/CreateAccount/index';
 import AlertDialog from '@/components/AlertDialog/index';
-
+import secretManager from '@/SecretManager/SecretManager';
+import { ehters } from 'ethers';
 
 export default {
   name: 'LoginStep',
@@ -39,12 +40,14 @@ export default {
     return {
       active: 0,
       registerDialog: false,
+      user: null, // todo to store
     }
   },
 
 
   methods: {
-    loginEnd() {
+    loginEnd(singer) {
+      this.user = singer
       this.active = 1
     },
     createEnd() {

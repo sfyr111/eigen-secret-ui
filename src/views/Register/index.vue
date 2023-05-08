@@ -2,7 +2,7 @@
   <div class="page-login page-container">
     <div class="login-des">Welcome to Eigen zkPay! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
-      <div class="login-btn" @click="connect">
+      <div class="login-btn" @click="connectMetamask">
         <img src="~@/assets/metamask.png" class="metamask-icon">
         <p class="metamask-text">Register with MetaMask</p>
       </div>
@@ -15,6 +15,7 @@
 import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
 import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
+import { ethers } from 'ethers';
 
 async function loadScriptFromBlob(blob) {
   return new Promise((resolve, reject) => {
@@ -43,6 +44,10 @@ export default {
 
 
   methods: {
+    async connectMetamask() {
+      const signer = await connectMetaMask();
+      this.$emit('login-end', signer)
+    },
     async connect() {
       await connectMetaMask();
       // todo 连接metamask没有错误且拿到address后，跳转到输入昵称注册页面

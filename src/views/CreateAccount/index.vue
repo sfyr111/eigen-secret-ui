@@ -26,7 +26,7 @@
 
 
     <div class="create-submit">
-      <button class="submit-btn page-submit" @click="register">Register</button>
+      <button class="submit-btn page-submit" @click="createAccount">Register</button>
     </div>
 
     <AlertDialog
@@ -45,6 +45,7 @@ import ExchangeItem from '@/components/ExchangeItem/index';
 import FormInput from '@/components/Input/index';
 import {getSecretManager, getSigner} from "@/store";
 import AlertDialog from '@/components/AlertDialog/index';
+import secretManager from '@/SecretManager/SecretManager';
 
 export default {
   name: 'create-accout-page',
@@ -52,6 +53,12 @@ export default {
     ExchangeItem,
     FormInput,
     AlertDialog
+  },
+  props: {
+    user: {
+      type: Object,
+      default: null,
+    }
   },
   data() {
     return {
@@ -67,6 +74,20 @@ export default {
     }
   },
   methods: {
+    async createAccount() {
+      if (!this.user) {
+        return
+      }
+      const eloading = this.$eloading('Registration in progress, please wait')
+      try {
+        await secretManager.createAccount({ alias: this.alias, user: this.user });
+        this.$emit('create-end')
+      } catch (e) {
+        console.error(e)
+      } finally {
+        eloading.close()
+      }
+    },
     async register() {
       const eloading = this.$eloading('Registration in progress, please wait')
       if (!this.alias) {

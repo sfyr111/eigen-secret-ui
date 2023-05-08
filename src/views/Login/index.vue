@@ -6,7 +6,7 @@
     <h1 class="login-des login-des-title">Trusted Encrypted Private Payments for You</h1>
     <div class="login-des">Welcome to Eigen zkPay! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
-      <div class="login-btn" @click="connect">
+      <div class="login-btn" @click="login">
         <img src="~@/assets/metamask.png" class="metamask-icon">
         <p class="metamask-text">Login with MetaMask</p>
       </div>
@@ -19,7 +19,7 @@
 
 import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
-import SecretManager from "@/SecretManager/SecretManager";
+import secretManager from '@/SecretManager/SecretManager';
 import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
 
 async function loadScriptFromBlob(blob) {
@@ -43,19 +43,34 @@ async function loadScriptFromBlob(blob) {
 export default {
   name: 'login-page',
   data() {
-    return {}
+    return {
+      user: null, // todo to store
+    }
   },
   methods: {
+    async login() {
+      if (!this.user) {
+        this.user = await connectMetaMask();
+      }
+      const eloading = this.$eloading('Registration in progress, please wait')
+      try {
+        await secretManager.initSDK({ alias: 'Alice', user: this.user });
+        this.$emit('create-end')
+      } catch (e) {
+        console.error(e)
+      } finally {
+        eloading.close()
+      }
+
+    },
     toLogin() {
       this.$router.push('/LoginStep')
     },
     async connect() {
-      await connectMetaMask();
-      let secretManager = getSecretManager();
-      await secretManager.initSDK({alias: 'EIGEN_BUILTIN_PLACEHOLDER', password: '12356', user: getSigner()})
-      // todo 如果sdk没有报错 以及有正确的返回值，此处可以跳转到首页
-      //if (loginSuccess) {
-        this.$router.push('/dashboard')
+      // await connectMetaMask();
+      // let secretManager = getSecretManager();
+      // await secretManager.initSDK({alias: 'EIGEN_BUILTIN_PLACEHOLDER', password: '12356', user: getSigner()})
+      //   this.$router.push('/dashboard')
       //} else {
         // todo 弹出error
       //}
