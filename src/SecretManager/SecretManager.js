@@ -26,9 +26,15 @@ class SecretManager {
       alias, accountKey, signingKey, accountKey, newSigningKey1, newSigningKey2
     );
     const ctx = new Context(alias, address, rawMessage, timestamp, signature);
-    this.sdk = await SecretSDK.initSDKFromAccount(
+    let appRes = await SecretSDK.initSDKFromAccount(
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, sa
     );
+    if (appRes.errno == 0) {
+      this.sdk = appRes.data
+    } else {
+      throw new Error(appRes)
+    }
+    console.log('this.sdk ', this.sdk)
     let proofAndPublicSignals = await this.sdk.createAccount(ctx, password);
     console.log("create account", proofAndPublicSignals);
     return proofAndPublicSignals

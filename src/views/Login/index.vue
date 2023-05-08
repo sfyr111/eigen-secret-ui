@@ -19,6 +19,7 @@
 
 import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
+import SecretManager from "@/SecretManager/SecretManager";
 import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
 
 async function loadScriptFromBlob(blob) {
@@ -50,15 +51,15 @@ export default {
     },
     async connect() {
       await connectMetaMask();
-      let signer = getSigner()
-      let address = getAddress()
-      console.log('address ', address)
-      if (address) {
-        this.$emit('login-end', 1)
-      } else {
-        // 签名失败
+      let secretManager = getSecretManager();
+      await secretManager.initSDK({alias: 'EIGEN_BUILTIN_PLACEHOLDER', password: '12356', user: getSigner()})
+      // todo 如果sdk没有报错 以及有正确的返回值，此处可以跳转到首页
+      //if (loginSuccess) {
+        this.$router.push('/dashboard')
+      //} else {
+        // todo 弹出error
+      //}
 
-      }
     },
     async createAccount() {
       const batchproof = await createSecretAccount('abu')

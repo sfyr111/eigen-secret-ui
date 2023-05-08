@@ -8,7 +8,9 @@
       <div class="dialog-title" v-if="dialogTitle">{{dialogTitle}}</div>
       <div class="dialog-des" v-if="dialogDes">{{dialogDes}}</div>
       <div class="dialog-status-box">
-        <img src="~@/assets/dialog/dialog-sucess.png" class="status-icon">
+        <img v-if="dialogType == 0" src="~@/assets/dialog/dialog-sucess.png" class="status-icon">
+        <img v-if="dialogType == 1" src="~@/assets/dialog/dialog-pending.png" class="status-icon">
+        <img v-if="dialogType == 2" src="~@/assets/dialog/dialog-fail.png" class="status-icon">
         <p class="status-txt">{{ dialogTip }}</p>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -34,7 +36,7 @@ export default {
       type: String,
     },
     dialogType: {
-      type: String,
+      type: Number,
     },
     dialogVisible: {
       type: Boolean,

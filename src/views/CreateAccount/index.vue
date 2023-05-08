@@ -28,6 +28,14 @@
     <div class="create-submit">
       <button class="submit-btn page-submit" @click="register">Register</button>
     </div>
+
+    <AlertDialog
+        :dialogDes="dialogObject.dialogDes"
+        :dialogType="dialogObject.dialogType"
+        :dialogVisible.sync="dialogObject.dialogVisible"
+        :dialogBtnTxt="dialogObject.dialogBtnTxt"
+    />
+
   </div>
 </template>
 
@@ -35,70 +43,59 @@
 
 import ExchangeItem from '@/components/ExchangeItem/index';
 import FormInput from '@/components/Input/index';
-import {createSecretAccount} from "@/contractUtils/account";
-import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
+import {getSecretManager, getSigner} from "@/store";
+import AlertDialog from '@/components/AlertDialog/index';
 
 export default {
   name: 'create-accout-page',
   components: {
     ExchangeItem,
-    FormInput
+    FormInput,
+    AlertDialog
   },
   data() {
     return {
       assetsTokenList: [],
       tokenLoading: false,
       alias: null,
+      dialogObject: {
+        dialogDes: null,
+        dialogType: 1,
+        dialogVisible: false,
+        dialogBtnTxt: 'confirm',
+      },
     }
   },
   methods: {
-    openFullScreen2() {
-
-    },
     async register() {
       const eloading = this.$eloading('Registration in progress, please wait')
-      try {
-        if (!this.alias) {
-          alert('请登录')
-          return
-        }
-
-
-        let info;
-        const secretManager = getSecretManager();
-        const signer = getSigner()
-        await secretManager.initSDK({ alias: this.alias, password: '123456', user:  signer});
-        const createAccountResp = await secretManager.createAccount({
-          alias: this.alias,
-          password: '123456',
-          user: signer
-        })
-        console.log(createAccountResp)
-        // const userExistsResponse = await secretManager.userExists({
-        //   alias: this.alias,
-        //   password: '123456',
-        //   user: getSigner()
-        // });
-        // console.log('userExistsResponse ', userExistsResponse)
-        // try {
-        //   info = await createSecretAccount();
-        // } catch (e) {
-        //   if (e.code == 'ACTION_REJECTED') {
-        //     alert('Unable to link your account. Please try again.')
-        //   } else {
-        //     alert('create account error')
-        //   }
-        //   console.dir(e)
-        // }
-        // if (info) {
-        //
-        //   this.$emit('create-end', 4)
-        // } else {
-        //
-        // }
-      }  finally {
-        eloading.close()
+      if (!this.alias) {
+        this.dialogObject.dialogDes = 'Please enter a nickname'
+        this.dialogObject.dialogType = 2
+        this.dialogObject.dialogVisible = true
+        return
       }
+      let info;
+      const secretManager = getSecretManager();
+      const signer = getSigner()
+      secretManager.createAccount({
+        alias: this.alias,
+        password: '123456',
+        user: signer
+      }).then(res => {
+        if (res.errno == 0) {
+          // todo 根据sdk的返回值判断是否注册成功, 未注册成功要提示原因
+          this.$emit('create-end', 4)
+        } else {
+          this.dialogDes = res.message ? res.message : 'system error'
+          this.dialogType = 2
+          this.dialogVisible = true
+        }
+      }).catch(error => {
+        console.log(error)
+      }).finally(() => {
+        eloading.close()
+      })
     }
   },
   created() {

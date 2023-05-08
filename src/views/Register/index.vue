@@ -45,13 +45,12 @@ export default {
   methods: {
     async connect() {
       await connectMetaMask();
-      let signer = getSigner()
+      // todo 连接metamask没有错误且拿到address后，跳转到输入昵称注册页面
       let address = getAddress()
-      console.log('address ', address)
       if (address) {
         this.$emit('login-end', 1)
       } else {
-        // 签名失败
+        // todo 签名失败, 报错，不进入下一个页面
 
       }
     },
