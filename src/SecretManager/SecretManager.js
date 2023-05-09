@@ -5,6 +5,8 @@ import { rawMessage, signEOASignature } from '@eigen-secret/core/dist-browser/ut
 import { Context } from '@eigen-secret/core/dist-browser/context';
 import { SigningKey, SecretAccount } from '@eigen-secret/core/dist-browser/account';
 import { defaultServerEndpoint, defaultCircuitPath, defaultContractABI, defaultContractFile as contractJson } from './configure';
+import { Context } from '@eigen-secret/core/dist-browser/context';
+import { buildError } from '@/utils/common';
 
 class SecretManager {
   constructor() {
@@ -41,7 +43,7 @@ class SecretManager {
          data: proofAndPublicSignals
        }
      } catch (e) {
-
+       return buildError(e)
      }
   }
 
