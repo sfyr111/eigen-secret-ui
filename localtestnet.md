@@ -1,48 +1,48 @@
-## 本地开发环境
+## Local Development Environment
 
-### 本地依赖指向：
+### Local Dependencies Configuration：
 ```
 // package.json
 "@eigen-secret/core": "file:${写入你本地 sdk 真是目录}eigen-secret/core",
-举例    "@eigen-secret/core": "file:/Users/qiaohao/Documents/JsProjects/eigen-secret/core",
+for example "@eigen-secret/core": "file:/Users/qiaohao/Documents/JsProjects/eigen-secret/core",
 ```
 
-### 启动本项目：
+### 
+Start this project：
 ```
 npm install
 npm run serve
 ```
 
 
-### 打开 eigen-secret:
+### Open eigen-secret:
 ```
 npm run server
 npx hardhat node
 npm run deploy:dev
 ```
 ```
-// 当页面创建好账号后，注册资产id token 地址
+// After the page creates the account, register the asset ID token address
 npx hardhat register-token --token 0x0165878A594ca255338adfa4d48449f69242Eb8F --network dev
 ```
 
-#### 更新本项目合约地址
+#### Update the contract address of this project
 `src/artifacts/contract.json`
 
-#### 1. MetaMask 添加 hardhat 测试网
+#### 1.Add hardhat test network to MetaMask
 ![image](https://user-images.githubusercontent.com/18510448/237016442-392a5c04-587f-4a9b-84a4-e42d1a163d1b.png)
 
-#### 2. 使用 hardhat node 分配账户秘钥生成账户
+#### 2. Use hardhat node to allocate account keys and generate accounts
 ![image](https://user-images.githubusercontent.com/18510448/237016712-eeeefd47-08bb-433f-9011-eb96a1639f88.png)
 
-#### 确保MetaMask  切换本地测试网络和使用分配的账户
-打开 localhost:8080/secret 进行页面调试。
+#### Make sure to switch to the local test network and use the allocated account in MetaMask
+Open localhost:8080/secret for page debugging.
 
-页面代码位置：
-`src/views/secret/index.vue`
+Location of page code:
+src/views/secret/index.vue
 
-SecretManager.js 位置：
-`src/SecretManager/SecretManager.js`
+Location of SecretManager.js:
+src/SecretManager/SecretManager.js
 
-
-使用过程中如果出现 noce 相关错误点击 MetaMask 设置-高级操作"清除活动和nonce数据" 并重启环境
+If there is a nonce-related error during use, click on MetaMask settings-advanced operations"clear activity and nonce data" and restart the environment.
 ![image](https://user-images.githubusercontent.com/18510448/237016842-0af095ee-2bcb-43c1-afbd-da30a6a17f42.png)
