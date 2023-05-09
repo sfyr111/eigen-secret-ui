@@ -1,20 +1,20 @@
-本地开发环境
+## 本地开发环境
 
-本地依赖指向：
+### 本地依赖指向：
 ```
 // package.json
 "@eigen-secret/core": "file:${写入你本地 sdk 真是目录}eigen-secret/core",
 举例    "@eigen-secret/core": "file:/Users/qiaohao/Documents/JsProjects/eigen-secret/core",
 ```
 
-启动本项目：
+### 启动本项目：
 ```
 npm install
 npm run serve
 ```
 
 
-打开 eigen-secret:
+### 打开 eigen-secret:
 ```
 npm run server
 npx hardhat node
@@ -25,18 +25,17 @@ npm run deploy:dev
 npx hardhat register-token --token 0x0165878A594ca255338adfa4d48449f69242Eb8F --network dev
 ```
 
-更新合约地址
+#### 更新本项目合约地址
 `src/artifacts/contract.json`
 
-1. MetaMask 添加 hardhat 测试网
+#### 1. MetaMask 添加 hardhat 测试网
 ![image](https://user-images.githubusercontent.com/18510448/237016442-392a5c04-587f-4a9b-84a4-e42d1a163d1b.png)
 
-2. 使用 hardhat node 分配账户秘钥生成账户
+#### 2. 使用 hardhat node 分配账户秘钥生成账户
 ![image](https://user-images.githubusercontent.com/18510448/237016712-eeeefd47-08bb-433f-9011-eb96a1639f88.png)
 
-确保MetaMask  切换本地测试网络和使用分配的账户
+#### 确保MetaMask  切换本地测试网络和使用分配的账户
 打开 localhost:8080/secret 进行页面调试。
-
 
 页面代码位置：
 `src/views/secret/index.vue`
