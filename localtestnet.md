@@ -20,6 +20,10 @@ npm run server
 npx hardhat node
 npm run deploy:dev
 ```
+```
+// 当页面创建好账号后，注册资产id token 地址
+npx hardhat register-token --token 0x0165878A594ca255338adfa4d48449f69242Eb8F --network dev
+```
 
 更新合约地址
 `src/artifacts/contract.json`
