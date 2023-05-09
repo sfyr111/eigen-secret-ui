@@ -73,10 +73,21 @@ export default {
       this.dialogObject.dialogVisible = true
     },
     async login() {
-      if (!this.user) {
-        this.user = await connectMetaMask();
-      }
       const eloading = this.$eloading('Registration in progress, please wait')
+      if (!this.user) {
+        try {
+          this.user = await connectMetaMask();
+        } catch (e) {
+          console.log('e.message ',e.message)
+          if (e.message.indexOf('user rejected signing')) {
+            this.showAlert('Unable to link your account. Please try again.', 2)
+          } else {
+            this.showAlert(null, 2)
+          }
+          eloading.close()
+          return
+        }
+      }
       secretManager.initSDK({ alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user }).then((res) => {
         if (res.errno == 0) {
           this.$router.push('/dashboard')
@@ -84,6 +95,11 @@ export default {
           this.showAlert(res.message, 2)
         }
       }).catch(e => {
+        if (e.message.indexOf('user rejected signing') != -1) {
+          this.showAlert('Unable to link your account. Please try again.', 2)
+        } else {
+          this.showAlert(null, 2)
+        }
         console.error(e)
       }).finally(() => {
         eloading.close()
