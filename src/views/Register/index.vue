@@ -7,13 +7,22 @@
         <p class="metamask-text">Register with MetaMask</p>
       </div>
     </div>
+
+    <AlertDialog
+        :dialogDes="dialogObject.dialogDes"
+        :dialogType="dialogObject.dialogType"
+        :dialogVisible.sync="dialogObject.dialogVisible"
+        :dialogBtnTxt="dialogObject.dialogBtnTxt"
+    />
+
   </div>
 </template>
 
 <script>
 
 import {createSecretAccount} from "@/contractUtils/account";
-import {connectMetaMask} from "@/contractUtils/metaMask";
+import AlertDialog from '@/components/AlertDialog/index';
+import {connectMetaMask, doConnectMetaMask} from "@/contractUtils/metaMask";
 import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
 import { ethers } from 'ethers';
 
@@ -37,26 +46,33 @@ async function loadScriptFromBlob(blob) {
 
 export default {
   name: 'register-page',
-
+  components: {
+    AlertDialog
+  },
   data() {
-    return {}
+    return {
+      dialogObject: {
+        dialogDes: null,
+        dialogType: 1,
+        dialogVisible: false,
+        dialogBtnTxt: 'confirm',
+      },
+    }
   },
 
 
   methods: {
-    async connectMetamask() {
-      const signer = await connectMetaMask();
-      this.$emit('login-end', signer)
+    showAlert(dialogDes, dialogType) {
+      this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
+      this.dialogObject.dialogType = dialogType
+      this.dialogObject.dialogVisible = true
     },
-    async connect() {
-      await connectMetaMask();
-      // todo 连接metamask没有错误且拿到address后，跳转到输入昵称注册页面
-      let address = getAddress()
-      if (address) {
-        this.$emit('login-end', 1)
+    async connectMetamask() {
+      const data = await doConnectMetaMask();
+      if (data.errno == 0) {
+        this.$emit('login-end', data.data)
       } else {
-        // todo 签名失败, 报错，不进入下一个页面
-
+        this.showAlert(data.message, 2)
       }
     },
     async createAccount() {

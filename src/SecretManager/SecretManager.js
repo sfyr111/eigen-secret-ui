@@ -12,27 +12,37 @@ class SecretManager {
   }
 
   async createAccount({ alias, password = '<your password>', user }) {
-    console.log('createAccount start...')
-    let timestamp = Math.floor(Date.now() / 1000).toString();
-    const address = await user.getAddress();
-    console.log("ETH address", address);
+     try{
+       console.log('createAccount start...')
+       let timestamp = Math.floor(Date.now() / 1000).toString();
+       const address = await user.getAddress();
+       console.log("ETH address", address);
 
-    const signature = await signEOASignature(user, rawMessage, address, timestamp);
-    const ctx = new Context(alias, address, rawMessage, timestamp, signature);
-    this.sdk = await SecretSDK.initSDKFromAccount(
-      ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, true
-    );
-    console.log('create-accout', ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, password, user, contractJson,defaultCircuitPath,defaultContractABI)
+       const signature = await signEOASignature(user, rawMessage, address, timestamp);
+       const ctx = new Context(alias, address, rawMessage, timestamp, signature);
+       this.sdk = await SecretSDK.initSDKFromAccount(
+           ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, true
+       );
+       console.log('create-accout', ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, password, user, contractJson,defaultCircuitPath,defaultContractABI)
 
-    let proofAndPublicSignals = await this.sdk.data.createAccount(ctx, password);
-    console.log("create account", proofAndPublicSignals);
-    if (proofAndPublicSignals.errno !== 0) {
-      console.error(proofAndPublicSignals)
-      throw new Error("createAccount failed: " + proofAndPublicSignals)
-    }
-    console.log("create account", proofAndPublicSignals);
-    console.log('createAccount done.')
+       let proofAndPublicSignals = await this.sdk.data.createAccount(ctx, password);
+       console.log("create account", proofAndPublicSignals);
+       if (proofAndPublicSignals.errno !== 0) {
+         console.error(proofAndPublicSignals)
+         return {
+           errno:  -1,
+           message:"createAccount failed: " + proofAndPublicSignals
+         }
+       }
+       console.log("create account", proofAndPublicSignals);
+       console.log('createAccount done.')
+       return {
+         errno: 0,
+         data: proofAndPublicSignals
+       }
+     } catch (e) {
 
+     }
   }
 
   async initSDK({ alias, password = '<your password>', user }) {

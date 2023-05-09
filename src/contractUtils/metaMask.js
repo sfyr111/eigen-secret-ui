@@ -2,6 +2,36 @@ import { ethers } from "ethers";
 import { rawMessage, signEOASignature } from "@eigen-secret/core/dist-browser/utils";
 import {setSigner, setAddress, getSigner, getAddress} from "@/store";
 
+export async function doConnectMetaMask() {
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      let signer = await connectMetaMask()
+      return {
+        errno: 0,
+        data: signer
+      }
+    } catch (e) {
+      console.error(e)
+      if (e.message.indexOf('user rejected signing')) {
+        return{
+          errno: -2,
+          message: 'user rejected signing'
+        }
+      } else {
+        return{
+          errno: -1,
+          message: 'System error'
+        }
+      }
+    }
+  } else {
+     return{
+       errno: -3,
+       message: 'MetaMask not found'
+     }
+  }
+}
+
 export async function connectMetaMask() {
   if (typeof window.ethereum !== 'undefined') {
     await window.ethereum.request({ method: 'eth_requestAccounts' }); // Request account access

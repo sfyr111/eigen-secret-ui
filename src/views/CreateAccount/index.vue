@@ -74,6 +74,11 @@ export default {
     }
   },
   methods: {
+    showAlert(dialogDes, dialogType) {
+      this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
+      this.dialogObject.dialogType = dialogType
+      this.dialogObject.dialogVisible = true
+    },
     async createAccount() {
       if (!this.user) {
         return
@@ -83,6 +88,9 @@ export default {
         await secretManager.createAccount({ alias: this.alias, user: this.user });
         this.$emit('create-end')
       } catch (e) {
+
+        console.log('create error ', e)
+
         console.error(e)
       } finally {
         eloading.close()
