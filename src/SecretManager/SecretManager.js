@@ -47,10 +47,17 @@ class SecretManager {
       timestamp,
       signature
     );
-    this.sdk = await SecretSDK.initSDKFromAccount(
+    let sdkResponse = await SecretSDK.initSDKFromAccount(
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI
     );
+
+    if (sdkResponse.errno == 0) {
+      this.sdk = sdkResponse.data
+    } else {
+      console.log(sdkResponse.message)
+    }
     console.log('initSDK done.')
+    return sdkResponse
   }
 
   async deposit({ alias, assetId, password = '<your password>', value, user }) {

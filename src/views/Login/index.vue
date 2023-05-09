@@ -12,6 +12,15 @@
       </div>
     </div>
     <p class="login-des">Don't have an account yet? <span class="sign-up" @click="toLogin">Sign up now</span></p>
+
+
+    <AlertDialog
+        :dialogDes="dialogObject.dialogDes"
+        :dialogType="dialogObject.dialogType"
+        :dialogVisible.sync="dialogObject.dialogVisible"
+        :dialogBtnTxt="dialogObject.dialogBtnTxt"
+    />
+
   </div >
 </template>
 
@@ -20,6 +29,7 @@
 import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
 import secretManager from '@/SecretManager/SecretManager';
+import AlertDialog from '@/components/AlertDialog/index';
 import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
 
 async function loadScriptFromBlob(blob) {
@@ -42,19 +52,45 @@ async function loadScriptFromBlob(blob) {
 
 export default {
   name: 'login-page',
+  components: {
+    AlertDialog
+  },
   data() {
     return {
       user: null, // todo to store
+      dialogObject: {
+        dialogDes: null,
+        dialogType: 1,
+        dialogVisible: false,
+        dialogBtnTxt: 'confirm',
+      },
     }
   },
   methods: {
+    showAlert(dialogDes, dialogType) {
+      this.dialogObject.dialogDes = dialogDes
+      this.dialogObject.dialogType = dialogType
+      this.dialogObject.dialogVisible = true
+    },
     async login() {
       if (!this.user) {
         this.user = await connectMetaMask();
       }
       const eloading = this.$eloading('Registration in progress, please wait')
+      secretManager.initSDK({ alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user }).then((res) => {
+        if (res.errno == 0) {
+
+        } else {
+          this.showAlert(res.message, 2)
+        }
+      }).catch(e => {
+        console.error(e)
+      }).finally(() => {
+        eloading.close()
+      })
+
       try {
-        await secretManager.initSDK({ alias: 'Alice', user: this.user });
+        await secretManager.initSDK({ alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user });
         this.$emit('create-end')
       } catch (e) {
         console.error(e)

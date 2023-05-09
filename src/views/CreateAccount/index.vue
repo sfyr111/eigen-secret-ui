@@ -94,9 +94,9 @@ export default {
         this.dialogObject.dialogDes = 'Please enter a nickname'
         this.dialogObject.dialogType = 2
         this.dialogObject.dialogVisible = true
+        eloading.close()
         return
       }
-      let info;
       const secretManager = getSecretManager();
       const signer = getSigner()
       secretManager.createAccount({
