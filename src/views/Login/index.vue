@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     showAlert(dialogDes, dialogType) {
-      this.dialogObject.dialogDes = dialogDes
+      this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
       this.dialogObject.dialogType = dialogType
       this.dialogObject.dialogVisible = true
     },
@@ -79,7 +79,7 @@ export default {
       const eloading = this.$eloading('Registration in progress, please wait')
       secretManager.initSDK({ alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user }).then((res) => {
         if (res.errno == 0) {
-
+          this.$router.push('/dashboard')
         } else {
           this.showAlert(res.message, 2)
         }
@@ -88,16 +88,14 @@ export default {
       }).finally(() => {
         eloading.close()
       })
-
-      try {
-        await secretManager.initSDK({ alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user });
-        this.$emit('create-end')
-      } catch (e) {
-        console.error(e)
-      } finally {
-        eloading.close()
-      }
-
+      // try {
+      //   await secretManager.initSDK({ alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user });
+      //   this.$emit('create-end')
+      // } catch (e) {
+      //   console.error(e)
+      // } finally {
+      //   eloading.close()
+      // }
     },
     toLogin() {
       this.$router.push('/LoginStep')
