@@ -21,7 +21,7 @@
         :dialogBtnTxt="dialogObject.dialogBtnTxt"
     />
 
-  </div >
+  </div>
 </template>
 
 <script>
@@ -30,7 +30,7 @@ import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
 import secretManager from '@/SecretManager/SecretManager';
 import AlertDialog from '@/components/AlertDialog/index';
-import {getSecretAccount, getSigner, getAddress, getSecretManager} from "@/store";
+import {getSigner, setSigner} from "@/store";
 
 async function loadScriptFromBlob(blob) {
   return new Promise((resolve, reject) => {
@@ -77,8 +77,9 @@ export default {
       if (!this.user) {
         try {
           this.user = await connectMetaMask();
+          setSigner(this.user)
         } catch (e) {
-          console.log('e.message ',e.message)
+          console.log('e.message ', e.message)
           if (e.message.indexOf('user rejected signing')) {
             this.showAlert('Unable to link your account. Please try again.', 2)
           } else {
@@ -88,7 +89,7 @@ export default {
           return
         }
       }
-      secretManager.initSDK({ alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user }).then((res) => {
+      secretManager.initSDK({alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user}).then((res) => {
         if (res.errno == 0) {
           this.$router.push('/dashboard')
         } else {
@@ -122,7 +123,7 @@ export default {
       // await secretManager.initSDK({alias: 'EIGEN_BUILTIN_PLACEHOLDER', password: '12356', user: getSigner()})
       //   this.$router.push('/dashboard')
       //} else {
-        // todo 弹出error
+      // todo 弹出error
       //}
 
     },
@@ -164,6 +165,7 @@ export default {
   },
 
   created() {
+    this.user = getSigner()
     console.log('token')
   },
 
