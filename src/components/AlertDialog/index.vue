@@ -6,7 +6,7 @@
       width="34%"
       >
       <div class="dialog-title" v-if="dialogTitle">{{dialogTitle}}</div>
-      <div class="dialog-des" v-if="dialogDes">{{dialogDes}}</div>
+      <div class="dialog-des" v-if="dialogDes">{{dialogDes ? dialogDes : 'System error'}}</div>
       <div class="dialog-status-box">
         <img v-if="dialogType == 0" src="~@/assets/dialog/dialog-sucess.png" class="status-icon">
         <img v-if="dialogType == 1" src="~@/assets/dialog/dialog-pending.png" class="status-icon">

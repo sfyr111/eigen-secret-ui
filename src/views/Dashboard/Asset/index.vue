@@ -10,10 +10,10 @@
           <th>24-hour Return</th>
         </tr>
         <tr v-for="item in assetList">
-          <td>{{item.asset}}</td>
-          <td>{{item.balance}}</td>
-          <td>{{item.value}}</td>
-          <td>{{item.hourReturn}}</td>
+          <td>{{ item.asset }}</td>
+          <td>{{ item.balance }}</td>
+          <td>{{ item.value }}</td>
+          <td>{{ item.hourReturn }}</td>
         </tr>
       </table>
     </div>
@@ -21,7 +21,9 @@
 </template>
 
 <script>
-import {getAllBalance} from "@/contractUtils/account";
+import secretManager from '@/SecretManager/SecretManager';
+import {getSigner} from "@/store";
+
 export default {
   name: 'Asset',
   data() {
@@ -38,11 +40,14 @@ export default {
   },
   methods: {
     initData() {
-      const eloading = this.$eloading('Obtaining assets, please wait')
+      const eloading = this.$eloading('Obtain asset list, please wait')
       const Alice = "Alice"
-      getAllBalance(Alice).then((res) => {
-        console.log('getAllBalance res: ', res)
+      const options = {alias: Alice, password: '123456', user: getSigner(), page: this.page, pageSize: this.pageSize}
+      secretManager.getBalance(options).then((res) => {
+        console.log('getAssets res: ', res)
         // to convert
+      }).catch((e) => {
+        console.error('getAssets error: ', e)
       }).finally(() => {
         eloading.close()
       })
@@ -54,6 +59,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  @import 'index.scss';
+@import 'index.scss';
 </style>
 

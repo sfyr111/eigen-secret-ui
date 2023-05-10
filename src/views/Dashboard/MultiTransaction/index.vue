@@ -4,7 +4,7 @@
       <div class="recipient">
         <p class="common-block-title">Recipient</p>
         <div>
-          <FormInput placeholder="Enter nickname、ethereum address or ENS"/>
+          <FormInput :value.sync="receiverAlias" placeholder="Enter nickname"/>
         </div>
       </div>
       <div class="amount">
@@ -19,8 +19,8 @@
               placeholder="Enter amount"
               :sourceData="assetsTokenList"
               :showLoading="tokenLoading"
-              @selectChagne="val=> val"
-              @inputChange="val=> val"
+              @selectChagne="val => {this.assetId = val}"
+              @inputChange="val => {this.transactionValue = val}"
               ref="tokenFromSelect"/>
         </div>
       </div>
@@ -55,12 +55,21 @@
     <div class="right">
       <div class="common-block-title">Summary</div>
       <div class="content">
-        {{summaryTxt}}
+        {{ summaryTxt }}
       </div>
       <div class="button">
-        <button class="submit-btn" @click="doOperate">{{buttonTxt}}</button>
+        <button class="submit-btn" @click="doOperate">{{ buttonTxt }}</button>
       </div>
     </div>
+
+
+    <AlertDialog
+        :dialogDes="dialogObject.dialogDes"
+        :dialogType="dialogObject.dialogType"
+        :dialogVisible.sync="dialogObject.dialogVisible"
+        :dialogBtnTxt="dialogObject.dialogBtnTxt"
+    />
+
   </div>
 </template>
 
@@ -69,8 +78,10 @@
 import FormSelect from '@/components/Select/index';
 import FormInput from '@/components/Input/index';
 import ExchangeItem from '@/components/ExchangeItem/index';
-import {deposit, send, withdraw} from "@/contractUtils/transaction";
+import secretManager from '@/SecretManager/SecretManager';
 import msg from "@/utils/msg";
+import {getSigner} from "@/store";
+import AlertDialog from '@/components/AlertDialog/index';
 
 
 const assetId = 2
@@ -83,7 +94,8 @@ export default {
   components: {
     FormSelect,
     ExchangeItem,
-    FormInput
+    FormInput,
+    AlertDialog
   },
   props: {
     transactionType: {
@@ -101,45 +113,94 @@ export default {
       transactionFee: '1',
       summaryTxt: '',
       buttonTxt: '',
+      transactionValue: null,
+      receiverAlias: null,
+      assetId: null,
+      dialogObject: {
+        dialogDes: null,
+        dialogType: 1,
+        dialogVisible: false,
+        dialogBtnTxt: 'confirm',
+      },
     }
   },
   methods: {
+    showAlert(dialogDes, dialogType) {
+      this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
+      this.dialogObject.dialogType = dialogType
+      this.dialogObject.dialogVisible = true
+    },
     switchTransactionFee(e) {
       this.transactionFee = e
     },
     doOperate() {
-      const eloading = this.$eloading('Operation in progress, please wait')
-      let pro = null
-      if (msg.transaction[this.transactionType] == msg.transaction.deposit) {
-        pro = this.doDeposit()
-      }
-      if (msg.transaction[this.transactionType] == msg.transaction.send) {
-        pro = this.doSend()
-      }
-      if (msg.transaction[this.transactionType] == msg.transaction.withdraw) {
-        pro = this.doWithdraw()
-      }
-      if (pro == null) {
-        alert('操作有误')
+      if (!this.transactionValue) {
+        this.showAlert('Please enter the operation amount', 2)
         return
       }
-      pro.then(() => {
-
-      }).catch((e) => {
-        alert('发生错误')
-      }).finally(() => {
+      if (!this.assetId) {
+        this.showAlert('Please select an asset type', 2)
+        return
+      }
+      if (!this.receiverAlias) {
+        this.showAlert('Please enter the recipient nickname', 2)
+        return
+      }
+      let userOperation = null
+      let options = null
+      if (msg.transaction[this.transactionType] == msg.transaction.deposit) {
+        options = {
+          alias: null,
+          assetId: null,
+          password: '<your password>',
+          value: this.transactionValue,
+          user: getSigner()
+        }
+        userOperation = secretManager.deposit
+      }
+      if (msg.transaction[this.transactionType] == msg.transaction.send) {
+        options = {
+          alias: null,
+          assetId: null,
+          password: '<your password>',
+          value: this.transactionValue,
+          user: getSigner(),
+          receiver: null,
+          receiverAlias: null
+        }
+        userOperation = secretManager.send
+      }
+      if (msg.transaction[this.transactionType] == msg.transaction.withdraw) {
+        options = {
+          alias: null,
+          assetId: null,
+          password: '<your password>',
+          value: this.transactionValue,
+          user: getSigner()
+        }
+        userOperation = secretManager.withdraw
+      }
+      if (userOperation == null) {
+        this.showAlert('Operation error, please contact the administrator', 2)
         eloading.close()
-      })
+        return
+      } else {
+        const eloading = this.$eloading('Operation in progress, please wait')
+        userOperation(options).then((res) => {
+          // todo res
+          if (res.code == 0) {
+            this.showAlert('Transaction Confirmed!', 1)
+          } else {
+            this.showAlert(res.message, 2)
+          }
+        }).catch((e) => {
+          console.error(e)
+          this.showAlert(null, 2)
+        }).finally(() => {
+          eloading.close()
+        })
+      }
     },
-    doDeposit() {
-      return deposit(Alice, assetId, 1, AliceAccount)
-    },
-    doSend() {
-      return send(Alice, AliceAccount, Alice, AliceAccount, assetId, 1)
-    },
-    doWithdraw() {
-      return withdraw(AliceAccount, assetId)
-    }
   }
 }
 </script>

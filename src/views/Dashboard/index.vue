@@ -20,15 +20,7 @@
       </div>
       <div class="transaction-list-box">
         <div class="common-block-title">Transaction History</div>
-        <Transaction
-          :transactionList="transactionList"/>
-        <div class="pagination-box">
-          <el-pagination
-            background
-            layout="prev, pager, next"
-            :total="1000">
-          </el-pagination>
-        </div>
+        <Transaction />
       </div>
     </div>
     <ConfirmDialog
