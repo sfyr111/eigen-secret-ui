@@ -6,6 +6,7 @@ import SecretManager from "@/SecretManager/SecretManager";
 Vue.use(Vuex)
 
 const SECRET_INFO_INIT = {
+    alias: '',
     signer: null,
     address: null,
     sdk: null,
@@ -20,6 +21,9 @@ const index = new Vuex.Store({
         }
     },
     mutations: {
+        setAlias(state, n) {
+            state.secretInfo.alias = n;
+        },
         setSecretInfo(state, n) {
             state.secretInfo = n
         },
@@ -41,6 +45,9 @@ const index = new Vuex.Store({
     }
 })
 
+export function getAlias() {
+    return index.state?.secretInfo?.alias
+}
 
 export function getSigner() {
     return index.state?.secretInfo?.signer
@@ -60,6 +67,10 @@ export function getSecretAccount() {
 
 export function setSigner(signer) {
     index.commit('setSigner', signer)
+}
+
+export function setAlias(alias) {
+    index.commit('setAlias', alias)
 }
 
 export function setAddress(address) {

@@ -30,7 +30,8 @@ import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
 import secretManager from '@/SecretManager/SecretManager';
 import AlertDialog from '@/components/AlertDialog/index';
-import {getSigner, setSigner} from "@/store";
+import { getSigner, setSigner, setAlias, setSdk } from "@/store";
+import { __DEFAULT_ALIAS__ } from "@eigen-secret/core/dist-browser/utils";
 
 async function loadScriptFromBlob(blob) {
   return new Promise((resolve, reject) => {
@@ -74,7 +75,7 @@ export default {
     },
     async login() {
       const eloading = this.$eloading('Registration in progress, please wait')
-      if (!this.user) {
+      if (!getSigner()) {
         try {
           this.user = await connectMetaMask();
           setSigner(this.user)
@@ -89,8 +90,10 @@ export default {
           return
         }
       }
-      secretManager.initSDK({alias: 'EIGEN_BUILTIN_PLACEHOLDER', user: this.user}).then((res) => {
+      secretManager.initSDK({alias: __DEFAULT_ALIAS__, user: getSigner() }).then((res) => {
         if (res.errno == 0) {
+          setSdk(res.data)
+          setAlias(res.data.alias)
           this.$router.push('/dashboard')
         } else {
           this.showAlert(res.message, 2)

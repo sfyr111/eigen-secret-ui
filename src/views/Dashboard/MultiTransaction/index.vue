@@ -4,7 +4,7 @@
       <div class="recipient">
         <p class="common-block-title">Recipient</p>
         <div>
-          <FormInput :value.sync="receiverAlias" placeholder="Enter nickname"/>
+          <FormInput :value.sync="receiver" placeholder="Enter nickname"/>
         </div>
       </div>
       <div class="amount">
@@ -58,7 +58,7 @@
         {{ summaryTxt }}
       </div>
       <div class="button">
-        <button class="submit-btn" @click="doOperate">{{ buttonTxt }}</button>
+        <button class="submit-btn" @click="caller">{{ buttonTxt }}</button>
       </div>
     </div>
 
@@ -80,7 +80,7 @@ import FormInput from '@/components/Input/index';
 import ExchangeItem from '@/components/ExchangeItem/index';
 import secretManager from '@/SecretManager/SecretManager';
 import msg from "@/utils/msg";
-import {getSigner} from "@/store";
+import { getAlias, getSigner } from "@/store";
 import AlertDialog from '@/components/AlertDialog/index';
 
 
@@ -114,7 +114,7 @@ export default {
       summaryTxt: '',
       buttonTxt: '',
       transactionValue: null,
-      receiverAlias: null,
+      receiver: null,
       assetId: null,
       dialogObject: {
         dialogDes: null,
@@ -133,6 +133,17 @@ export default {
     switchTransactionFee(e) {
       this.transactionFee = e
     },
+    caller() {
+      const type = this.transactionType
+      const params = {
+        alias: getAlias(),
+        assetId: 2, // todo this value from selector, default 2.
+        value: this.transactionValue,
+        user: getSigner(),
+        receiver: this.receiver, // todo when only call send method is required
+      }
+      secretManager[type] && secretManager[type].call(secretManager, params)
+    },
     doOperate() {
       if (!this.transactionValue) {
         this.showAlert('Please enter the operation amount', 2)
@@ -142,7 +153,7 @@ export default {
         this.showAlert('Please select an asset type', 2)
         return
       }
-      if (!this.receiverAlias) {
+      if (!this.receiver) {
         this.showAlert('Please enter the recipient nickname', 2)
         return
       }
@@ -166,7 +177,7 @@ export default {
           value: this.transactionValue,
           user: getSigner(),
           receiver: null,
-          receiverAlias: null
+          receiver: null
         }
         userOperation = secretManager.send
       }

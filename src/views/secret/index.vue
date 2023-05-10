@@ -7,6 +7,9 @@
         <label for="value">Value:</label>
         <input v-model="value" id="value" class="input-field"/>
 
+        <label for="value">Receiver:</label>
+        <input v-model="receiver" id="receiver" class="input-field"/>
+
         <button @click="createAccount" class="btn">Create Account</button>
         <button @click="initSDK" class="btn">InitSDK</button>
         <button @click="deposit" class="btn">Deposit</button>
@@ -33,14 +36,12 @@ export default {
       assetId: 2,
       value: '',
       receiver: 'receiverPublicKey',
-      receiverAlias: 'receiverAlias',
       page: 1,
       pageSize: 10,
     }
   },
   methods: {
     async proverInit() {
-        debugger
         Prover.serverAddr = 'http://localhost:3000'
         Prover.init()
     },
@@ -60,7 +61,6 @@ export default {
       if (!this.user) {
         await this.connectMetamask();
       }
-      debugger
       await this.secretManager.createAccount({ alias: this.alias, password: this.password, user: this.user });
     },
     async initSDK() {
@@ -80,7 +80,6 @@ export default {
         value: this.value,
         user: this.user,
         receiver: this.receiver,
-        receiverAlias: this.receiverAlias,
       });
     },
     async withdraw() {

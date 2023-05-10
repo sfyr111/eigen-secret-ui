@@ -13,7 +13,7 @@
     </div>
     <div class="content">
       <Register v-if="active == 0" @login-end="loginEnd"/>
-      <CreateAccount @create-end="createEnd" v-if="active == 1 || active == 2 || active == 3" :user="user"/>
+      <CreateAccount @create-end="createEnd" v-if="active == 1 || active == 2 || active == 3"/>
       <AlertDialog @update:dialogVisible="registerDialogClose" :dialog-visible="registerDialog"
                    dialog-tip="Congratulations, your registration is successful!"
                    dialog-btn-txt="Confirm"/>
@@ -27,6 +27,7 @@ import Register from '@/views/Register/index';
 import CreateAccount from '@/views/CreateAccount/index';
 import AlertDialog from '@/components/AlertDialog/index';
 import secretManager from '@/SecretManager/SecretManager';
+import { getSigner, setSdk, setSigner } from "@/store";
 import { ehters } from 'ethers';
 
 export default {
@@ -47,11 +48,13 @@ export default {
 
   methods: {
     loginEnd(singer) {
-      this.user = singer
+      setSigner(singer)
       this.active = 1
     },
-    createEnd() {
+    createEnd(sdk) {
       this.active = 3
+      setSdk(sdk.data)
+      setAlias(sdk.data.alias)
       this.registerDialog = true
     },
     metamaskLogin() {

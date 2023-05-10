@@ -6,6 +6,7 @@ import "element-ui/lib/theme-chalk/index.css"
 import 'vant/lib/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
 import Vuex from 'vuex'
+import store from "@/store";
 
 
 Vue.use(ElementUI, { locale });
@@ -24,6 +25,7 @@ Vue.prototype.$eloading = function (txt) {
 }
 
 new Vue({
+  store,
   router,
   render: h => h(App),
 }).$mount('#app')

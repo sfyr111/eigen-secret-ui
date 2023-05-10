@@ -47,18 +47,13 @@ import {getSecretManager, getSigner} from "@/store";
 import AlertDialog from '@/components/AlertDialog/index';
 import secretManager from '@/SecretManager/SecretManager';
 
+
 export default {
   name: 'create-accout-page',
   components: {
     ExchangeItem,
     FormInput,
     AlertDialog
-  },
-  props: {
-    user: {
-      type: Object,
-      default: null,
-    }
   },
   data() {
     return {
@@ -80,13 +75,14 @@ export default {
       this.dialogObject.dialogVisible = true
     },
     async createAccount() {
-      if (!this.user) {
+      const user = getSigner();
+      if (!user) {
         return
       }
       const eloading = this.$eloading('Registration in progress, please wait')
       try {
-        await secretManager.createAccount({ alias: this.alias, user: this.user });
-        this.$emit('create-end')
+        const sdk = await secretManager.createAccount({ alias: this.alias, user });
+        this.$emit('create-end', sdk)
       } catch (e) {
 
         console.log('create error ', e)
