@@ -135,7 +135,6 @@ export default {
     },
     caller() {
       if (!this.receiver) {
-        alert(this.receiver)
         this.showAlert('Please enter the recipient address', 2)
         return
       }

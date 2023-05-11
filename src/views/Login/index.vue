@@ -74,7 +74,7 @@ export default {
       this.dialogObject.dialogVisible = true
     },
     async login() {
-      const eloading = this.$eloading('Registration in progress, please wait')
+      const eloading = this.$eloading('Login in progress, please wait')
       if (!getSigner()) {
         try {
           this.user = await connectMetaMask();

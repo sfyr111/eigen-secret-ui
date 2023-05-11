@@ -5,6 +5,7 @@ import Login from '../views/Login/index';
 import Dashboard from '../views/Dashboard/index';
 import CreateAccount from '../views/CreateAccount/index';
 import Secret from '../views/secret/index';
+import { getSigner, getAlias } from "@/store";
 
 
 // cache origin push method
@@ -97,6 +98,19 @@ const router = new VueRouter({
     mode: 'history', // 'hash'
     base: process.env.BASE_URL,
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.path != '/' && to.path != '/LoginStep' && to.path != '/login') {
+        if(!getAlias() || !getSigner()) {
+            next('/')
+        } else {
+            next();
+        }
+    } else {
+        next()
+    }
+
 });
 
 export default router;
