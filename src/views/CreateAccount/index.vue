@@ -80,17 +80,19 @@ export default {
         return
       }
       const eloading = this.$eloading('Registration in progress, please wait')
-      try {
-        const sdk = await secretManager.createAccount({ alias: this.alias, user });
-        this.$emit('create-end', sdk)
-      } catch (e) {
-
+      secretManager.createAccount({ alias: this.alias, user }).then(res => {
+        if (res.errno == 0) {
+          this.$emit('create-end', res.data)
+        } else {
+          this.showAlert(res.message, 2)
+        }
+      }).catch(e => {
+        this.showAlert(null, 2)
         console.log('create error ', e)
-
         console.error(e)
-      } finally {
+      }).finally(() => {
         eloading.close()
-      }
+      })
     },
     async register() {
       const eloading = this.$eloading('Registration in progress, please wait')
