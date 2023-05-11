@@ -134,7 +134,9 @@ export default {
       this.transactionFee = e
     },
     caller() {
-      if (!this.receiver) {
+      const type = this.transactionType
+
+      if (!this.receiver && type === 'send') {
         this.showAlert('Please enter the recipient address', 2)
         return
       }
@@ -146,7 +148,6 @@ export default {
         this.showAlert('Please select an asset type', 2)
         return
       }
-      const type = this.transactionType
       const params = {
         alias: getAlias(),
         assetId: 2, // todo this value from selector, default 2.

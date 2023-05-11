@@ -25,6 +25,7 @@
 import secretManager from '@/SecretManager/SecretManager';
 import { Prover } from '@eigen-secret/core/dist-browser/prover';
 import { ethers } from 'ethers';
+import { __DEFAULT_ALIAS__ } from "@eigen-secret/core/dist-browser/utils";
 
 export default {
   data() {
@@ -67,7 +68,7 @@ export default {
       if (!this.user) {
         await this.connectMetamask();
       }
-      await this.secretManager.initSDK({ alias: this.alias, password: this.password, user: this.user });
+      await this.secretManager.initSDK({ alias: this.alias ? this.alias : __DEFAULT_ALIAS__, password: this.password, user: this.user });
     },
     async deposit() {
       await this.secretManager.deposit({ alias: this.alias, assetId: this.assetId, password: this.password, value: this.value, user: this.user });

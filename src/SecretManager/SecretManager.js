@@ -8,7 +8,6 @@ import {
   defaultContractFile as contractJson,
   defaultServerEndpoint,
 } from './configure';
-import { buildError } from '@/utils/common';
 
 class SecretManager {
   constructor() {
@@ -23,10 +22,15 @@ class SecretManager {
 
     const signature = await signEOASignature(user, rawMessage, address, timestamp);
     const ctx = new Context(alias, address, rawMessage, timestamp, signature);
-    this.sdk = await SecretSDK.initSDKFromAccount(
+    const sdkRespond = await SecretSDK.initSDKFromAccount(
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, true,
-    ).then(res => res.data);
-    console.log('create account params:', ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, password, user, contractJson, defaultCircuitPath, defaultContractABI)
+    );
+    if (sdkRespond.errno !== 0) {
+      console.log('create account initSDK fail: ', sdkRespond)
+      return sdkRespond
+    }
+    this.sdk = sdkRespond.data;
+    console.log('create account params:', ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, password, user, contractJson, defaultCircuitPath, defaultContractABI);
 
     let respond = await this.sdk.createAccount(ctx, password);
     console.log("create account", respond);
@@ -35,7 +39,11 @@ class SecretManager {
     }
     console.log("create account", respond);
     console.log('createAccount done.')
-    return respond;
+    return {
+      message: respond.message,
+      errno: respond.errno,
+      data: this.sdk,
+    };
   }
 
   async initSDK({ alias, password = '<your password>', user }) {
