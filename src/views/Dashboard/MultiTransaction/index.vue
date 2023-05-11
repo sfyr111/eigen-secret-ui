@@ -4,7 +4,7 @@
       <div class="recipient">
         <p class="common-block-title">Recipient</p>
         <div>
-          <FormInput :value.sync="receiver" placeholder="Enter nickname"/>
+          <FormInput :value.sync="receiver" @inputChange="(e) => {this.receiver = e.value} " placeholder="Enter address"/>
         </div>
       </div>
       <div class="amount">
@@ -115,7 +115,7 @@ export default {
       buttonTxt: '',
       transactionValue: null,
       receiver: null,
-      assetId: null,
+      assetId: 2,
       dialogObject: {
         dialogDes: null,
         dialogType: 1,
@@ -134,17 +134,11 @@ export default {
       this.transactionFee = e
     },
     caller() {
-      const type = this.transactionType
-      const params = {
-        alias: getAlias(),
-        assetId: 2, // todo this value from selector, default 2.
-        value: this.transactionValue,
-        user: getSigner(),
-        receiver: this.receiver, // todo when only call send method is required
+      if (!this.receiver) {
+        alert(this.receiver)
+        this.showAlert('Please enter the recipient address', 2)
+        return
       }
-      secretManager[type] && secretManager[type].call(secretManager, params)
-    },
-    doOperate() {
       if (!this.transactionValue) {
         this.showAlert('Please enter the operation amount', 2)
         return
@@ -153,51 +147,17 @@ export default {
         this.showAlert('Please select an asset type', 2)
         return
       }
-      if (!this.receiver) {
-        this.showAlert('Please enter the recipient nickname', 2)
-        return
+      const type = this.transactionType
+      const params = {
+        alias: getAlias(),
+        assetId: 2, // todo this value from selector, default 2.
+        value: this.transactionValue,
+        user: getSigner(),
+        receiver: this.receiver, // todo when only call send method is required
       }
-      let userOperation = null
-      let options = null
-      if (msg.transaction[this.transactionType] == msg.transaction.deposit) {
-        options = {
-          alias: null,
-          assetId: null,
-          password: '<your password>',
-          value: this.transactionValue,
-          user: getSigner()
-        }
-        userOperation = secretManager.deposit
-      }
-      if (msg.transaction[this.transactionType] == msg.transaction.send) {
-        options = {
-          alias: null,
-          assetId: null,
-          password: '<your password>',
-          value: this.transactionValue,
-          user: getSigner(),
-          receiver: null,
-          receiver: null
-        }
-        userOperation = secretManager.send
-      }
-      if (msg.transaction[this.transactionType] == msg.transaction.withdraw) {
-        options = {
-          alias: null,
-          assetId: null,
-          password: '<your password>',
-          value: this.transactionValue,
-          user: getSigner()
-        }
-        userOperation = secretManager.withdraw
-      }
-      if (userOperation == null) {
-        this.showAlert('Operation error, please contact the administrator', 2)
-        eloading.close()
-        return
-      } else {
+      if (secretManager[type]) {
         const eloading = this.$eloading('Operation in progress, please wait')
-        userOperation(options).then((res) => {
+        secretManager[type].call(secretManager, params).then((res) => {
           // todo res
           if (res.code == 0) {
             this.showAlert('Transaction Confirmed!', 1)
