@@ -35,7 +35,7 @@ export default {
       user: null,
       assetId: 2,
       value: '',
-      receiver: 'receiverPublicKey',
+      receiver: '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
       page: 1,
       pageSize: 10,
     }

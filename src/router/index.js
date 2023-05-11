@@ -101,6 +101,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+    if (to.path === '/secret') {
+        return next()
+    }
     if (to.path != '/' && to.path != '/LoginStep' && to.path != '/login') {
         if(!getAlias() || !getSigner()) {
             next('/')
