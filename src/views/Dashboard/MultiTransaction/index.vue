@@ -158,8 +158,7 @@ export default {
       if (secretManager[type]) {
         const eloading = this.$eloading('Operation in progress, please wait')
         secretManager[type].call(secretManager, params).then((res) => {
-          // todo res
-          if (res.code == 0) {
+          if (res.errno == 0) {
             this.showAlert('Transaction Confirmed!', 1)
           } else {
             this.showAlert(res.message, 2)

@@ -27,7 +27,7 @@ import Register from '@/views/Register/index';
 import CreateAccount from '@/views/CreateAccount/index';
 import AlertDialog from '@/components/AlertDialog/index';
 import secretManager from '@/SecretManager/SecretManager';
-import { getSigner, setSdk, setSigner } from "@/store";
+import { getSigner, setSdk, setSigner, setAlias } from "@/store";
 import { ehters } from 'ethers';
 
 export default {
