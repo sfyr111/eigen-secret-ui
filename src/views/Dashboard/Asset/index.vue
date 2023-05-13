@@ -44,6 +44,14 @@ export default {
       const Alice = "Alice"
       const options = {alias: Alice, password: '123456', user: getSigner(), page: this.page, pageSize: this.pageSize}
       secretManager.getAllBalance(options).then((res) => {
+        this.assetList = this.res?.data?.map(item => {
+          return {
+            asset: item.assetId,
+            balance: item.balance,
+            value: item.balanceUSD,
+            hourReturn: '0 0'
+          }
+        })
         console.log('getAssets res: ', res)
         // to convert
       }).catch((e) => {
