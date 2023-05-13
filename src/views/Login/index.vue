@@ -30,7 +30,7 @@ import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
 import secretManager from '@/SecretManager/SecretManager';
 import AlertDialog from '@/components/AlertDialog/index';
-import { getSigner, setSigner, setAlias, setSdk } from "@/store";
+import { getSigner, setSigner, setAddress, setAlias, setSdk } from "@/store";
 import { __DEFAULT_ALIAS__ } from "@eigen-secret/core/dist-browser/utils";
 
 async function loadScriptFromBlob(blob) {
@@ -92,6 +92,7 @@ export default {
       }
       secretManager.initSDK({alias: __DEFAULT_ALIAS__, user: getSigner() }).then((res) => {
         if (res.errno == 0) {
+          console.log('login res data ', res)
           setSdk(res.data)
           setAlias(res.data.alias)
           this.$router.push('/dashboard')

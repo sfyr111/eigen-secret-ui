@@ -163,6 +163,22 @@ class SecretManager {
     return respond;
   }
 
+  async getAllBalance({ alias, assetId, password = '<your password>', user }) {
+    if (!this.sdk) await this.initSDK(alias, password, user);
+    const address = await user.getAddress();
+    let timestamp = Math.floor(Date.now() / 1000).toString();
+    const signature = await signEOASignature(user, rawMessage, address, timestamp);
+
+    const ctx = new Context(
+        alias,
+        address,
+        rawMessage,
+        timestamp,
+        signature,
+    )
+    return await this.sdk.getAllBalance(ctx);
+  }
+
   async getBalance({ alias, assetId, password = '<your password>', user }) {
     if (!this.sdk) await this.initSDK(alias, password, user);
     const address = await user.getAddress();

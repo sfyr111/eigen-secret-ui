@@ -18,6 +18,11 @@
 	.head-right {
 		display: flex;
 		align-items: center;
+		cursor: pointer;
+	}
+	.dropdown-txt {
+		display: inline-block;
+		width: 100%;
 	}
 }
 

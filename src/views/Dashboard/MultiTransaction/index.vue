@@ -4,7 +4,7 @@
       <div class="recipient">
         <p class="common-block-title">Recipient</p>
         <div>
-          <FormInput :value.sync="receiver" @inputChange="(e) => {this.receiver = e.value} " placeholder="Enter address"/>
+          <FormInput :disabled="transactionType == 'deposit' || transactionType == 'withdraw'" :value.sync="receiver" @inputChange="(e) => {this.receiver = e.value} " placeholder="Enter address"/>
         </div>
       </div>
       <div class="amount">
@@ -105,6 +105,9 @@ export default {
   created() {
     this.summaryTxt = msg.transaction[this.transactionType].summaryTxt
     this.buttonTxt = msg.transaction[this.transactionType].buttonTxt
+    if (this.transactionType == 'deposit' || this.transactionType == 'withdraw') {
+      this.receiver = getSigner().userAddress
+    }
   },
   data() {
     return {

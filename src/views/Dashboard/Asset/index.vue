@@ -43,7 +43,7 @@ export default {
       const eloading = this.$eloading('Obtain asset list, please wait')
       const Alice = "Alice"
       const options = {alias: Alice, password: '123456', user: getSigner(), page: this.page, pageSize: this.pageSize}
-      secretManager.getBalance(options).then((res) => {
+      secretManager.getAllBalance(options).then((res) => {
         console.log('getAssets res: ', res)
         // to convert
       }).catch((e) => {

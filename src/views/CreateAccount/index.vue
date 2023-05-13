@@ -19,9 +19,9 @@
         </div>
       </div>
 
-      <div>
-        <div class="error-tip">Already registered，please change your nickname</div>
-      </div>
+<!--      <div>-->
+<!--        <div class="error-tip">Already registered，please change your nickname</div>-->
+<!--      </div>-->
     </div>
 
 
