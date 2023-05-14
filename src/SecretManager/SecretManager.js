@@ -16,10 +16,10 @@ class SecretManager {
     this.signatureTimestamp = null;
   }
 
-  async getSignature(user, address, timestamp) {
+  async getSignature(user, address, timestamp, forceUpdate = false) {
     const currentTime = Math.floor(Date.now() / 1000);
 
-    if (this.signature && (currentTime - this.signatureTimestamp <= 10)) {
+    if (!forceUpdate && this.signature && (currentTime - this.signatureTimestamp <= 180)) {
       return this.signature;
     }
 
@@ -35,7 +35,7 @@ class SecretManager {
     const address = await user.getAddress();
     console.log("ETH address", address);
 
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature(user, address, timestamp, true);
     const ctx = new Context(alias, address, rawMessage, timestamp, signature);
     const sdkRespond = await SecretSDK.initSDKFromAccount(
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, true,
@@ -65,7 +65,7 @@ class SecretManager {
     console.log('initSDK start...')
     const timestamp = Math.floor(Date.now() / 1000).toString();
     const address = await user.getAddress();
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature(user, address, timestamp, true);
     const ctx = new Context(
       alias,
       address,
@@ -100,7 +100,7 @@ class SecretManager {
     await approveTx.wait();
 
     const timestamp = Math.floor(Date.now() / 1000).toString();
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature(user, address, timestamp, true);
 
     const ctx = new Context(
       alias,
@@ -134,7 +134,7 @@ class SecretManager {
     if (!this.sdk) await this.initSDK(alias, password, user);
     const address = await user.getAddress();
     const timestamp = Math.floor(Date.now() / 1000).toString();
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature(user, address, timestamp, true);
 
     const ctx = new Context(
       alias,
@@ -158,7 +158,7 @@ class SecretManager {
     if (!this.sdk) await this.initSDK(alias, password, user);
     const address = await user.getAddress();
     const timestamp = Math.floor(Date.now() / 1000).toString();
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature(user, address, timestamp, true);
 
     const ctx = new Context(
       alias,
