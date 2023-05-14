@@ -58,7 +58,7 @@
 <script>
 import {getStatusTxt} from '@/utils/index';
 import secretManager from '@/SecretManager/SecretManager';
-import {getSigner} from "@/store";
+import {getAlias, getSigner} from "@/store";
 
 export default {
   name: 'Transaction',
@@ -93,17 +93,19 @@ export default {
     nextPage() {
       this.page++;
     },
-    initData() {
-      const eloading = this.$eloading('Obtaining transaction history, please wait')
-      const Alice = "Alice"
-      const options = {alias: Alice, password: '123456', user: getSigner(), page: this.page, pageSize: this.pageSize}
+    fetchPageData() {
+      const options = {alias: getAlias(), password: '123456', user: getSigner(), page: this.page, pageSize: this.pageSize}
       secretManager.getTransactions(options).then((res) => {
         console.log('getTransactions res: ', res)
         // to convert
       }).catch((e) => {
         console.error('getTransactions error: ', e)
-      }).finally(() => {
-        eloading.close()
+      })
+    },
+    initData() {
+      this.fetchPageData()
+      this.$eventBus.$on('transaction-success', function(data) {
+        this.fetchPageData()
       })
     }
   },

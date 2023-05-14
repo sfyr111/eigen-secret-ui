@@ -14,6 +14,7 @@ Vue.use(ElementUI, { locale });
 Vue.config.productionTip = false
 Vue.prototype.$eventBus = new Vue()
 
+
 Vue.prototype.$eloading = function (txt) {
   const loading = this.$loading({
     lock: true,

@@ -17,9 +17,9 @@
               key="fromToken"
               isMax=true
               placeholder="Enter amount"
-              :sourceData="assetsTokenList"
+              :sourceData="assetsInfos"
               :showLoading="tokenLoading"
-              @selectChagne="val => {this.assetId = val}"
+              @selectChagne="val => {this.assetId = val.rightVal}"
               @inputChange="val => {this.transactionValue = val}"
               ref="tokenFromSelect"/>
         </div>
@@ -101,6 +101,9 @@ export default {
     transactionType: {
       type: String,
     },
+    assetsInfos: {
+      type: Array,
+    }
   },
   created() {
     this.summaryTxt = msg.transaction[this.transactionType].summaryTxt
@@ -112,14 +115,21 @@ export default {
   },
   data() {
     return {
-      assetsTokenList: [],
+      assetsTokenList: [
+        {
+          rightVal: null,
+          tokenName: '123',
+          leftDes: null,
+          icon: null,
+        }
+      ],
       tokenLoading: false,
       transactionFee: '1',
       summaryTxt: '',
       buttonTxt: '',
       transactionValue: null,
       receiver: null,
-      assetId: 2,
+      assetId: null,
       dialogObject: {
         dialogDes: null,
         dialogType: 1,
@@ -130,12 +140,21 @@ export default {
   },
   methods: {
     init() {
-      const options = {alias: getAlias(), password: '123456', user: getSigner()}
-      secretManager.getAssetInfo(options).then(res => {
-        console.log('getAssetInfo res', res)
-      }).catch(e => {
-        console.log('getAssetInfo error', e)
-      })
+      // const options = {alias: getAlias(), password: '123456', user: getSigner()}
+      // secretManager.getAssetInfo(options).then(res => {
+      //   console.log('getAssetInfo res', res)
+      // }).catch(e => {
+      //   console.log('getAssetInfo error', e)
+      // })
+      //
+      // this.assetsInfos.map(item => {
+      //   return {
+      //     rightVal: item.assetId,
+      //     tokenName: item.token_symbol,
+      //     leftDes: null,
+      //     icon: null,
+      //   }
+      // })
     },
     showAlert(dialogDes, dialogType) {
       this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
@@ -162,7 +181,7 @@ export default {
       }
       const params = {
         alias: getAlias(),
-        assetId: 2, // todo this value from selector, default 2.
+        assetId: this.assetId, // todo this value from selector, default 2.
         value: this.transactionValue,
         user: getSigner(),
         receiver: this.receiver, // todo when only call send method is required
@@ -172,6 +191,7 @@ export default {
         secretManager[type].call(secretManager, params).then((res) => {
           if (res.errno == 0) {
             this.showAlert('Transaction Confirmed!', 1)
+            this.$eventBus.$emit('transaction-success', {value: true})
           } else {
             this.showAlert(res.message, 2)
           }

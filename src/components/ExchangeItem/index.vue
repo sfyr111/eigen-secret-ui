@@ -112,7 +112,7 @@ export default {
   methods: {
     inputChange(e) {
       const val = e.target.value
-      this.dealShowUs(val)
+      //this.dealShowUs(val)
       this.$emit('inputChange', this.exchangVal);
     },
     dealShowUs(val) {

@@ -101,6 +101,11 @@ export default {
         console.error('getAssets error: ', e)
       })
     },
+    onTransaction() {
+      this.$eventBus.$on('transaction-success', function(data) {
+        this.getAllBalance()
+      })
+    },
     transClick(type) {
       this.$refs.multiTransactionTab.switchTab(type)
       this.scrollToSection()
@@ -129,7 +134,8 @@ export default {
   },
 
   created() {
-    console.log('token')
+    this.getAllBalance()
+    this.onTransaction()
   },
 
 };
