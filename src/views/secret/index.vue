@@ -16,6 +16,7 @@
         <button @click="send" class="btn">Send</button>
         <button @click="withdraw" class="btn">Withdraw</button>
         <button @click="getBalance" class="btn">Get Balance</button>
+        <button @click="getAssetInfo" class="btn">Get AssetInfo</button>
         <button @click="getTransactions" class="btn">Get Transactions</button>
         <button @click="proverInit" class="btn">Prover Init</button>
     </div>
@@ -88,6 +89,9 @@ export default {
     },
     async getBalance() {
       await this.secretManager.getBalance({ alias: this.alias, assetId: this.assetId, password: this.password, user: this.user });
+    },
+    async getAssetInfo() {
+      await this.secretManager.getAssetInfo({ alias: this.alias, password: this.password, user: this.user });
     },
     async getTransactions() {
       await this.secretManager.getTransactions({ alias: this.alias, password: this.password, user: this.user, page: this.page, pageSize: this.pageSize });
