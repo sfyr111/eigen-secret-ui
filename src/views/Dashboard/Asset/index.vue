@@ -16,53 +16,29 @@
           <td>{{ item.hourReturn }}</td>
         </tr>
       </table>
+      <div class="no-data" v-if="!assetList || assetList.length < 1">
+        <span>No more data available</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import secretManager from '@/SecretManager/SecretManager';
-import {getSigner} from "@/store";
 
 export default {
   name: 'Asset',
+  props: {
+    assetList: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
-    return {
-      assetList: [
-        {
-          asset: 'eETH',
-          balance: '0.033444eETH',
-          value: '$66.26',
-          hourReturn: '-$21.11 -12.55%',
-        }
-      ],
-    }
+    return {}
   },
-  methods: {
-    initData() {
-      const eloading = this.$eloading('Obtain asset list, please wait')
-      const Alice = "Alice"
-      const options = {alias: Alice, password: '123456', user: getSigner(), page: this.page, pageSize: this.pageSize}
-      secretManager.getAllBalance(options).then((res) => {
-        this.assetList = this.res?.data?.map(item => {
-          return {
-            asset: item.assetId,
-            balance: item.balance,
-            value: item.balanceUSD,
-            hourReturn: '0 0'
-          }
-        })
-        console.log('getAssets res: ', res)
-        // to convert
-      }).catch((e) => {
-        console.error('getAssets error: ', e)
-      }).finally(() => {
-        eloading.close()
-      })
-    }
-  },
+  methods: {},
   created() {
-    this.initData()
+
   },
 };
 </script>

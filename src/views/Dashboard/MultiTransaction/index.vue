@@ -24,30 +24,30 @@
               ref="tokenFromSelect"/>
         </div>
       </div>
-      <div class="transaction-fee">
-        <p class="amount-title">
-          <span class="common-block-title">Transaction Fee</span>
-          <span class="remainder">Balance: 0.005780 ETH</span>
-        </p>
-        <div class="row" :class="transactionFee == '1' ? 'selected' : ''" @click="switchTransactionFee('1')">
-          <div class="item icon">
-            <el-radio v-model="transactionFee" label="1"><span></span></el-radio>
-          </div>
-          <div class="item title">Slow</div>
-          <div class="item time"></div>
-          <div class="item price">0.00034 ETH</div>
-          <div class="item process">$0.58</div>
-        </div>
-        <div class="row" :class="transactionFee == '2' ? 'selected' : ''" @click="switchTransactionFee('2')">
-          <div class="item icon">
-            <el-radio v-model="transactionFee" label="2"><span></span></el-radio>
-          </div>
-          <div class="item title">Instant</div>
-          <div class="item time">7 mins</div>
-          <div class="item price">0.0085 ETH</div>
-          <div class="item process">$14.56</div>
-        </div>
-      </div>
+<!--      <div class="transaction-fee">-->
+<!--        <p class="amount-title">-->
+<!--          <span class="common-block-title">Transaction Fee</span>-->
+<!--          <span class="remainder">Balance: 0.005780 ETH</span>-->
+<!--        </p>-->
+<!--        <div class="row" :class="transactionFee == '1' ? 'selected' : ''" @click="switchTransactionFee('1')">-->
+<!--          <div class="item icon">-->
+<!--            <el-radio v-model="transactionFee" label="1"><span></span></el-radio>-->
+<!--          </div>-->
+<!--          <div class="item title">Slow</div>-->
+<!--          <div class="item time"></div>-->
+<!--          <div class="item price">0.00034 ETH</div>-->
+<!--          <div class="item process">$0.58</div>-->
+<!--        </div>-->
+<!--        <div class="row" :class="transactionFee == '2' ? 'selected' : ''" @click="switchTransactionFee('2')">-->
+<!--          <div class="item icon">-->
+<!--            <el-radio v-model="transactionFee" label="2"><span></span></el-radio>-->
+<!--          </div>-->
+<!--          <div class="item title">Instant</div>-->
+<!--          <div class="item time">7 mins</div>-->
+<!--          <div class="item price">0.0085 ETH</div>-->
+<!--          <div class="item process">$14.56</div>-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
     <div class="center">
 
@@ -108,6 +108,7 @@ export default {
     if (this.transactionType == 'deposit' || this.transactionType == 'withdraw') {
       this.receiver = getSigner().userAddress
     }
+    this.init()
   },
   data() {
     return {
@@ -128,6 +129,14 @@ export default {
     }
   },
   methods: {
+    init() {
+      const options = {alias: getAlias(), password: '123456', user: getSigner()}
+      secretManager.getAssetInfo(options).then(res => {
+        console.log('getAssetInfo res', res)
+      }).catch(e => {
+        console.log('getAssetInfo error', e)
+      })
+    },
     showAlert(dialogDes, dialogType) {
       this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
       this.dialogObject.dialogType = dialogType

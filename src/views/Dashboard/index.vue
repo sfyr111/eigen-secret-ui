@@ -5,8 +5,8 @@
       <div class="nav-title">Net Worth</div>
       <div class="assets-nav-box">
         <div class="assets-nav-left">
-          <p class="asset-total">$66.26</p>
-          <p class="asset-change">-12.55% ($21.11)</p>
+          <p class="asset-total">${{totalBalanceUSD}}</p>
+<!--          <p class="asset-change">-12.55% ($21.11)</p>-->
         </div>
         <div class="assets-nav-right">
           <button class="submit-btn" @click="transClick('Deposit')">Deposit</button>
@@ -14,20 +14,20 @@
           <button class="submit-btn" @click="transClick('Withdraw')">Withdraw</button>
         </div>
       </div>
-      <Asset/>
+      <Asset :asset-list="assetList"/>
       <div class="multi-transaction-box" ref="multiTransactionBox">
         <MultiTransactionTab ref="multiTransactionTab"/>
       </div>
       <div class="transaction-list-box">
         <div class="common-block-title">Transaction History</div>
-        <Transaction />
+        <Transaction/>
       </div>
     </div>
     <ConfirmDialog
-      :dialogDes="dialogDes"
-      :dialogType="dialogType"
-      :dialogVisible.sync="dialogVisible"
-      />
+        :dialogDes="dialogDes"
+        :dialogType="dialogType"
+        :dialogVisible.sync="dialogVisible"
+    />
     <Footer/>
   </div>
 </template>
@@ -36,14 +36,18 @@
 import Header from '@/components/Header/index';
 import Footer from '@/components/Footer/index';
 import Transaction from './Transaction/index';
-import MultiTransaction from './MultiTransaction/index';
 import Asset from './Asset/index';
 import MultiTransactionTab from './MultiTransactionTab/index';
 import ConfirmDialog from '@/components/ConfirmDialog/index';
+import secretManager from '@/SecretManager/SecretManager';
+import {getAlias, getSigner} from "@/store";
+
 export default {
   name: 'dashboard-page',
   data() {
     return {
+      assetList: [],
+      totalBalanceUSD: 0,
       transactionList: [
         {
           id: 1,
@@ -68,12 +72,35 @@ export default {
     Footer,
     Transaction,
     ConfirmDialog,
-    MultiTransaction,
     MultiTransactionTab,
     Asset
   },
 
   methods: {
+    getAllBalance() {
+      const options = {
+        alias: getAlias(),
+        password: '123456',
+        user: getSigner(),
+        page: this.page,
+        pageSize: this.pageSize
+      }
+      secretManager.getAllBalance(options).then((res) => {
+        this.assetList = this.res?.data?.assetInfo?.map(item => {
+          return {
+            asset: item.assetId,
+            balance: item.balance,
+            value: item.balanceUSD,
+            hourReturn: '0 0'
+          }
+        })
+        this.totalBalanceUSD = this.res?.data?.totalBalanceUSD
+        console.log('getAssets res: ', res)
+        // to convert
+      }).catch((e) => {
+        console.error('getAssets error: ', e)
+      })
+    },
     transClick(type) {
       this.$refs.multiTransactionTab.switchTab(type)
       this.scrollToSection()
@@ -96,7 +123,7 @@ export default {
     scrollToSection() {
       const section = this.$refs.multiTransactionBox;
       if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
+        section.scrollIntoView({behavior: 'smooth'});
       }
     }
   },
@@ -108,6 +135,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  @import 'index.scss';
+@import 'index.scss';
 </style>
 

@@ -32,6 +32,9 @@
             <td>{{ item.time }}</td>
           </tr>
         </table>
+        <div class="no-data" v-if="!pageData || pageData.length < 1">
+          <span>No more data available</span>
+        </div>
       </div>
     </div>
 
