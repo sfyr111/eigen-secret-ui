@@ -90,11 +90,13 @@ export default {
           return
         }
       }
-      secretManager.initSDK({alias: __DEFAULT_ALIAS__, user: getSigner() }).then((res) => {
+      secretManager.initSDK({alias: __DEFAULT_ALIAS__, user: getSigner()}).then((res) => {
         if (res.errno == 0) {
           console.log('login res data ', res)
           setSdk(res.data)
           setAlias(res.data.alias)
+          // // init signer
+          // secretManager.initSignature({alias: __DEFAULT_ALIAS__, user: getSigner()})
           this.$router.push('/dashboard')
         } else {
           this.showAlert(res.message, 2)

@@ -16,17 +16,43 @@ class SecretManager {
     this.signatureTimestamp = null;
   }
 
-  async getSignature(user, address, timestamp, forceUpdate = false) {
+  async getSignature(user, address, timestamp, forceUpdate = false, storage = true) {
     const currentTime = Math.floor(Date.now() / 1000);
 
     if (!forceUpdate && this.signature && (currentTime - this.signatureTimestamp <= 180)) {
       return this.signature;
     }
 
-    this.signature = await signEOASignature(user, rawMessage, address, timestamp);
-    this.signatureTimestamp = currentTime;
+    const signature = await signEOASignature(user, rawMessage, address, timestamp);
+    if (storage) {
+      this.signature = signature;
+      this.signatureTimestamp = currentTime;
+    }
+    return signature;
+  }
 
-    return this.signature;
+  async getSignature2(user, address, timestamp, forceUpdate = false, storage = true) {
+    const currentTime = Math.floor(Date.now() / 1000);
+
+    if (!forceUpdate && this.signature && (currentTime - this.signatureTimestamp <= 180)) {
+      return {signature: this.signature, signatureTimestamp: this.signatureTimestamp};
+    }
+
+    const signature = await signEOASignature(user, rawMessage, address, timestamp);
+    const signatureTimestamp = currentTime;
+    if (storage) {
+      this.signature = signature;
+      this.signatureTimestamp = currentTime;
+    }
+    return {signature: signature, signatureTimestamp: signatureTimestamp};
+  }
+
+  async initSignature({ alias, user }) {
+    console.log('createAccount start...')
+    let timestamp = Math.floor(Date.now() / 1000).toString();
+    const address = await user.getAddress();
+    console.log("ETH address", address);
+    return await this.getSignature(user, address, timestamp, true, true);
   }
 
   async createAccount({ alias, password = '<your password>', user }) {
@@ -86,13 +112,16 @@ class SecretManager {
     return respond;
   }
 
-  async deposit({ alias, assetId, password = '<your password>', value, user }) {
+  getPubKey() {
+    return this.sdk.account.accountKey.pubKey.pubKey
+  }
+
+  async deposit({ alias, assetId, password = '<your password>', value, user, receiver }) {
     console.log('deposit start...')
     if (!this.sdk) await this.initSDK(alias, password, user);
     const provider = user.provider;
     const address = await user.getAddress();
     const nonce = await provider.getTransactionCount(address);
-    let receiver = this.sdk.account.accountKey.pubKey.pubKey;
 
     let tokenAddress = await this.sdk.getRegisteredToken(BigInt(assetId))
     console.log("token", tokenAddress.toString());
@@ -116,8 +145,8 @@ class SecretManager {
       console.log("deposit failed: ", respond);
     }
     console.log('deposit done...', respond)
-    const proofRespond = await this.sdk.submitProofs(ctx, respond.data);
-    console.log('proofRespond: ', proofRespond)
+    // const proofRespond = await this.sdk.submitProofs(ctx, respond.data);
+    // console.log('proofRespond: ', proofRespond)
     return respond;
   }
 
@@ -148,12 +177,12 @@ class SecretManager {
       console.log("send failed: ", respond);
     }
     console.log('send down.', respond)
-    const proofRespond = await this.sdk.submitProofs(this.sdk.ctx, respond.data);
-    console.log('proofRespond: ', proofRespond)
+    // const proofRespond = await this.sdk.submitProofs(this.sdk.ctx, respond.data);
+    // console.log('proofRespond: ', proofRespond)
     return respond;
   }
 
-  async withdraw({ alias, assetId, password = '<your password>', value, user }) {
+  async withdraw({ alias, assetId, password = '<your password>', value, user,  receiver}) {
     console.log('withdraw start...')
     if (!this.sdk) await this.initSDK(alias, password, user);
     const address = await user.getAddress();
@@ -167,14 +196,13 @@ class SecretManager {
       timestamp,
       signature,
     );
-    let receiver = this.sdk.account.accountKey.pubKey.pubKey;
     let respond = await this.sdk.withdraw(ctx, receiver, BigInt(value), Number(assetId));
     if (respond.errno !== 0) {
       console.log("withdraw failed: ", respond);
     }
     console.log('withdraw down.', respond)
-    const proofRespond = await this.sdk.submitProofs(this.sdk.ctx, respond.data);
-    console.log('proofRespond: ', proofRespond)
+    // const proofRespond = await this.sdk.submitProofs(this.sdk.ctx, respond.data);
+    // console.log('proofRespond: ', proofRespond)
     return respond;
   }
 
@@ -182,14 +210,14 @@ class SecretManager {
     if (!this.sdk) await this.initSDK(alias, password, user);
     const address = await user.getAddress();
     let timestamp = Math.floor(Date.now() / 1000).toString();
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature2(user, address, timestamp);
 
     const ctx = new Context(
         alias,
         address,
         rawMessage,
-        timestamp,
-        signature,
+        signature.signatureTimestamp,
+        signature.signature,
     )
     return await this.sdk.getAllBalance(ctx);
   }
@@ -198,14 +226,14 @@ class SecretManager {
     if (!this.sdk) await this.initSDK(alias, password, user);
     const address = await user.getAddress();
     let timestamp = Math.floor(Date.now() / 1000).toString();
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature2(user, address, timestamp);
 
     const ctx = new Context(
         alias,
         address,
         rawMessage,
-        timestamp,
-        signature,
+        signature.signatureTimestamp,
+        signature.signature,
     )
     const respond = await this.sdk.getAssetInfo(ctx);
     console.log('getAssetInfo: ', respond)
@@ -254,19 +282,34 @@ class SecretManager {
     if (!this.sdk) await this.initSDK(alias, password, user);
     const address = await user.getAddress();
     const timestamp = Math.floor(Date.now() / 1000).toString();
-    const signature = await this.getSignature(user, address, timestamp);
+    const signature = await this.getSignature2(user, address, timestamp);
 
     const ctx = new Context(
-      alias,
-      address,
-      rawMessage,
-      timestamp,
-      signature,
-    );
+        alias,
+        address,
+        rawMessage,
+        signature.signatureTimestamp,
+        signature.signature,
+    )
     const transactions = await this.sdk.getTransactions(ctx, { page, pageSize });
     console.log("transactions", transactions);
     return transactions;
   }
+
+  async getWeb3ETH() {
+    await window.ethereum.request({method: 'eth_requestAccounts'}); // Request account access
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    // 使用Web3Provider获取钱包余额
+    const balance = await provider.getBalance(address)
+    return ethers.utils.formatEther(balance);
+  }
+
+  getPassword() {
+    return '123456'
+  }
+
 }
 
 export default new SecretManager();

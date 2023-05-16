@@ -4,13 +4,13 @@
       <div class="recipient">
         <p class="common-block-title">Recipient</p>
         <div>
-          <FormInput :disabled="transactionType == 'deposit' || transactionType == 'withdraw'" :value.sync="receiver" @inputChange="(e) => {this.receiver = e.value} " placeholder="Enter address"/>
+          <FormInput :value.sync="receiver" @inputChange="(e) => {this.receiver = e.value} " placeholder="Enter address"/>
         </div>
       </div>
       <div class="amount">
         <p class="amount-title">
           <span class="common-block-title">Amount</span>
-          <span class="remainder">Balance: 0.005780 ETH</span>
+          <span class="remainder">Balance: {{ethBalance}} ETH</span>
         </p>
         <div>
           <ExchangeItem
@@ -103,26 +103,20 @@ export default {
     },
     assetsInfos: {
       type: Array,
+    },
+    ethBalance: {
+      type: String
     }
   },
   created() {
     this.summaryTxt = msg.transaction[this.transactionType].summaryTxt
     this.buttonTxt = msg.transaction[this.transactionType].buttonTxt
     if (this.transactionType == 'deposit' || this.transactionType == 'withdraw') {
-      this.receiver = getSigner().userAddress
+      this.receiver = secretManager.getPubKey()// getSigner().userAddress
     }
-    this.init()
   },
   data() {
     return {
-      assetsTokenList: [
-        {
-          rightVal: null,
-          tokenName: '123',
-          leftDes: null,
-          icon: null,
-        }
-      ],
       tokenLoading: false,
       transactionFee: '1',
       summaryTxt: '',
@@ -139,23 +133,6 @@ export default {
     }
   },
   methods: {
-    init() {
-      // const options = {alias: getAlias(), password: '123456', user: getSigner()}
-      // secretManager.getAssetInfo(options).then(res => {
-      //   console.log('getAssetInfo res', res)
-      // }).catch(e => {
-      //   console.log('getAssetInfo error', e)
-      // })
-      //
-      // this.assetsInfos.map(item => {
-      //   return {
-      //     rightVal: item.assetId,
-      //     tokenName: item.token_symbol,
-      //     leftDes: null,
-      //     icon: null,
-      //   }
-      // })
-    },
     showAlert(dialogDes, dialogType) {
       this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
       this.dialogObject.dialogType = dialogType
@@ -167,7 +144,7 @@ export default {
     caller() {
       const type = this.transactionType
 
-      if (!this.receiver && type === 'send') {
+      if (!this.receiver) {
         this.showAlert('Please enter the recipient address', 2)
         return
       }

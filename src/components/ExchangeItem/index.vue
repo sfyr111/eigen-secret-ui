@@ -4,7 +4,7 @@
       <p class="exchange-des" v-if="type">{{ type }}</p>
       <div class="exchange-select-list">
         <div class="exchange-select" @click="showOptionList">
-          <img :src="selectedTokenInfo && selectedTokenInfo.icon" class="select-img" v-if="selectedTokenInfo">
+          <img :src="selectedTokenInfo.icon" class="select-img" v-if="selectedTokenInfo && selectedTokenInfo.icon">
           <img src="@/assets/exchangeitem/icon_token_eth.png" class="select-img" v-else>
           <span class="select-txt">{{ selectedTokenInfo && selectedTokenInfo['tokenName'] }}</span>
           <img src="@/assets/exchangeitem/solidDown.png" class="select-down-img">

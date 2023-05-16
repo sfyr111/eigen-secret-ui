@@ -80,21 +80,21 @@ export default {
     getAllBalance() {
       const options = {
         alias: getAlias(),
-        password: '123456',
+        password: secretManager.getPassword(),
         user: getSigner(),
         page: this.page,
         pageSize: this.pageSize
       }
       secretManager.getAllBalance(options).then((res) => {
-        this.assetList = this.res?.data?.assetInfo?.map(item => {
+        this.assetList = res?.data?.assetInfo?.map(item => {
           return {
             asset: item.assetId,
             balance: item.balance,
             value: item.balanceUSD,
-            hourReturn: '0 0'
+            hourReturn: item.profit24Hour + ' ' + item.return
           }
         })
-        this.totalBalanceUSD = this.res?.data?.totalBalanceUSD
+        this.totalBalanceUSD = res?.data?.totalBalanceUSD
         console.log('getAssets res: ', res)
         // to convert
       }).catch((e) => {
@@ -102,7 +102,7 @@ export default {
       })
     },
     onTransaction() {
-      this.$eventBus.$on('transaction-success', function(data) {
+      this.$eventBus.$on('transaction-success', (data) => {
         this.getAllBalance()
       })
     },

@@ -19,6 +19,7 @@
 </template>
 <script>
 import {getAlias, getSigner, setAlias, setSigner} from "@/store";
+import secretManager from "@/SecretManager/SecretManager";
 
 export default {
   name: 'Header',
@@ -31,7 +32,7 @@ export default {
   methods: {
     init() {
       this.alias = getAlias()
-      this.address = getSigner().userAddress
+      this.address = secretManager.getPubKey()
     },
     copyAddress() {
       navigator.clipboard.writeText(this.address)

@@ -14,22 +14,15 @@
             <th>TIMESTAMP</th>
           </tr>
           <tr v-for="(item,index) in pageData" :key="index" class="transaction-list-tr">
-            <td :class="['status-trans', `status-${getStatusTxt(item.status)}`]"><i></i>{{ getStatusTxt(item.status) }}
-            </td>
-            <td>{{ item.opration }}</td>
-            <td>{{ item.hash }}</td>
+<!--            <td :class="['status-trans', `status-${getStatusTxt(item.status)}`]"><i></i>{{ getStatusTxt(item.status) }}-->
+<!--            </td>-->
+            <td>{{ item.status }}</td>
+            <td>{{ item.operation }}</td>
+            <td>{{ item.txhash }}</td>
             <td>{{ item.balance }}</td>
-            <td>
-              <div class="address-td">
-                <i class="address-icon"></i>{{ item.from }}
-              </div>
-            </td>
-            <td>
-              <div class="address-td">
-                <i class="address-icon"></i>{{ item.to }}
-              </div>
-            </td>
-            <td>{{ item.time }}</td>
+            <td>{{ item.assetId }}</td>
+            <td>{{ item.to }}</td>
+            <td>{{ item.timestamp }}</td>
           </tr>
         </table>
         <div class="no-data" v-if="!pageData || pageData.length < 1">
@@ -94,8 +87,14 @@ export default {
       this.page++;
     },
     fetchPageData() {
-      const options = {alias: getAlias(), password: '123456', user: getSigner(), page: this.page, pageSize: this.pageSize}
+      const options = {alias: getAlias(), password: secretManager.getPassword(), user: getSigner(), page: this.page, pageSize: this.pageSize}
       secretManager.getTransactions(options).then((res) => {
+        if (res && Array.isArray(res.data?.transactions)) {
+          this.pageData = res?.data?.transactions
+          this.totalCount = res?.data?.totalPage * this.pageSize
+        } else {
+          this.pageData = []
+        }
         console.log('getTransactions res: ', res)
         // to convert
       }).catch((e) => {
@@ -104,7 +103,7 @@ export default {
     },
     initData() {
       this.fetchPageData()
-      this.$eventBus.$on('transaction-success', function(data) {
+      this.$eventBus.$on('transaction-success', (data) => {
         this.fetchPageData()
       })
     }

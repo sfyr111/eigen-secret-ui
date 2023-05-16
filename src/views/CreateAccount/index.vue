@@ -107,7 +107,7 @@ export default {
       const signer = getSigner()
       secretManager.createAccount({
         alias: this.alias,
-        password: '123456',
+        password: secretManager.getPassword(),
         user: signer
       }).then(res => {
         if (res.errno == 0) {
