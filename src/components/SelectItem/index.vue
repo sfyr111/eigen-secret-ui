@@ -2,7 +2,8 @@
     <li class="select-item" @click="selectChange">
       <div class="select-left">
         <div class="select-left-icon">
-          <img :src="icon">
+          <img :src="icon" v-if="icon">
+          <img src="@/assets/exchangeitem/icon_token_eth.png" class="select-img" v-else>
         </div>
         <div class="select-left-text">
           <h3 class="select-left-title">{{leftTitle}}</h3>
