@@ -50,7 +50,7 @@ export default {
         if (res.errno == 0) {
           this.assetsInfos = res.data.map(item => {
             return {
-              rightVal: item.assetId,
+              rightVal: '$0', //item.assetId,
               tokenName: item.tokenInfo?.symbol,
               leftDes: null,
               icon: item.tokenInfo?.logoURI,
