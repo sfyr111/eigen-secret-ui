@@ -38,6 +38,7 @@ export async function connectMetaMask() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const address = await signer.getAddress();
+        signer.address = address
         signer.userAddress = address
         console.log(address)
         return signer;
