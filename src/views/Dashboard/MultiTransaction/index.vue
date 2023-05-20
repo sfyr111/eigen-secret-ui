@@ -53,7 +53,7 @@
 
     </div>
     <div class="right">
-      <div class="common-block-title">Summary</div>
+      <div class="common-block-title">Tips</div>
       <div class="content">
         {{ summaryTxt }}
       </div>

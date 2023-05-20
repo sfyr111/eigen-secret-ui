@@ -13,8 +13,7 @@
 
         <div class="create-des">
           <div>
-            <span>Please set an account nicknameYour friends can easily transfer crypto to you by
-          nickname.</span>
+            <span>Please set your unique account nickname. The nickname cann't be changed once you create successfully</span>
           </div>
         </div>
       </div>

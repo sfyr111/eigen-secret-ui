@@ -5,7 +5,7 @@
     </div>
     <div class="steps">
       <el-steps :active="active" align-center>
-        <el-step title="Login in with your wallet">
+        <el-step title="Login in with MetaMask">
         </el-step>
         <el-step title="Set an account nickname"></el-step>
         <el-step title="Login succeeded"></el-step>
