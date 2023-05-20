@@ -3,8 +3,8 @@
     <div class="logo-box">
       <img class="logo" src="@/assets/header/logo.png">
     </div>
-    <h1 class="login-des login-des-title">Trusted Encrypted Private Payments for You</h1>
-    <div class="login-des">Welcome to Eigen zkPay! Connect a wallet to manage your data and transactions.</div>
+    <h1 class="login-des login-des-title">Eigen Secret: Simple Private Transaction</h1>
+    <div class="login-des">Welcome to Eigen Secret! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
       <div class="login-btn" @click="login">
         <img src="~@/assets/metamask.png" class="metamask-icon">

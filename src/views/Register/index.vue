@@ -1,10 +1,10 @@
 <template>
   <div class="page-login page-container">
-    <div class="login-des">Welcome to Eigen zkPay! Connect a wallet to manage your data and transactions.</div>
+    <div class="login-des">Welcome to Eigen Secret! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
       <div class="login-btn" @click="connectMetamask">
         <img src="~@/assets/metamask.png" class="metamask-icon">
-        <p class="metamask-text">Register with MetaMask</p>
+        <p class="metamask-text">Create with MetaMask</p>
       </div>
     </div>
 
