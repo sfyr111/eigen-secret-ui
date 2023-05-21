@@ -174,7 +174,7 @@ export default {
           }
         }).catch((e) => {
           console.error(e)
-          this.showAlert(null, 2)
+          this.showAlert(null, 2, e)
         }).finally(() => {
           eloading.close()
         })

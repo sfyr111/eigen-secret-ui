@@ -7,13 +7,14 @@ import 'vant/lib/index.css'
 import locale from 'element-ui/lib/locale/lang/en'
 import Vuex from 'vuex'
 import store from "@/store";
+import { hideAddress } from "@/utils/common";
 
 
 Vue.use(ElementUI, { locale });
 
 Vue.config.productionTip = false
 Vue.prototype.$eventBus = new Vue()
-
+Vue.prototype.$hideAddress = hideAddress;
 
 Vue.prototype.$eloading = function (txt) {
   const loading = this.$loading({

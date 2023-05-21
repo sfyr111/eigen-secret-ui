@@ -82,9 +82,9 @@ export default {
         } catch (e) {
           console.log('e.message ', e.message)
           if (e.message.indexOf('user rejected signing')) {
-            this.showAlert('Unable to link your account. Please try again.', 2)
+            this.showAlert('Unable to link your account. Please try again.', 2, e)
           } else {
-            this.showAlert(null, 2)
+            this.showAlert(null, 2, e)
           }
           eloading.close()
           return
@@ -103,9 +103,9 @@ export default {
         }
       }).catch(e => {
         if (e.message.indexOf('user rejected signing') != -1) {
-          this.showAlert('Unable to link your account. Please try again.', 2)
+          this.showAlert('Unable to link your account. Please try again.', 2, e)
         } else {
-          this.showAlert(null, 2)
+          this.showAlert(null, 2, e)
         }
         console.error(e)
       }).finally(() => {

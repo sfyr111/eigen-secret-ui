@@ -9,7 +9,7 @@
             <th>OPERATION</th>
             <th>TX HASH</th>
             <th>BALANCE</th>
-            <th>FROM</th>
+<!--            <th>FROM</th>-->
             <th>TO</th>
             <th>TIMESTAMP</th>
           </tr>
@@ -20,8 +20,8 @@
             <td>{{ item.operation }}</td>
             <td>{{ item.txhash }}</td>
             <td>{{ item.balance }}</td>
-            <td>{{ item.assetId }}</td>
-            <td>{{ item.to }}</td>
+<!--            <td>{{ item.assetId }}</td>-->
+            <td :title="item.to">{{ $hideAddress(item.to) }}</td>
             <td>{{ item.timestamp }}</td>
           </tr>
         </table>

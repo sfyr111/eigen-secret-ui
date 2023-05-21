@@ -7,8 +7,8 @@
 
         <div class="left input-box">
           <div>
-            <FormInput :value="alias" @inputChange="(v) => {this.alias = v.value}" placeholder="@nickname"/>
-          </div>
+            <FormInput :value="alias" @inputChange="handleAliasInputChange" placeholder="@nickname"/>
+            <span v-if="!isAliasValid" class="error-message">Invalid alias format. It should start with a letter and contain only letters, numbers, underscores, and dots.</span>          </div>
         </div>
 
         <div class="create-des">
@@ -45,6 +45,7 @@ import FormInput from '@/components/Input/index';
 import {getSecretManager, getSigner} from "@/store";
 import AlertDialog from '@/components/AlertDialog/index';
 import secretManager from '@/SecretManager/SecretManager';
+import { normalizeAlias } from '@eigen-secret/core/dist-browser/utils'
 
 
 export default {
@@ -56,6 +57,7 @@ export default {
   },
   data() {
     return {
+      isAliasValid: true,
       assetsTokenList: [],
       tokenLoading: false,
       alias: null,
@@ -68,15 +70,23 @@ export default {
     }
   },
   methods: {
-    showAlert(dialogDes, dialogType) {
-      this.dialogObject.dialogDes = dialogDes ? dialogDes : 'System error'
+    showAlert(dialogDes, dialogType, e) {
+      this.dialogObject.dialogDes = dialogDes ? dialogDes : e ? (e.reason ?? e.messageData ?? e.message) : 'System error'
       this.dialogObject.dialogType = dialogType
       this.dialogObject.dialogVisible = true
+    },
+    handleAliasInputChange({ value }) {
+      this.alias = value;
+      this.isAliasValid = normalizeAlias(this.alias);
     },
     async createAccount() {
       const user = getSigner();
       if (!user) {
         return
+      }
+      if (!this.isAliasValid) {
+        this.showAlert('Invalid alias format. It should start with a letter and contain only letters, numbers, underscores, and dots.', 2);
+        return;
       }
       const eloading = this.$eloading('Registration in progress, please wait')
       secretManager.createAccount({ alias: this.alias, user }).then(res => {
@@ -86,9 +96,11 @@ export default {
           this.showAlert(res.message, 2)
         }
       }).catch(e => {
-        this.showAlert(null, 2)
-        console.log('create error ', e)
-        console.error(e)
+        if (e.code === 'ACTION_REJECTED') {
+          this.showAlert('unable to sign with MetaMask', 2, e);
+        } else {
+          this.showAlert(e.reason ?? e.messageData ?? e.message, 2, e);
+        }
       }).finally(() => {
         eloading.close()
       })
@@ -132,5 +144,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import 'index.scss';
+
 </style>
 
