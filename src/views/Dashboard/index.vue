@@ -88,6 +88,7 @@ export default {
       secretManager.getAllBalance(options).then((res) => {
         this.assetList = res?.data?.assetInfo?.map(item => {
           return {
+            symbol: item.symbol,
             asset: item.assetId,
             balance: item.balance,
             value: item.balanceUSD,

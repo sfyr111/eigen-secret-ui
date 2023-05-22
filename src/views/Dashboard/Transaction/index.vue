@@ -18,7 +18,7 @@
 <!--            </td>-->
             <td>{{ item.status }}</td>
             <td>{{ item.operation }}</td>
-            <td>{{ item.txhash }}</td>
+            <td>{{ $hideAddress(item.txhash) }}</td>
             <td>{{ item.balance }}</td>
 <!--            <td>{{ item.assetId }}</td>-->
             <td :title="item.to">{{ $hideAddress(item.to) }}</td>
