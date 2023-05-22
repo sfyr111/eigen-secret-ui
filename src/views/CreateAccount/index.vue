@@ -90,7 +90,6 @@ export default {
       }
       const eloading = this.$eloading('Registration in progress, please wait')
       secretManager.createAccount({ alias: this.alias, user }).then(res => {
-        debugger
         if (res.errno == 0) {
           this.$emit('create-end', res)
         } else {
