@@ -23,6 +23,7 @@ const index = new Vuex.Store({
     mutations: {
         setAlias(state, n) {
             state.secretInfo.alias = n;
+            localStorage.setItem('alias', n)
         },
         setSecretInfo(state, n) {
             state.secretInfo = n
@@ -99,6 +100,14 @@ export function getSecretManager() {
     return secretManager
 }
 
+function init() {
+    const alias = localStorage.getItem('alias')
+    if (alias) {
+        setAlias(alias)
+    }
+}
+
+init()
 
 export default index
 

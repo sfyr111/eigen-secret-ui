@@ -92,11 +92,11 @@ class SecretManager {
     };
   }
 
-  async initSDK({ alias, password = '<your password>', user }) {
+  async initSDK({ alias, password = '<your password>', user, isCreate = false}) {
     console.log('initSDK start...')
     const timestamp = Math.floor(Date.now() / 1000).toString();
     const address = await user.getAddress();
-    const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp, true);
+    const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp, false);
     const ctx = new Context(
       alias,
       address,
@@ -105,7 +105,7 @@ class SecretManager {
       signature,
     );
     let respond = await SecretSDK.initSDKFromAccount(
-      ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI,
+      ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, isCreate
     );
 
     if (respond.errno === 0) {

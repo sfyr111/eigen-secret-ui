@@ -30,7 +30,7 @@ import {createSecretAccount} from "@/contractUtils/account";
 import {connectMetaMask} from "@/contractUtils/metaMask";
 import secretManager from '@/SecretManager/SecretManager';
 import AlertDialog from '@/components/AlertDialog/index';
-import { getSigner, setSigner, setAddress, setAlias, setSdk } from "@/store";
+import { getSigner, setSigner, setAddress, setAlias, setSdk, getAlias } from "@/store";
 import { __DEFAULT_ALIAS__ } from "@eigen-secret/core/dist-browser/utils";
 
 async function loadScriptFromBlob(blob) {
@@ -90,7 +90,10 @@ export default {
           return
         }
       }
-      secretManager.initSDK({alias: __DEFAULT_ALIAS__, user: getSigner()}).then((res) => {
+      let alias = getAlias();
+      let isCreate = alias
+      alias = alias ? alias : __DEFAULT_ALIAS__
+      secretManager.initSDK({alias: alias, user: getSigner(), isCreate: isCreate}).then((res) => {
         if (res.errno == 0) {
           console.log('login res data ', res)
           setSdk(res.data)
@@ -171,8 +174,11 @@ export default {
   },
 
   created() {
-    this.user = getSigner()
-    console.log('token')
+    if (getAlias()) {
+      this.login()
+    } else {
+      this.user = getSigner()
+    }
   },
 
 };
