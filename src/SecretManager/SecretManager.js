@@ -96,7 +96,7 @@ class SecretManager {
     console.log('initSDK start...')
     const timestamp = Math.floor(Date.now() / 1000).toString();
     const address = await user.getAddress();
-    const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp, false);
+    const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp, alias == __DEFAULT_ALIAS__);
     const ctx = new Context(
       alias,
       address,

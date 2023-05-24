@@ -48,20 +48,6 @@ export default {
     return {
       assetList: [],
       totalBalanceUSD: 0,
-      transactionList: [
-        {
-          id: 1,
-          status: 2,
-          opration: '0.033444eETH',
-          hash: 'txsdfdf',
-          balance: '0.5eth',
-          from: 'sdfsdjisd',
-          to: 'sdfsdfsdf',
-          time: '2023-2-23'
-        }
-      ],
-      transactionHash: '',
-
       dialogDes: '',
       dialogType: '',
       dialogVisible: false,
@@ -88,7 +74,7 @@ export default {
       secretManager.getAllBalance(options).then((res) => {
         this.assetList = res?.data?.assetInfo?.map(item => {
           return {
-            symbol: item.symbol,
+            symbol: item.tokenInfo?.symbol,
             asset: item.assetId,
             balance: item.balance,
             value: item.balanceUSD,
@@ -96,6 +82,7 @@ export default {
           }
         })
         this.totalBalanceUSD = res?.data?.totalBalanceUSD
+        console.log('getAssets res2: ', this.assetList)
         console.log('getAssets res: ', res)
         // to convert
       }).catch((e) => {

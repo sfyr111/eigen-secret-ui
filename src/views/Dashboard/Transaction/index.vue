@@ -97,7 +97,7 @@ export default {
           this.totalCount = res?.data?.totalPage * this.pageSize
           this.pageData?.forEach(item => {
             item.txhash = '0x' + this.$hideAddress(item.txhash)
-            item.to = 'eig' + this.$hideAddress(item.to)
+            item.to = 'eig:' + this.$hideAddress(item.to)
           })
         } else {
           this.pageData = []

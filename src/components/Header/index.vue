@@ -9,7 +9,7 @@
                 {{ alias }}
               </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><span @click="copyAddress" :title="address">{{$hideAddress(address)}}</span></el-dropdown-item>
+              <el-dropdown-item><span @click="copyAddress" :title="address">{{'eig:' + $hideAddress(address)}}</span></el-dropdown-item>
               <el-dropdown-item><span  @click="quit" class="dropdown-txt">Quit</span></el-dropdown-item>
             </el-dropdown-menu>
           </div>
