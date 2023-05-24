@@ -18,10 +18,10 @@
 <!--            </td>-->
             <td>{{ item.status }}</td>
             <td>{{ item.operation }}</td>
-            <td>{{ $hideAddress(item.txhash) }}</td>
+            <td @click="copyAddress(item.txhash)" :title="item.txhash">{{ item.txhash }}</td>
             <td>{{ item.balance }}</td>
 <!--            <td>{{ item.assetId }}</td>-->
-            <td :title="item.to">{{ $hideAddress(item.to) }}</td>
+            <td @click="copyAddress(item.to)" :title="item.to">{{ item.to }}</td>
             <td>{{ item.timestamp }}</td>
           </tr>
         </table>
@@ -72,6 +72,9 @@ export default {
     }
   },
   methods: {
+    copyAddress(data) {
+      navigator.clipboard.writeText(data)
+    },
     changePage(p) {
       this.page = p
     },
@@ -92,6 +95,10 @@ export default {
         if (res && Array.isArray(res.data?.transactions)) {
           this.pageData = res?.data?.transactions
           this.totalCount = res?.data?.totalPage * this.pageSize
+          this.pageData?.forEach(item => {
+            item.txhash = '0x' + this.$hideAddress(item.txhash)
+            item.to = 'eig' + this.$hideAddress(item.to)
+          })
         } else {
           this.pageData = []
         }
