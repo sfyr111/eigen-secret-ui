@@ -10,7 +10,7 @@
           <th>24-hour Return</th>
         </tr>
         <tr v-for="item in assetList">
-          <td>{{ item.symbol }}</td>
+          <td>{{ item.tokenInfo ? item.tokenInfo.symbol : '' }}</td>
           <td>{{ item.balance }}</td>
           <td>{{ item.value }}</td>
           <td>{{ item.hourReturn }}</td>
