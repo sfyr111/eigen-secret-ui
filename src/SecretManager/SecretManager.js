@@ -130,8 +130,6 @@ class SecretManager {
 
     let tokenAddress = await this.sdk.getRegisteredToken(BigInt(assetId))
     console.log("token", tokenAddress.toString());
-    let approveTx = await this.sdk.approve(tokenAddress.toString(), value);
-    await approveTx.wait();
 
     const timestamp = Math.floor(Date.now() / 1000).toString();
     const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp, true);
