@@ -37,7 +37,7 @@ class SecretManager {
   async getSignature(user, address, timestamp, forceUpdate = false, storage = true) {
     const currentTime = Math.floor(Date.now() / 1000);
 
-    if (!forceUpdate && this.signature && (currentTime - this.signatureTimestamp <= 180)) {
+    if (!forceUpdate && this.signature && (currentTime - this.signatureTimestamp <= 1680)) {
       return {signature: this.signature, signatureTimestamp: this.signatureTimestamp};
     }
 
