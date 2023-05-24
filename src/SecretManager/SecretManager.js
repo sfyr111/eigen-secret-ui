@@ -1,6 +1,6 @@
 import { SecretSDK } from "@eigen-secret/core/dist-browser/sdk";
 import { ethers } from 'ethers';
-import { __DEFAULT_ALIAS__, rawMessage, signEOASignature } from '@eigen-secret/core/dist-browser/utils';
+import { __DEFAULT_ALIAS__, rawMessage, signEOASignature, SESSION_DURATION } from '@eigen-secret/core/dist-browser/utils';
 import { Context } from '@eigen-secret/core/dist-browser/context';
 import {
   defaultCircuitPath,
@@ -37,7 +37,7 @@ class SecretManager {
   async getSignature(user, address, timestamp, forceUpdate = false, storage = true) {
     const currentTime = Math.floor(Date.now() / 1000);
 
-    if (!forceUpdate && this.signature && (currentTime - this.signatureTimestamp <= 1680)) {
+    if (!forceUpdate && this.signature && (currentTime - this.signatureTimestamp <= (SESSION_DURATION  - 5 * 60))) {
       return {signature: this.signature, signatureTimestamp: this.signatureTimestamp};
     }
 
