@@ -146,6 +146,13 @@ class SecretManager {
 
     console.log('deposit params: ', ctx)
     value = this.formatValue({value, assetId})
+
+    // approve
+    let allowance = await this.sdk.allowance(tokenAddress.toString())
+    if (allowance.data < value) {
+       await this.sdk.approve(tokenAddress.toString(), value);
+    }
+
     let respond = await this.sdk.deposit(ctx, receiver, BigInt(value), Number(assetId), nonce);
     if (respond.errno !== 0) {
       console.log("deposit failed: ", respond);
