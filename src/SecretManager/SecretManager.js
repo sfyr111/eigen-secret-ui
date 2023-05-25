@@ -143,7 +143,7 @@ class SecretManager {
     );
 
     console.log('deposit params: ', ctx)
-    value = this.formatValue({value, assetId, decimals})
+    value = this.sdk.formatValue({value, assetId, decimals})
 
     // approve
     let allowance = await this.sdk.allowance(tokenAddress.toString())
@@ -159,13 +159,6 @@ class SecretManager {
     // const proofRespond = await this.sdk.submitProofs(ctx, respond.data);
     // console.log('proofRespond: ', proofRespond)
     return respond;
-  }
-
-  formatValue({value, assetId, decimals= 18}) {
-    if (assetId === 1) {
-      decimals = 18
-    }
-    return BigInt(value) * BigInt(10 ** decimals)
   }
 
   async send({
@@ -191,7 +184,7 @@ class SecretManager {
       signatureTimestamp,
       signature,
     );
-    value = this.formatValue({value, assetId, decimals})
+    value = this.sdk.formatValue({value, assetId, decimals})
     let respond = await this.sdk.send(ctx, receiver, receiverAlias, BigInt(value), Number(assetId));
     if (respond.errno !== 0) {
       console.log("send failed: ", respond);
@@ -216,7 +209,7 @@ class SecretManager {
       signatureTimestamp,
       signature,
     );
-    value = this.formatValue({value, assetId, decimals})
+    value = this.sdk.formatValue({value, assetId, decimals})
     let respond = await this.sdk.withdraw(ctx, receiver, BigInt(value), Number(assetId));
     if (respond.errno !== 0) {
       console.log("withdraw failed: ", respond);
