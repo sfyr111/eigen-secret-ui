@@ -148,7 +148,7 @@ export default {
     hanldeValue(e) {
       let value = e.target.value
       // if (this.limitInput) {
-      value = value.replace(/^\D*(\d*(?:\.\d{0,4})?).*$/g, '$1')
+      value = value.replace(/^\D*(\d*(?:\.\d*)?).*$/g, '$1');
       this.exchangVal = value
       this.$emit('inputChange', value);
       // }
