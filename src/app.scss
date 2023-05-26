@@ -15,7 +15,6 @@ $redColor: #EE615B;
 $activeColor: #3466E6;
 
 #app {
-  // font-family: 'MicrosoftYaHei', 'Avenir', Helvetica, Arial, sans-serif;
   font-family: Euclid, Roboto, Helvetica, Arial, sans-serif;;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -91,9 +90,7 @@ $activeColor: #3466E6;
 .main-block-with-text:after {
     content: '';
     position: absolute;
-    /*设置遮盖省略号的位置 */
     right: 0;
-    /*设置遮盖省的大小 */
     width: 1em;
     height: 1em;
     margin-top: 0.2em;
@@ -111,4 +108,10 @@ $activeColor: #3466E6;
     width: 11.58rem;
     height: 2.1rem;
     border-radius: 1.05rem;
+}
+
+.no-data {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
 }

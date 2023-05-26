@@ -1,27 +1,59 @@
 @import '@/app.scss';
+
+.error-message {
+  color: red;
+  font-size: 14px;
+}
+
 .page-create-account {
-  .create-title {
-    font-size: 2.04rem;
+
+  .nickname-box {
+    .content {
+      display: flex;
+      align-content: center;
+
+      .left {
+        width: 40%;
+        margin-right: 20px;
+      }
+
+      .create-des {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+
+      }
+
+    }
+  }
+
+
+  .title {
+    font-size: 1.08rem;
+    color: #16161A;
     font-weight: 600;
-    line-height: 48px;
-    margin-top: 66px;
-    color: $defaultColor;
+    font-family: PingFangSC-Semibold;
+    margin: 20px 0;
   }
-  
+
   .create-des {
-    font-size: 0.96rem;
-    line-height: 30px;
-    color: #666;
-    margin-top: 20px;
+    font-size: 1rem;
+    color: #16161A;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
   }
+
   .create-nick-box {
     border: 1px solid $borderColor;
     border-radius: 10px;
-    width: 16.8rem;
+    width: 100%;
     height: 2.4rem;
     margin-top: 12px;
     display: flex;
     align-items: center;
+
     input {
       border: 0px;
       height: 2.2rem;
@@ -30,19 +62,25 @@
       font-size: 0.96rem;
       color: #9D9FA8;
     }
+
     .input-success {
       width: 20px;
       height: 20px;
     }
   }
+
   .error-tip {
     color: $redColor;
     font-size: 0.54rem;
     margin-top: 3px;
   }
+
   .create-submit {
-    margin-top: 58px;
+    margin-top: 78px;
+    display: flex;
+    justify-content: center;
   }
+
   .create-value-box {
     .input-wraper {
       width: 16.8rem;
@@ -55,30 +93,35 @@
     background: #F0F0F2;
     border-radius: 6px;
     padding: 5px 10px;
+
     .input-top {
       display: flex;
       justify-content: space-between;
       font-size: 0.54rem;
       color: #71727C;
     }
-    
+
     .input-bottom {
       display: flex;
       justify-content: space-between;
+
       .input-bot-left {
         display: flex;
         margin-top: 3px;
       }
+
       .eth-icon {
         width: 0.78rem;
         height: 0.78rem;
         margin-right: 3px;
       }
+
       .eth-label {
         color: #16161A;
         font-size: 0.72rem;
       }
     }
+
     .input-bot {
       border: 0px;
       background: transparent;

@@ -1,0 +1,66 @@
+@import '@/app.scss';
+
+.multi-transaction {
+  height: 330px;
+  display: flex;
+
+  .common-block-title {
+    font-size: 1.08rem;
+    color: #16161A;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    margin-top: 32px;
+    margin-bottom: 18px;
+  }
+
+  .amount-title {
+    display: flex;
+    justify-content: space-between;
+
+    .remainder {
+      margin-top: 38px;
+    }
+  }
+
+  .left {
+    flex: 1;
+    overflow: scroll;
+    padding-right: 30px;
+  }
+
+  .right {
+    width: 40%;
+    padding-left: 30px;
+    position: relative;
+
+    .button {
+      position: absolute;
+      bottom: 0;
+
+      .submit-btn {
+        width: 6.16rem;
+        height: 1.86rem;
+      }
+    }
+
+  }
+
+
+  .transaction-fee {
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 10px;
+      border: 1px solid transparent;
+      .item {
+        width: 20%;
+      }
+    }
+
+    .selected {
+      border: 1px solid #e6e7e9;
+      border-radius: 8px;
+    }
+
+  }
+}

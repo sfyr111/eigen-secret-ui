@@ -1,0 +1,41 @@
+.select-item {
+    height: 48px;
+    border: 1px solid #e6e7e9;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding: 10px;
+    .select-left {
+      display: flex;
+      align-items: center;
+      .select-left-icon {
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-right: 10px;
+      }
+      //.select-left-value {
+      //  margin-top: 2px;
+      //}
+    }
+    .select-price-right {
+      display: flex;
+      align-items: center;
+      label {
+        margin-left: 5px;
+        color: #000;
+      }
+      .input-text {
+        width: 52px;
+        height: 28px;
+        padding: 10px 5px;
+        border: 1px solid #e6e7e9;
+        border-radius: 5px;
+        text-align: right;
+      }
+    }
+}
+.select-item:hover {
+	background-color: #f0f0f2;
+	cursor: pointer;
+}

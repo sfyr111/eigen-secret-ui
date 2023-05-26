@@ -1,0 +1,11 @@
+@import '@/app.scss';
+
+.multi-transaction-tab-container {
+  ::v-deep .el-tabs__item {
+    font-size: 1.08rem;
+    color: #16161A;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+  }
+}
+

@@ -1,96 +1,117 @@
 @import '@/app.scss';
+
 .page-dashboard {
-    .common-block-title {
-	  	font-size: 1.08rem;
-	  	color: #16161A;
-	  	font-weight: 600;
-	  	margin-top: 32px;
-	  	font-family: PingFangSC-Semibold;
-	  	margin-bottom: 18px;
+  .common-block-title {
+    font-size: 1.08rem;
+    color: #16161A;
+    font-weight: 600;
+    margin-top: 32px;
+    font-family: PingFangSC-Semibold;
+    margin-bottom: 18px;
+  }
+
+  .nav-title {
+    font-size: 1.8rem;
+    color: $defaultColor;
+    font-weight: 600;
+  }
+
+  .assets-nav-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+
+    .asset-total {
+      color: #16161A;
+      font-size: 1.74rem;
+      font-weight: 600;
     }
-    .nav-title {
-	  	font-size: 1.8rem;
-	  	color: $defaultColor;
-	  	font-weight: 600;
-	}
-    .assets-nav-box {
-	  	display: flex;
-	  	justify-content: space-between;
-	  	align-items: center;
-	  	margin-top: 28px;
-	  	.asset-total {
-	  		color: #16161A;
-	  		font-size: 1.74rem;
-	  		font-weight: 600;
-	  	}
-	  	.asset-change {
-	  		color: $redColor;
-	  		font-size: 0.72rem;
-	  		letter-spacing: 0.02rem;
-	  		margin-top: 5px;
-	  	}
-	  	button + button {
-	  		margin-left: 0.72rem;
-	  	}
+
+    .asset-change {
+      color: $redColor;
+      font-size: 0.72rem;
+      letter-spacing: 0.02rem;
+      margin-top: 5px;
     }
-   .table-list {
-	  	table {
-	  		width: 100%;
-	  		font-size: 0.6rem;
-	  		th {
-	  			text-align: left;
-	  			color: #44444D;
-	  			font-weight: 600;
-	  		}
-	  		td {
-	  			color: #16161A;
-	  		}
-	  		th {
-	  			height: 30px;
-	  		}
-	  	}
+
+    button + button {
+      margin-left: 0.72rem;
     }
-   .assets-list-box {
-        .asset-list {
-	      	border-radius: 12px;
-	      	border: 1px solid $borderColor;
-	      	padding: 0 1.44rem;
-	      	table {
-	      		td {
-	      			height: 48px;
-	      		}
-	      		tr+tr {
-		  			border-top: 1px solid $borderColor;
-		  		}
-	      	}
+  }
+
+  .table-list {
+    table {
+      width: 100%;
+      font-size: 0.6rem;
+
+      th {
+        text-align: left;
+        color: #44444D;
+        font-weight: 600;
+      }
+
+      td {
+        color: #16161A;
+      }
+
+      th {
+        height: 30px;
+      }
+    }
+  }
+
+  .assets-list-box {
+    .asset-list {
+      border-radius: 12px;
+      border: 1px solid $borderColor;
+      padding: 0 1.44rem;
+
+      table {
+        td {
+          height: 48px;
         }
+
+        tr + tr {
+          border-top: 1px solid $borderColor;
+        }
+      }
     }
-    .pagination-box {
-    	width: 100%;
-    	text-align: center;
-    	margin-top: 36px;
-    	margin-bottom: 63px;
+  }
+
+  .multi-transaction-box {
+    margin-top: 30px;
+  }
+
+  .pagination-box {
+    width: 100%;
+    text-align: center;
+    margin-top: 36px;
+    margin-bottom: 63px;
+  }
+
+  .transaction-search-box {
+    width: 14.4rem;
+    height: 1.38rem;
+    background: #E6E7E9;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .search-icon-style {
+      font-size: 0.7rem;
+      margin-left: 10px;
     }
-    .transaction-search-box {
-    	width: 14.4rem;
-    	height: 1.38rem;
-    	background: #E6E7E9;
-    	border-radius: 6px;
-    	display: flex;
-    	align-items: center;
-    	margin-bottom: 10px;
-    	.search-icon-style {
-	    	font-size: 0.7rem;
-	    	margin-left: 10px;
-	    }
-    	.input-search {
-            font-size: 0.6rem;
-            padding-left: 8px;
-            border: 0px;
-            background: transparent;
-            outline: none;
-            color: #16161A;
-    	}
+
+    .input-search {
+      font-size: 0.6rem;
+      padding-left: 8px;
+      border: 0px;
+      background: transparent;
+      outline: none;
+      color: #16161A;
     }
-    
+  }
+
 }
