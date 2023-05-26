@@ -8,7 +8,7 @@ import * as defaultContractFile from "../artifacts/contract.json";
 
 // export const defaultAccountFile = path.join(__dirname, "../.account.json")
 export const defaultCircuitPath = "../circuits/";
-export const defaultServerEndpoint = "http://127.0.0.1:3000";
+export const defaultServerEndpoint = process.env.VUE_APP_ENDPOINT;
 
 export { defaultContractFile };
 

@@ -27,6 +27,7 @@ import secretManager from '@/SecretManager/SecretManager';
 import { Prover } from '@eigen-secret/core/dist-browser/prover';
 import { ethers } from 'ethers';
 import { __DEFAULT_ALIAS__ } from "@eigen-secret/core/dist-browser/utils";
+import { defaultServerEndpoint } from "@/SecretManager/configure";
 
 export default {
   data() {
@@ -44,7 +45,7 @@ export default {
   },
   methods: {
     async proverInit() {
-        Prover.serverAddr = 'http://localhost:3000'
+        Prover.serverAddr = defaultServerEndpoint
         Prover.init()
     },
     async connectMetamask() {
