@@ -4,7 +4,7 @@
 ```
 // package.json
 "@eigen-secret/core": "file:${path}eigen-secret/core",
-for example "@eigen-secret/core": "file:/Users/qiaohao/Documents/JsProjects/eigen-secret/core",
+for example "@eigen-secret/core": "file:/Users/JsProjects/eigen-secret/core",
 ```
 
 ### 
