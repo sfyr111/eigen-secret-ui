@@ -1,6 +1,10 @@
 const { defineConfig } = require('@vue/cli-service')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
+console.log('---current env----')
+console.log(process.env)
+console.log('------------------')
+
 module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
