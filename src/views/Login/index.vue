@@ -3,7 +3,7 @@
     <div class="logo-box">
       <img class="logo" src="@/assets/header/logo.png">
     </div>
-    <h1 class="login-des login-des-title">Eigen Secret: Simple Private Transaction</h1>
+    <h1 class="login-des login-des-title">Eigen Secret: Truly Private Transaction</h1>
     <div class="login-des">Welcome to Eigen Secret! Connect a wallet to manage your data and transactions.</div>
     <div class="login-btn-box">
       <div class="login-btn" @click="login">
