@@ -85,7 +85,7 @@ export default {
         return
       }
       if (!this.isAliasValid) {
-        this.showAlert('Invalid alias format. It should start with a letter and contain only letters, numbers, underscores, and dots.', 2);
+        this.showAlert('It should start with a letter and contain only letters, numbers, underscores, and dots.', 2);
         return;
       }
       const eloading = this.$eloading('Registration in progress, please wait')
