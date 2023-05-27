@@ -8,7 +8,7 @@
             <th>STATUS</th>
             <th>OPERATION</th>
             <th>TX HASH</th>
-            <th>BALANCE</th>
+            <th>AMOUNT</th>
 <!--            <th>FROM</th>-->
             <th>TO</th>
             <th>TIMESTAMP</th>
@@ -19,7 +19,7 @@
             <td>{{ item.status }}</td>
             <td>{{ item.operation }}</td>
             <td @click="copyAddress(item.txhashReal)" title="Click to copy">{{ item.txhash }}</td>
-            <td>{{ item.balance }}</td>
+            <td>{{ item.amount }}</td>
 <!--            <td>{{ item.assetId }}</td>-->
             <td @click="copyAddress(item.toReal)" title="Click to copy">{{ item.to }}</td>
             <td>{{ item.timestamp }}</td>

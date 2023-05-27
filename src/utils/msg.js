@@ -1,7 +1,7 @@
 const msg = {
     transaction: {
         deposit: {
-            summaryTxt: 'Deposit asset from Layer 1 (e.g. connected MetaMask wallet) to the EigenSecret account. You can withdraw assets to the laver1 wallet at any time.',
+            summaryTxt: 'Deposit asset from Layer 1 (e.g. connected MetaMask wallet) to the EigenSecret account. You can withdraw assets to the Layer 1 wallet at any time.',
             buttonTxt: 'Deposit to L2'
         },
         send: {
