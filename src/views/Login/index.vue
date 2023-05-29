@@ -78,6 +78,9 @@ export default {
           setSdk(res.data)
           setAlias(res.data.alias)
           this.$router.push('/dashboard')
+        } else if (res.errno == 7) {
+          this.showAlert(res.message, 2)
+          this.$router.push('/LoginStep')
         } else {
           this.showAlert(res.message, 2)
         }
