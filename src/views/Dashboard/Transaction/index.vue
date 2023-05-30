@@ -5,22 +5,20 @@
       <div class="tranaction-list table-list">
         <table>
           <tr>
+            <th>ASSET</th>
             <th>STATUS</th>
             <th>OPERATION</th>
             <th>TX HASH</th>
             <th>AMOUNT</th>
-<!--            <th>FROM</th>-->
             <th>TO</th>
             <th>TIMESTAMP</th>
           </tr>
           <tr v-for="(item,index) in pageData" :key="index" class="transaction-list-tr">
-<!--            <td :class="['status-trans', `status-${getStatusTxt(item.status)}`]"><i></i>{{ getStatusTxt(item.status) }}-->
-<!--            </td>-->
+            <td>{{ item.symbol || item.assetId }}</td>
             <td>{{ item.status }}</td>
             <td>{{ item.operation }}</td>
             <td @click="copyAddress(item.txhashReal)" title="Click to copy">{{ item.txhash }}</td>
             <td>{{ item.amount }}</td>
-<!--            <td>{{ item.assetId }}</td>-->
             <td @click="copyAddress(item.toReal)" title="Click to copy">{{ item.to }}</td>
             <td>{{ item.timestamp }}</td>
           </tr>
@@ -55,15 +53,8 @@ import {getAlias, getSigner} from "@/store";
 
 export default {
   name: 'Transaction',
-  // props: {
-  //   transactionList: {
-  //     type: Array,
-  //     default: () => []
-  //   }
-  // },
   data() {
     return {
-      // newtransactionList: this.transactionList,
       getStatusTxt,
       page: 1,
       pageSize: 10,
