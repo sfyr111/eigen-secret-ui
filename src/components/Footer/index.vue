@@ -12,6 +12,7 @@
             </ul>
           </div>
           <div class="footer-item">
+            <p class="community-title" v-show="!!netWorkName">Current net work: {{netWorkName}}</p>
             <p class="community-title">Community</p>
             <ul class="commity-list">
               <li v-for="item in linkIconList" :key="item.key" class="link-item" @click="openPage(item.url)">
@@ -23,13 +24,16 @@
     </div>
     </div>
   </div>
-  
+
 </template>
 <script>
+import { getSigner } from "@/store";
+import NET_WORK_CONFIG from "@/NET_WORK_CONFIG";
 export default {
   name: 'Footer',
   data() {
     return {
+      netWorkName: '',
       linkIconList: [
         { key: 'twitter', url: 'https://twitter.com/Eigen_Network' },
         { key: 'telegram', url: 'https://t.me/Eigen_Network' },
@@ -43,7 +47,17 @@ export default {
       ],
     }
   },
+  async mounted() {
+    await this.getCurrentNetWorkName()
+  },
   methods: {
+    async getCurrentNetWorkName() {
+      const signer = getSigner();
+      const network = await signer.provider.getNetwork();
+      const chainId = network.chainId;
+      const netWork = NET_WORK_CONFIG[chainId];
+      this.netWorkName =  !netWork ? '' : netWork.name;
+    },
     openPage(url) {
       window.open(url, '_blank');
     },

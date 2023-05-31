@@ -101,7 +101,8 @@ export function getSecretManager() {
 }
 
 function init() {
-    const alias = localStorage.getItem('alias')
+    let alias = localStorage.getItem('alias')
+    if (!alias || alias === 'null' || alias === 'undefined') alias = ''
     if (alias) {
         setAlias(alias)
     }
