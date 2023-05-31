@@ -2,6 +2,7 @@ import { SecretSDK } from "@eigen-secret/core/dist-browser/sdk";
 import { ethers } from 'ethers';
 import { __DEFAULT_ALIAS__, rawMessage, signEOASignature, SESSION_DURATION } from '@eigen-secret/core/dist-browser/utils';
 import { Context } from '@eigen-secret/core/dist-browser/context';
+import { ErrCode } from '@eigen-secret/core/dist-browser/error';
 import {
   defaultCircuitPath,
   defaultContractABI,
@@ -71,7 +72,7 @@ class SecretManager {
     const sdkRespond = await SecretSDK.initSDKFromAccount(
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, true,
     );
-    if (sdkRespond.errno !== 0) {
+    if (sdkRespond.errno !== ErrCode.Success) {
       console.log('create account initSDK fail: ', sdkRespond)
       return sdkRespond
     }
@@ -80,7 +81,7 @@ class SecretManager {
 
     let respond = await this.sdk.createAccount(ctx, password);
     console.log("create account", respond);
-    if (respond.errno !== 0) {
+    if (respond.errno !== ErrCode.Success) {
       console.error('create account fail: ', respond)
     }
     console.log("create account", respond);
@@ -108,7 +109,7 @@ class SecretManager {
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, isCreate
     );
 
-    if (respond.errno === 0) {
+    if (respond.errno === ErrCode.Success) {
       this.sdk = respond.data
     } else {
       console.error('initSDK fail: ', respond)
@@ -152,7 +153,7 @@ class SecretManager {
     }
 
     let respond = await this.sdk.deposit(ctx, receiver, BigInt(value), Number(assetId), nonce);
-    if (respond.errno !== 0) {
+    if (respond.errno !== ErrCode.Success) {
       console.log("deposit failed: ", respond);
     }
     console.log('deposit done...', respond)
@@ -186,7 +187,7 @@ class SecretManager {
     );
     value = this.sdk.parseValue(ctx, value, assetId, decimals)
     let respond = await this.sdk.send(ctx, receiver, receiverAlias, BigInt(value), Number(assetId));
-    if (respond.errno !== 0) {
+    if (respond.errno !== ErrCode.Success) {
       console.log("send failed: ", respond);
     }
     console.log('send down.', respond)
@@ -211,7 +212,7 @@ class SecretManager {
     );
     value = this.sdk.parseValue(ctx, value, assetId, decimals)
     let respond = await this.sdk.withdraw(ctx, receiver, BigInt(value), Number(assetId));
-    if (respond.errno !== 0) {
+    if (respond.errno !== ErrCode.Success) {
       console.log("withdraw failed: ", respond);
     }
     console.log('withdraw down.', respond)

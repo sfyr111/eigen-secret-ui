@@ -48,7 +48,7 @@ export default {
     },
     async connectMetamask() {
       const data = await doConnectMetaMask();
-      if (data.errno == 0) {
+      if (data.errno == this.$errCode.Success) {
         this.$emit('login-end', data.data)
       } else {
         this.showAlert(data.message, 2)
