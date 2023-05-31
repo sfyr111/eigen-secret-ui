@@ -90,7 +90,7 @@ export default {
       }
       const eloading = this.$eloading('Registration in progress, please wait')
       secretManager.createAccount({ alias: this.alias, user }).then(res => {
-        if (res.errno == 0) {
+        if (res.errno == this.$errCode.Success) {
           this.$emit('create-end', res)
         } else {
           this.showAlert(res.message, 2)
@@ -121,7 +121,7 @@ export default {
         password: secretManager.getPassword(),
         user: signer
       }).then(res => {
-        if (res.errno == 0) {
+        if (res.errno == this.$errCode.Success) {
           this.$emit('create-end', 4)
         } else {
           this.dialogDes = res.message ? res.message : 'system error'

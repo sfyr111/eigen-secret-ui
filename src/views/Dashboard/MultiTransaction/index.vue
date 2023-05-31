@@ -164,7 +164,7 @@ export default {
           }
         })
         secretManager[type].call(secretManager, params).then((res) => {
-          if (res.errno == 0) {
+          if (res.errno == this.$errCode.Success) {
             this.showAlert('Transaction Confirmed!', 1)
             this.$eventBus.$emit('transaction-success', {value: true})
           } else {

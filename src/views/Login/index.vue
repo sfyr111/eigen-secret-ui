@@ -74,11 +74,11 @@ export default {
       let alias = getAlias();
       alias = alias ? alias : __DEFAULT_ALIAS__
       secretManager.initSDK({alias: alias, user: getSigner()}).then((res) => {
-        if (res.errno == 0) {
+        if (res.errno == this.$errCode.Success) {
           setSdk(res.data)
           setAlias(res.data.alias)
           this.$router.push('/dashboard')
-        } else if (res.errno == 7) {
+        } else if (res.errno == this.$errCode.RecordNotExist) {
           this.showAlert(res.message, 2)
           this.$router.push('/LoginStep')
         } else {

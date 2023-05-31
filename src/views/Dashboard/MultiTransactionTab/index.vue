@@ -47,7 +47,7 @@ export default {
       const options = {alias: getAlias(), password: secretManager.getPassword(), user: getSigner()}
       secretManager.getAssetInfo(options).then(res => {
         console.log('getAssetInfo res', res)
-        if (res.errno == 0) {
+        if (res.errno == this.$errCode.Success) {
           this.assetsInfos = res.data.map(item => {
             return {
               rightVal: item.assetId, //'$0',
