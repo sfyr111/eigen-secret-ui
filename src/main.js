@@ -26,6 +26,11 @@ Vue.prototype.$eloading = function (txt) {
     return loading
 }
 
+// Listen to network changes
+window.ethereum && window.ethereum.on('chainChanged', async (_chainId) => {
+    window.location.reload();
+});
+
 new Vue({
     store,
     router,

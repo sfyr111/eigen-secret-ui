@@ -3,14 +3,10 @@ import * as tokenRegistryContract from "../artifacts/TokenRegistry.json";
 import * as rollupContract from "../artifacts/Rollup.json";
 import * as testTokenContract from "../artifacts/TestToken.json";
 import * as SMT from "../artifacts/SMT.json";
-import * as defaultContractFile from "../artifacts/contract.json";
-
 
 // export const defaultAccountFile = path.join(__dirname, "../.account.json")
 export const defaultCircuitPath = "../circuits/";
 export const defaultServerEndpoint = process.env.VUE_APP_ENDPOINT;
-
-export { defaultContractFile };
 
 export const defaultContractABI = {
   spongePoseidonContractABI: spongePoseidonContract.abi,

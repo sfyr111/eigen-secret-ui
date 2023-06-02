@@ -6,9 +6,9 @@ import { ErrCode } from '@eigen-secret/core/dist-browser/error';
 import {
   defaultCircuitPath,
   defaultContractABI,
-  defaultContractFile as contractJson,
   defaultServerEndpoint,
 } from './configure';
+import NET_WORK_CONFIG from "@/NET_WORK_CONFIG"
 
 class SecretManager {
   constructor() {
@@ -16,6 +16,14 @@ class SecretManager {
     this.signature = null;
     this.signatureTimestamp = null;
     this.loadSignatureFromLocalStorage();
+  }
+
+  async getContract(signer) {
+    const network = await signer.provider.getNetwork();
+    const chainId = network.chainId;
+    const netWork = NET_WORK_CONFIG[chainId];
+    if (!network) throw new Error(`Contracts for which this ${chainId} does not exist！`)
+    return netWork.contract;
   }
 
   saveSignatureToLocalStorage() {
@@ -51,24 +59,17 @@ class SecretManager {
     return {signature: this.signature, signatureTimestamp: this.signatureTimestamp};
   }
 
-
-
-  async initSignature({ alias, user }) {
-    console.log('createAccount start...')
-    let timestamp = Math.floor(Date.now() / 1000).toString();
-    const address = await user.getAddress();
-    console.log("ETH address", address);
-    return await this.getSignature(user, address, timestamp, true, true);
-  }
-
   async createAccount({ alias, password = '<your password>', user }) {
     console.log('createAccount start...')
     let timestamp = Math.floor(Date.now() / 1000).toString();
     const address = await user.getAddress();
+    const contractJson = await this.getContract(user);
+
     console.log("ETH address", address);
 
     const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp, true);
     const ctx = new Context(alias, address, rawMessage, signatureTimestamp, signature);
+    console.log(ctx)
     const sdkRespond = await SecretSDK.initSDKFromAccount(
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, true,
     );
@@ -77,7 +78,7 @@ class SecretManager {
       return sdkRespond
     }
     this.sdk = sdkRespond.data;
-    console.log('create account params:', ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, password, user, contractJson, defaultCircuitPath, defaultContractABI);
+    console.log('create account params:', ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath);
 
     let respond = await this.sdk.createAccount(ctx, password);
     console.log("create account", respond);
@@ -97,6 +98,8 @@ class SecretManager {
     console.log('initSDK start...')
     const timestamp = Math.floor(Date.now() / 1000).toString();
     const address = await user.getAddress();
+    const contractJson = await this.getContract(user);
+
     const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp, alias == __DEFAULT_ALIAS__);
     const ctx = new Context(
       alias,
@@ -105,6 +108,8 @@ class SecretManager {
       signatureTimestamp,
       signature,
     );
+    console.log(ctx)
+
     let respond = await SecretSDK.initSDKFromAccount(
       ctx, defaultServerEndpoint, password, user, contractJson, defaultCircuitPath, defaultContractABI, isCreate
     );
@@ -142,7 +147,6 @@ class SecretManager {
       signatureTimestamp,
       signature,
     );
-
     console.log('deposit params: ', ctx)
     value = this.sdk.parseValue(ctx, value, assetId, decimals)
 
@@ -185,6 +189,7 @@ class SecretManager {
       signatureTimestamp,
       signature,
     );
+    console.log(ctx)
     value = this.sdk.parseValue(ctx, value, assetId, decimals)
     let respond = await this.sdk.send(ctx, receiver, receiverAlias, BigInt(value), Number(assetId));
     if (respond.errno !== ErrCode.Success) {
@@ -210,6 +215,7 @@ class SecretManager {
       signatureTimestamp,
       signature,
     );
+    console.log(ctx)
     value = this.sdk.parseValue(ctx, value, assetId, decimals)
     let respond = await this.sdk.withdraw(ctx, receiver, BigInt(value), Number(assetId));
     if (respond.errno !== ErrCode.Success) {

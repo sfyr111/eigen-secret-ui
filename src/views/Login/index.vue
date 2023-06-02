@@ -61,11 +61,10 @@ export default {
           this.user = await connectMetaMask();
           setSigner(this.user)
         } catch (e) {
-          console.log('e.message ', e.message)
-          if (e.message.indexOf('user rejected signing')) {
-            this.showAlert('Unable to link your account. Please try again.', 2, e)
+          if (e.message.indexOf('user rejected signing') > -1) {
+            this.showAlert('Unable to link your account. Please try again.', 2)
           } else {
-            this.showAlert(null, 2, e)
+            this.showAlert(e.message, 2)
           }
           eloading.close()
           return
