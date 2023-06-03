@@ -326,6 +326,24 @@ class SecretManager {
     return ethers.utils.formatEther(balance);
   }
 
+  async getL1Balance({ alias, password = '<your password>', user, token, decimals }) {
+    if (!this.sdk) await this.initSDK(alias, password, user);
+    const address = await user.getAddress();
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const { signature, signatureTimestamp } = await this.getSignature(user, address, timestamp);
+
+    const ctx = new Context(
+        alias,
+        address,
+        rawMessage,
+        signatureTimestamp,
+        signature,
+    )
+    const l1Balance = await this.sdk.getL1Balance(ctx, token, user, decimals)
+    console.log("l1Balance ", l1Balance);
+    return l1Balance;
+  }
+
   getPassword() {
     return '123456'
   }

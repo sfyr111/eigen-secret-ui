@@ -58,10 +58,9 @@ import selectItem from '@/components/SelectItem/index';
 Vue.use(Popup);
 Vue.use(Search);
 
-
 export default {
   name: 'ExchangeItem',
-  props: ['isMax', 'type', 'sourceData', 'inputDisabled', 'inputDefaultValue', 'showLoading', 'exchangeToInput', 'placeholder'],
+  props: ['isMax', 'type', 'sourceData', 'inputDisabled', 'inputDefaultValue', 'showLoading', 'exchangeToInput', 'placeholder', 'maxCallback'],
   data() {
     return {
       exchangVal: '',
@@ -143,7 +142,10 @@ export default {
       if (!this.selectedTokenInfo) {
         return
       }
-      this.exchangVal = this.selectedTokenInfo.balanceNumberString
+      this.maxCallback((data) => {
+        this.exchangVal = data
+      })
+      //this.exchangVal = this.selectedTokenInfo.balanceNumberString
     },
     hanldeValue(e) {
       let value = e.target.value
