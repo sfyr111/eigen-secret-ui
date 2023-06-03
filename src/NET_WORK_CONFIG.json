@@ -9,6 +9,11 @@
     "name": "Mumbai",
     "chainId": 80001
   },
+  "534353": {
+    "contract": {},
+    "name": "Scroll Alpha",
+    "chainId": 534353
+  },
   "137": {
     "contract": {},
     "name": "Polygon Mainnet",
