@@ -28,7 +28,7 @@
 </template>
 <script>
 import { getSigner } from "@/store";
-import NET_WORK_CONFIG from "@/NET_WORK_CONFIG";
+import NET_WORK_CONFIG from "@/enableNetWorkConfig";
 export default {
   name: 'Footer',
   data() {

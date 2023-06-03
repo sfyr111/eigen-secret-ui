@@ -8,7 +8,7 @@ import {
   defaultContractABI,
   defaultServerEndpoint,
 } from './configure';
-import NET_WORK_CONFIG from "@/NET_WORK_CONFIG"
+import NET_WORK_CONFIG from "@/enableNetWorkConfig"
 
 class SecretManager {
   constructor() {

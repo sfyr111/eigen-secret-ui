@@ -1,7 +1,7 @@
 import {ethers} from "ethers";
 import {rawMessage, signEOASignature} from "@eigen-secret/core/dist-browser/utils";
 import {getAddress, getSigner} from "@/store";
-import NET_WORK_CONFIG from "@/NET_WORK_CONFIG"
+import NET_WORK_CONFIG from "@/enableNetWorkConfig"
 
 export async function doConnectMetaMask() {
     if (typeof window.ethereum !== 'undefined') {
