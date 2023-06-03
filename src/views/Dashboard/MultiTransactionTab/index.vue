@@ -54,7 +54,8 @@ export default {
               tokenName: item.tokenInfo?.symbol,
               leftDes: null,
               icon: item.tokenInfo?.logoURI,
-              tokenInfo: item.tokenInfo
+              tokenInfo: item.tokenInfo,
+              metadata: item
             }
           })
         }

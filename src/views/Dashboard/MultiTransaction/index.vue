@@ -22,33 +22,10 @@
               :showLoading="tokenLoading"
               @selectChagne="val => {this.assetId = val.rightVal}"
               @inputChange="val => {this.transactionValue = val}"
+              :maxCallback="getMaxBalance"
               ref="tokenFromSelect"/>
         </div>
       </div>
-      <!--      <div class="transaction-fee">-->
-      <!--        <p class="amount-title">-->
-      <!--          <span class="common-block-title">Transaction Fee</span>-->
-      <!--          <span class="remainder">Balance: 0.005780 ETH</span>-->
-      <!--        </p>-->
-      <!--        <div class="row" :class="transactionFee == '1' ? 'selected' : ''" @click="switchTransactionFee('1')">-->
-      <!--          <div class="item icon">-->
-      <!--            <el-radio v-model="transactionFee" label="1"><span></span></el-radio>-->
-      <!--          </div>-->
-      <!--          <div class="item title">Slow</div>-->
-      <!--          <div class="item time"></div>-->
-      <!--          <div class="item price">0.00034 ETH</div>-->
-      <!--          <div class="item process">$0.58</div>-->
-      <!--        </div>-->
-      <!--        <div class="row" :class="transactionFee == '2' ? 'selected' : ''" @click="switchTransactionFee('2')">-->
-      <!--          <div class="item icon">-->
-      <!--            <el-radio v-model="transactionFee" label="2"><span></span></el-radio>-->
-      <!--          </div>-->
-      <!--          <div class="item title">Instant</div>-->
-      <!--          <div class="item time">7 mins</div>-->
-      <!--          <div class="item price">0.0085 ETH</div>-->
-      <!--          <div class="item process">$14.56</div>-->
-      <!--        </div>-->
-      <!--      </div>-->
     </div>
     <div class="center">
 
@@ -133,6 +110,37 @@ export default {
     },
     switchTransactionFee(e) {
       this.transactionFee = e
+    },
+    getMaxBalance(callback) {
+      const params = {
+        alias: getAlias(),
+        assetId: this.assetId,
+        user: getSigner(),
+      }
+      this.assetsInfos.forEach(item => {
+        if (item.rightVal == this.assetId) {
+          params.decimals = item.tokenInfo?.decimals
+          params.token = item.metadata?.contractAddress
+        }
+      })
+      if (!params.token) {
+        console.log('getL1Balance error no token')
+        return
+      }
+      const eloading = this.$eloading('Operation in progress, please wait')
+      secretManager.getL1Balance(params).then(res => {
+        console.log('getL1Balance res ', res)
+        if (res.errno == this.$errCode.Success) {
+          callback(res.data)
+        } else {
+          this.showAlert(res.message, 2)
+        }
+      }).catch((e) => {
+        console.error(e)
+        this.showAlert(null, 2, e)
+      }).finally(() => {
+        eloading.close()
+      })
     },
     caller() {
       const type = this.transactionType
