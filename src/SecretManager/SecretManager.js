@@ -148,7 +148,7 @@ class SecretManager {
       signature,
     );
     console.log('deposit params: ', ctx)
-    value = this.sdk.parseValue(ctx, value, assetId, decimals)
+    value = this.sdk.parseValue(ctx, value, decimals)
 
     // approve
     let allowance = await this.sdk.allowance(tokenAddress.toString())
@@ -190,7 +190,7 @@ class SecretManager {
       signature,
     );
     console.log(ctx)
-    value = this.sdk.parseValue(ctx, value, assetId, decimals)
+    value = this.sdk.parseValue(ctx, value, decimals)
     let respond = await this.sdk.send(ctx, receiver, receiverAlias, BigInt(value), Number(assetId));
     if (respond.errno !== ErrCode.Success) {
       console.log("send failed: ", respond);
@@ -216,7 +216,7 @@ class SecretManager {
       signature,
     );
     console.log(ctx)
-    value = this.sdk.parseValue(ctx, value, assetId, decimals)
+    value = this.sdk.parseValue(ctx, value, decimals)
     let respond = await this.sdk.withdraw(ctx, receiver, BigInt(value), Number(assetId));
     if (respond.errno !== ErrCode.Success) {
       console.log("withdraw failed: ", respond);
